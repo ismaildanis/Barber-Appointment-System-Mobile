@@ -1,20 +1,31 @@
 import { useEffect } from "react";
-import { Text, View } from "react-native";
-import { API_URL } from "../config";
+import { ActivityIndicator } from "react-native";
+import { useRouter } from "expo-router";
+import { ThemedView } from "@/components/themed-view";
+import { useUnifiedMe } from "@/src/hooks/useUnifiedAuth";
 
+export default function Index() {
+  const router = useRouter();
+  const { data, isLoading, isError } = useUnifiedMe();
 
-export default function App() {
   useEffect(() => {
-    fetch(`${API_URL}/auth/test`)
-      .then(r => r.json())
-      .then(d => console.log("API RESPONSE:", d))
-      .catch(err => console.log("API ERROR:", err));
-  }, []);
+    if (isLoading) return;
+    if (isError || !data) {
+      router.replace("/(auth)/login");
+    } else if (data.role === "customer") {
+      router.replace("/(customer)/home");
+    } else if (data.role === "admin") {
+      router.replace("/(admin)/dashboard");
+    } else if (data.role === "barber") {
+      router.replace("/(barber)/calendar");
+    } else {
+      router.replace("/(auth)/login");
+    }
+  }, [isLoading, isError, data, router]);
 
   return (
-    <View style={{ padding: 50, backgroundColor: "white" , alignItems: "center", justifyContent: "center" }}>
-      <Text>Barber Mobile Çalışıyor 🚀</Text>
-      <Text>Barber Mobile Çalışıyorawdawdawd 🚀</Text>
-    </View>
+    <ThemedView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <ActivityIndicator />
+    </ThemedView>
   );
 }
