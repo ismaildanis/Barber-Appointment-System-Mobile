@@ -24,7 +24,17 @@ export const Colors = {
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
+    button :'#AD8C57',
   },
+};
+
+export const myColors = {
+  mainBackground: "#2F2F2F",
+  mainBackgroundGradient: [
+    "#4A4A4A",
+    "#3A3A3A",
+    "#2F2F2F"
+  ] as const,
 };
 
 export const Fonts = Platform.select({

@@ -1,7 +1,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "../../config";
-import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber } from "../types/appointment";
+import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, LastAppointment } from "../types/appointment";
 const api = axios.create({
     baseURL: API_URL,
     headers: {
@@ -26,7 +26,8 @@ export const appointmentApi = {
     //Customer
     getCustomerAppointments: async () => await  api.get<Appointment[]>("/appointment").then(r => r.data),
     getCustomerOneAppointment: async (id: number) => await api.get<Appointment>(`/appointment/${id}`).then(r => r.data),
-    createAppointment: async (data: CreateAppointmentRequest, id: number) => await api.post<Appointment>(`/appointment/${id}`, data).then(r => r.data),
+    getCustomerLastAppointment: async () => await api.get<LastAppointment | null>(`/appointment/last`).then(r => r.data),
+    createAppointment: async (data: CreateAppointmentRequest) => await api.post<Appointment | null>("/appointment", data).then(r => r.data),
     updateCustomerAppointment: async (data: UpdateAppointmentRequest) => await api.put<Appointment>("/appointment", data).then(r => r.data),
     cancelCustomerAppointment: async (id: number) => await api.put(`/appointment/cancel/${id}`).then(r => r.data),
     availableHoursForAppointment: async (barberId: number, date: string) => await api.get(`/appointment/available-hours/${barberId}`, { params: { date } }).then(r => r.data),

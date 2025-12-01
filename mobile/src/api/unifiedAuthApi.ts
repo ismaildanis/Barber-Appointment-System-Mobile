@@ -7,6 +7,7 @@ const REFRESH_KEY = "unified_refresh";
 
 const api = axios.create({
   baseURL: API_URL,
+  timeout: 10000,
   headers: { "Content-Type": "application/json", Accept: "application/json" },
 });
 
@@ -61,9 +62,11 @@ api.interceptors.response.use(
       original.headers = { ...original.headers, Authorization: `Bearer ${resp.data.accessToken}` };
       return api(original);
     } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        await AsyncStorage.multiRemove([ACCESS_KEY, REFRESH_KEY]);
+      }
       queue.forEach((cb) => cb(null));
       queue = [];
-      await AsyncStorage.multiRemove([ACCESS_KEY, REFRESH_KEY]);
       return Promise.reject(err);
     } finally {
       isRefreshing = false;

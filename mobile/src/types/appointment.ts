@@ -4,14 +4,29 @@ export interface Appointment {
     customerId: number;
     barberId: number;
     serviceId: number;
-    appointmentStartAt: Date;
-    appointmentEndAt: Date;
+    appointmentStartAt: string;
+    appointmentEndAt: string;
     status: Status;
     notes?: string;
     cancelReason?: string;
-    createdAt: Date;
-    updatedAt: Date;
-    cancelledAt?: Date | null; 
+    createdAt: string;
+    updatedAt: string;
+    cancelledAt?: string | null; 
+}
+
+export interface LastAppointment extends Appointment {
+  barber?: Barber | null;
+  service?: Service | null;
+}
+
+export interface Barber {
+    id: number;
+    firstName: string;
+    lastName: string;
+}
+export interface Service {
+    id: number;
+    name: string;
 }
 
 export interface CreateAppointmentRequest {

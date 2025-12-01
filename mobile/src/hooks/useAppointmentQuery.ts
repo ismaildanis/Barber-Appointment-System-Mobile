@@ -1,5 +1,5 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber } from "../types/appointment";
+import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, LastAppointment } from "../types/appointment";
 import { appointmentApi } from "../api/appointmentApi";
 
 const key = ["appointment"] as const;
@@ -12,18 +12,25 @@ export const useGetCustomerAppointments = () =>
         staleTime: 5 * 60 * 1000
     })
 
-export const useGetCustomerOneAppointment = (id: number) => {
+export const useGetCustomerOneAppointment = (id: number) => 
     useQuery({
         queryKey: [key, id],
         queryFn: () => appointmentApi.getCustomerOneAppointment(id),
         enabled: !!id
     })
-}
 
-export const useCreateAppointment = (id: number) => {
+
+export const useGetCustomerLastAppointment = () =>
+    useQuery({
+        queryKey: ["appointment", "last-completed"],
+        queryFn: () => appointmentApi.getCustomerLastAppointment(),
+        staleTime: 5 * 60 * 1000,
+    });
+
+export const useCreateAppointment = () => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: (data: CreateAppointmentRequest) => appointmentApi.createAppointment(data, id),
+        mutationFn: (data: CreateAppointmentRequest) => appointmentApi.createAppointment(data),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: key })
         },
@@ -50,21 +57,21 @@ export const useCancelCustomerAppointment = (id: number) => {
     })
 }
 
-export const  useAvailableHoursForAppointment = (barberId: number, date: string) => {
+export const  useAvailableHoursForAppointment = (barberId: number, date: string) => 
     useQuery({
         queryKey: ["appointment", "available-hours", barberId, date],
         queryFn: () => appointmentApi.availableHoursForAppointment(barberId, date),
         enabled: !!barberId || !!date
     })
-}
 
-export const  useAvailableDatesForAppointment = () => {
+
+export const  useAvailableDatesForAppointment = () => 
     useQuery({
         queryKey: ["appointment", "available-dates"],
         queryFn: () => appointmentApi.availableDatesForAppointment(),
         staleTime : 5 * 60 * 1000
     })
-}
+
 
 //Barber
 

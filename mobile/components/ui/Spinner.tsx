@@ -1,0 +1,21 @@
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+
+type SpinnerProps = {
+  size?: number | "small" | "large";
+};
+
+export default function Spinner({ size = "large" }: SpinnerProps) {
+  return (
+    <View style={styles.container}>
+      <ActivityIndicator size={size} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
