@@ -47,3 +47,23 @@ export const useDeleteBarber = (id: number) => {
         },
     })
 }
+
+export const useUploadImage = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: any) => barberApi.uploadImage(data),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: key });
+        },
+    }) 
+}
+
+export const useDeleteImage = (id: number) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: () => barberApi.deleteImage(id),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: key });
+        },
+    }) 
+}

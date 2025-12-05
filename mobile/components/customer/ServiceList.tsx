@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { FlatList, NativeScrollEvent, NativeSyntheticEvent, StyleSheet, Text, useWindowDimensions } from "react-native";
 import { myColors } from "@/constants/theme";
+import { Image } from "react-native";
 
 export type ServiceListProps = {
   services: Service[];
@@ -21,7 +22,7 @@ export default function ServiceList({ services, loading = false, autoPlay = true
 
   const gap = 12;
   const cardWidth = Math.min(Math.max(width * 0.6, 220), 280);
-  const cardHeight = Math.min(Math.max(width * 0.33, 140), 165);
+  const cardHeight = Math.min(Math.max(width * 0.33, 360), 400);
 
   const stopAutoPlay = () => {
     if (timerRef.current) {
@@ -29,7 +30,6 @@ export default function ServiceList({ services, loading = false, autoPlay = true
       timerRef.current = null;
     }
   };
-
   const startAutoPlay = () => {
     stopAutoPlay();
     if (!autoPlay || !services?.length) return;
@@ -65,6 +65,11 @@ export default function ServiceList({ services, loading = false, autoPlay = true
         end={{ x: 1, y: 0.5 }}
         style={[styles.card, { width: cardWidth, height: cardHeight }]}
       >
+        <Image 
+          source={{ uri: item.image }} 
+          style={styles.cardImage}>
+
+        </Image>
         <Text style={styles.cardTitle} numberOfLines={1}>
           {item.name}
         </Text>
@@ -138,8 +143,18 @@ const styles = StyleSheet.create({
   },
   sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 12 },
   listContent: { gap: 12, paddingBottom: 12 },
+  cardImage: {
+    width: "100%",
+    height: 200,
+    borderRadius: 14,
+    borderCurve: "continuous",
+    resizeMode: "cover", 
+    marginBottom: 10,
+    backgroundColor: "#fff",
+    overflow: "hidden",
+  },
   card: {
-    padding: 14,
+    padding: 30,
     borderRadius: 18,
     justifyContent: "space-between",
     backgroundColor: "rgba(255,255,255,0.02)",

@@ -23,10 +23,12 @@ export interface Barber {
     id: number;
     firstName: string;
     lastName: string;
+    image?: string;
 }
 export interface Service {
     id: number;
     name: string;
+    image?: string;
 }
 
 export interface CreateAppointmentRequest {

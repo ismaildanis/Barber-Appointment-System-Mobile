@@ -44,6 +44,25 @@ export const useDeleteService = (id: number) => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: key });
         },
-    })
-    
+    })  
+}
+
+export const useUploadImage = (id: number) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: any) => serviceApi.uploadImage(data,id),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: key });
+        },
+    }) 
+}
+
+export const useDeleteImage = (id: number) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: () => serviceApi.deleteImage(id),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: key });
+        },
+    }) 
 }

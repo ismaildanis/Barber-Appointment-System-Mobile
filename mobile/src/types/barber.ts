@@ -5,6 +5,7 @@ export interface Barber {
     email: string;
     phone: string
     active: boolean
+    image?: string
 }
 export interface CreateBarber {
     firstName: string;

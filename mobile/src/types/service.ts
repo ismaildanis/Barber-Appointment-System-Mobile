@@ -4,6 +4,7 @@ export interface Service {
     description: string
     price: string
     duration: number
+    image?: string
     createdAt: Date
     updatedAt: Date
 }

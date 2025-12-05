@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text } from "react-native";
+import { FlatList, Image, StyleSheet, Text } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Barber } from "@/src/types/barber";
@@ -15,9 +15,11 @@ export default function BarberList({ barbers, loading = false }: BarberListProps
         <ThemedText style={styles.sectionTitle}>Berberlerimiz</ThemedText>
         <Spinner size="small" />
       </ThemedView>
-    );
-  }
-
+    ); 
+  } 
+  console.log(barbers);
+  console.log(barbers.map((barber) => barber.image));
+ 
   if (!barbers || barbers.length === 0) {
     return (
       <ThemedView style={styles.container}>
@@ -26,7 +28,7 @@ export default function BarberList({ barbers, loading = false }: BarberListProps
       </ThemedView>
     );
   }
-
+  
   return (
     <ThemedView style={styles.container}>
       <ThemedText style={styles.sectionTitle}>Berberlerimiz</ThemedText>
@@ -44,10 +46,13 @@ export default function BarberList({ barbers, loading = false }: BarberListProps
           end={{ x: 0.1, y: 0.5 }}
           style={styles.card}
         >
+            
+          <Image source={{ uri: item.image }} style={styles.image}></Image>
           <ThemedText style={styles.name}>
             {item.firstName} {item.lastName}
           </ThemedText>
         </LinearGradient>
+        
         )}
       />
     </ThemedView>
@@ -71,6 +76,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
 
    },
+  image: {
+    width: "100%",
+    height: 200,
+    borderRadius: 14,
+    borderCurve: "continuous",
+    resizeMode: "cover", 
+    marginBottom: 10,
+    backgroundColor: "#fff",
+    overflow: "hidden",
+  },
+
   sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 12, paddingTop: 8 },
   card: {
     padding: 14,
