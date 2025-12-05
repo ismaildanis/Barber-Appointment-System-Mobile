@@ -4,7 +4,7 @@ import { ThemedView } from "@/components/themed-view";
 import Spinner from "../ui/Spinner";
 
 export type DatesProps = {
-  dates: string[];             // "2025-12-01" gibi
+  dates: string[];         
   loading: boolean;
   selectedDate?: string;
   onSelect?: (date: string) => void;
@@ -18,7 +18,9 @@ const formatDay = (dateStr: string) => {
     .toUpperCase()
     .replace(".", "");
   return { dayNum, weekday };
-};
+}; 
+
+
 
 export default function Dates({ dates, loading, selectedDate, onSelect }: DatesProps) {
   if (loading) {

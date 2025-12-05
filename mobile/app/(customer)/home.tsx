@@ -7,7 +7,7 @@ import BarberList from "@/components/customer/BarberList";
 import Spinner from "@/components/ui/Spinner";
 import { useGetServices } from "@/src/hooks/useServiceQuery";
 import { useGetBarbers } from "@/src/hooks/useBarberQuery";
-import { useUnifiedMe } from "@/src/hooks/useUnifiedAuth";
+import { useUnifiedLogout, useUnifiedMe } from "@/src/hooks/useUnifiedAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedView } from "@/components/themed-view";
 import LastAppointmentCard from "@/components/appointments/LastAppointmentCard";
@@ -15,6 +15,7 @@ import { useGetCustomerLastAppointment } from "@/src/hooks/useAppointmentQuery";
 import { myColors } from "@/constants/theme";
 import { LinearGradient } from 'expo-linear-gradient';
 import OwnerLogo from "@/components/customer/OwnerLogo";
+import { useEffect, useState } from "react";
 
 
 export default function CustomerHome() {
@@ -22,9 +23,13 @@ export default function CustomerHome() {
   const { data: barbers, isLoading: bLoading, refetch: refetchBarbers } = useGetBarbers();
   const { data: me, isLoading: meLoading, refetch: refetchMe } = useUnifiedMe();
   const { data: lastAppt, isLoading: lastLoading, refetch: refetchLastAppt } = useGetCustomerLastAppointment();
-
+  const logoutMutation = useUnifiedLogout();
   const loading = sLoading || bLoading || meLoading || lastLoading;
-  
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  if (!mounted) {
+    return null
+  }
   return (
     <LinearGradient
       colors={myColors.mainBackgroundGradient}
@@ -34,7 +39,7 @@ export default function CustomerHome() {
     >
       <SafeAreaView style={{ flex: 1 }}> 
         <>  
-      <ShopHeader customer= {me} />
+      <ShopHeader customer= {me} logout={() => logoutMutation.mutate()}  />
     <ScrollView
       contentContainerStyle={{ paddingBottom: 120 }}
       refreshControl={

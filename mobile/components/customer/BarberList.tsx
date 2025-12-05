@@ -17,8 +17,6 @@ export default function BarberList({ barbers, loading = false }: BarberListProps
       </ThemedView>
     ); 
   } 
-  console.log(barbers);
-  console.log(barbers.map((barber) => barber.image));
  
   if (!barbers || barbers.length === 0) {
     return (
@@ -48,9 +46,11 @@ export default function BarberList({ barbers, loading = false }: BarberListProps
         >
             
           <Image source={{ uri: item.image }} style={styles.image}></Image>
-          <ThemedText style={styles.name}>
-            {item.firstName} {item.lastName}
-          </ThemedText>
+          <ThemedView style={styles.nameContainer}>
+            <ThemedText style={styles.name}>
+              {item.firstName} {item.lastName}
+            </ThemedText>
+          </ThemedView>
         </LinearGradient>
         
         )}
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
 
    },
   image: {
+    justifyContent: "center",
     width: "100%",
     height: 200,
     borderRadius: 14,
@@ -98,6 +99,7 @@ const styles = StyleSheet.create({
 
     shadowColor: "transparent",                   
   },
-  name: { fontSize: 16, fontWeight: "700", color: "#fff" },
+  nameContainer: {flexDirection: "row", justifyContent: "center", backgroundColor: "transparent"},
+  name: { padding: 8, flexDirection: "column", justifyContent: "center", fontSize: 16, fontWeight: "700", color: "#fff" },
   empty: { fontSize: 14, color: "#fff" },
 });
