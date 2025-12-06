@@ -40,6 +40,7 @@ export default function Dates({ dates, loading, selectedDate, onSelect }: DatesP
       </ThemedView>
     );
   }
+  const toYMD = (d: Date) => d.toISOString().slice(0, 10);
 
   return (
     <ThemedView style={styles.container}>
@@ -79,6 +80,7 @@ export default function Dates({ dates, loading, selectedDate, onSelect }: DatesP
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 20,
     paddingVertical: 8,
     borderRadius: 25,
     backgroundColor: "transparent",

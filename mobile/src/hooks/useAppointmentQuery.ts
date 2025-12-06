@@ -57,12 +57,15 @@ export const useCancelCustomerAppointment = (id: number) => {
     })
 }
 
-export const  useAvailableHoursForAppointment = (barberId: number, date: string) => 
-    useQuery({
-        queryKey: ["appointment", "available-hours", barberId, date],
-        queryFn: () => appointmentApi.availableHoursForAppointment(barberId, date),
-        enabled: !!barberId || !!date
-    })
+export const useAvailableHoursForAppointment = (barberId?: number, date?: string) =>
+  useQuery({
+    queryKey: ["appointment", "available-hours", barberId, date],
+    queryFn: async () => {
+      const { allHours, busyHours } = await appointmentApi.availableHoursForAppointment(barberId!, date!);
+      return allHours.map((time: any) => ({ time, available: !busyHours.includes(time) }));
+    },
+    enabled: !!barberId && !!date,
+  });
 
 
 export const  useAvailableDatesForAppointment = () => 

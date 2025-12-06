@@ -30,6 +30,7 @@ export default function CustomerHome() {
   if (!mounted) {
     return null
   }
+  if (!me) return <Spinner />;
   return (
     <LinearGradient
       colors={myColors.mainBackgroundGradient}
@@ -54,7 +55,7 @@ export default function CustomerHome() {
         />
       }
     >
-      {loading ? (
+      {loading ? ( 
         <Spinner />
       ) : (
         <>

@@ -1,0 +1,169 @@
+import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Spinner from "../ui/Spinner";
+
+type HourItem = { time: string; available: boolean };
+
+type HoursProps = {
+  hours: HourItem[];
+  durationMinutes: number;   // seçilen servisin süresi (dk)
+  loading?: boolean;
+  selectedHour?: string;     // başlangıç slotu
+  onSelect?: (hour: string) => void;
+};
+
+const canPick = (time: string, hours: HourItem[], duration: number, step = 15) => {
+  const need = Math.ceil(duration / step);
+  const start = hours.findIndex((h) => h.time === time);
+  if (start === -1) return false;
+  for (let i = 0; i < need; i++) {
+    const slot = hours[start + i];
+    if (!slot || !slot.available) return false;
+  }
+  return true;
+};
+
+const isInRange = (time: string, selected: string | undefined, hours: HourItem[], duration: number, step = 15) => {
+  if (!selected) return false;
+  const start = hours.findIndex((h) => h.time === selected);
+  const idx = hours.findIndex((h) => h.time === time);
+  if (start === -1 || idx === -1) return false;
+  const need = Math.ceil(duration / step);
+  return idx >= start && idx < start + need;
+};
+
+export default function Hours({
+  hours,
+  durationMinutes,
+  loading,
+  selectedHour,
+  onSelect,
+}: HoursProps) {
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.sectionTitle}>Saatler</Text>
+        <Spinner size="small" />
+      </View>
+    );
+  }
+  if (!hours?.length) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.sectionTitle}>Saatler</Text>
+        <Text style={styles.empty}>Bu gün için saat bulunamadı.</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+        <FlatList
+            data={hours}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 10, paddingHorizontal: 20 }}
+            keyExtractor={(item) => item.time}
+            renderItem={({ item }) => {
+                const hasSpace = canPick(item.time, hours, durationMinutes);
+                const disabled = !item.available; // busy tıklanmaz
+                const inRange = isInRange(item.time, selectedHour, hours, durationMinutes);
+
+                return (
+                <TouchableOpacity
+                    disabled={disabled}
+                    onPress={() => {
+                        if (!hasSpace) {
+                            Alert.alert("Uyarı", "Bu saat seçilen servis süresi için yeterli boşluk içermiyor.");
+                            return;
+                        }
+                        onSelect?.(item.time);
+                    }}
+                    activeOpacity={disabled ? 1 : 0.8}
+                    style={[
+                        styles.slot,
+                        inRange && styles.slotSelected,
+                        disabled && styles.slotDisabled,
+                    ]}
+                >
+                    <Text style={[styles.slotText, disabled && styles.slotTextDisabled]}>
+                    {item.time}
+                    </Text>
+                    {disabled && (
+                        <View style={styles.busyBadge}>
+                            <Text style={styles.busyText}>DOLU</Text>
+                        </View>
+                    )}
+                </TouchableOpacity>
+                );
+            }}
+        />
+
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 40,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderRadius: 22,
+    backgroundColor: "rgba(255,255,255,0.04)",
+    borderWidth: 5,
+    borderColor: "rgba(255,255,255,0.08)",
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 6 },
+    justifyContent: "center",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 12,
+    color: "#fff",
+  },
+  empty: { color: "#fff" },
+    slot: {
+    minWidth: 90,
+    paddingVertical: 14,
+    borderRadius: 14,
+    backgroundColor: "#2f2f2f",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.08)",
+    marginRight: 0, // gap ile kontrol
+    },
+  slotSelected: {
+    backgroundColor: "#AD8C57",
+    borderColor: "#AD8C57",
+  },
+  slotDisabled: {
+    backgroundColor: "#1f1f1f",
+    borderColor: "rgba(255,255,255,0.05)",
+    opacity: 0.5,
+  },
+  slotText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#fff",
+  },
+  slotTextDisabled: {
+    color: "rgba(255,255,255,0.5)",
+  },
+  busyBadge: {
+    marginTop: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    backgroundColor: "rgba(255,255,255,0.12)",
+  },
+  busyText: {
+    color: "rgba(255,255,255,0.8)",
+    fontSize: 12,
+    fontWeight: "700",
+  },
+});

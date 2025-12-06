@@ -23,7 +23,7 @@ export default function ShopHeader({ customer, logout }: ShopHeaderProps) {
   const subtitleSize = Math.min(Math.max(width * 0.04, 12), 14);
   const initials = `${customer.firstName?.[0] ?? "B"}${customer.lastName?.[0] ?? ""}`.toUpperCase();
   const onSubmit = () => {
-    logout;
+    logout();
     router.replace("/(auth)/login");  
   }
   return (
@@ -45,7 +45,7 @@ export default function ShopHeader({ customer, logout }: ShopHeaderProps) {
               </View>
               <View style={{ gap: 0 }}>
                 <ThemedText style={[styles.name, { fontSize: subtitleSize + 3 }]}>
-                  {customer.firstName} {customer.lastName}
+                  {customer.firstName ?? "Kullanıcı"} {customer.lastName ?? ""}
                 </ThemedText>
                 <ThemedText style={[styles.email, { fontSize: subtitleSize }]}>{customer.email}</ThemedText>
               </View>

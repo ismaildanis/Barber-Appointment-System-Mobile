@@ -1,9 +1,11 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "../../config";
+import { useRouter } from "expo-router";
 
 const ACCESS_KEY = "unified_access";
 const REFRESH_KEY = "unified_refresh";
+const router = useRouter();
 
 const api = axios.create({
   baseURL: API_URL,
@@ -31,6 +33,7 @@ api.interceptors.response.use(
   (res) => res,
   async (error: AxiosError) => {
     const original = error.config as AxiosRequestConfig & { _retry?: boolean };
+    console.log("[API] status", error.response?.status, "retry?", original._retry);
     if (error.response?.status !== 401 || original._retry) return Promise.reject(error);
     original._retry = true;
 
@@ -51,8 +54,10 @@ api.interceptors.response.use(
 
       const resp = await axios.post<{ accessToken: string; refreshToken: string }>(
         `${API_URL}/unified-auth/refresh`,
-        { refreshToken } // body’de gönderiyoruz
+        { refreshToken } // body
       );
+      console.log("[API] refresh ok", resp.data.accessToken.slice(0, 10));
+
 
       await AsyncStorage.setItem(ACCESS_KEY, resp.data.accessToken);
       await AsyncStorage.setItem(REFRESH_KEY, resp.data.refreshToken);
@@ -65,6 +70,7 @@ api.interceptors.response.use(
       if (axios.isAxiosError(err) && err.response?.status === 401) {
         await AsyncStorage.multiRemove([ACCESS_KEY, REFRESH_KEY]);
       }
+      router.replace('/(auth)/login')
       queue.forEach((cb) => cb(null));
       queue = [];
       return Promise.reject(err);

@@ -1,14 +1,31 @@
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { unifiedAuthApi } from "../api/unifiedAuthApi";
+import { useEffect } from "react";
 
 const keyMe = ["unified", "me"] as const;
-
-export const useUnifiedMe = () =>
-  useQuery({
+export const useUnifiedMe = () => {
+  const router = useRouter();
+  const query = useQuery({
     queryKey: keyMe,
     queryFn: () => unifiedAuthApi.me(),
     staleTime: 5 * 60 * 1000,
+    retry: false,
   });
+
+  useEffect(() => {
+    if (query.isError && axios.isAxiosError(query.error) && query.error.response?.status === 401) {
+      AsyncStorage.multiRemove(["unified_access", "unified_refresh"]).then(() => {
+        router.replace("/(auth)/login");
+      });
+    }
+  }, [query.isError, query.error, router]);
+
+  return query;
+};
+
 
 export const useUnifiedLogin = () => {
   const qc = useQueryClient();
