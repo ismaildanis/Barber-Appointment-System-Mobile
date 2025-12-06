@@ -8,11 +8,13 @@ import { useAvailableDatesForAppointment, useAvailableHoursForAppointment, useCr
 import { useGetBarbers } from "@/src/hooks/useBarberQuery";
 import { useGetServices } from "@/src/hooks/useServiceQuery";
 import { useUnifiedMe } from "@/src/hooks/useUnifiedAuth";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, RefreshControl } from "react-native";
+import { Button, FlatList, RefreshControl, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CustomerAppointments() {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<string>();
   const [selectedBarber, setSelectedBarber] = useState<number>();
   const [selectedService, setSelectedService] = useState<number>();
@@ -25,22 +27,41 @@ export default function CustomerAppointments() {
   const { data: availableHours, isLoading: ahLoading, refetch: refetchAvailableHours } = useAvailableHoursForAppointment(selectedBarber, selectedDate);
   const createAppointment = useCreateAppointment();
 
-  const loading = sLoading || bLoading || meLoading || adLoading || ahLoading;
+  const loading = sLoading || bLoading || meLoading || adLoading || ahLoading; 
 
-  const toYMD = (d: Date) => d.toISOString().slice(0, 10);
+  const onSubmit = () => {
+    if (!selectedDate || !selectedBarber || !selectedService || !selectedHour) return alert("Lütfen gerekli alanları doldurun.");
+    createAppointment.mutate({ 
+      barberId: selectedBarber,
+      serviceIds: selectedService,
+      appointmentStartAt: `${selectedDate}T${selectedHour}`
+    }, {
+      onSuccess: (data) => { ;
+        setSelectedDate(undefined);
+        setSelectedBarber(undefined);
+        setSelectedService(undefined);
+        setSelectedHour(undefined);
+        alert("Randevu oluşturuldu.");
+        router.replace("/(customer)/profile");
+      },
+      onError: (err: any) => {
+        const msg =
+          err?.response?.data?.message ||
+          err?.message ||
+          "Randevu oluşturulamadı.";
+        alert(msg);
+      },
+    }
+   );
 
-  // Türkiye saatiyle bugün
+  };
   useEffect(() => {
     if (!selectedDate && availableDates?.length) {
-      const now = new Date();
-      const trNow = new Date(now.getTime() + 3 * 60 * 60 * 1000); // UTC+3
-      const today = toYMD(trNow);
-      const match = availableDates.find((d: string) => d.startsWith(today));
-      setSelectedDate(match ?? availableDates[0]);
+      setSelectedDate(availableDates[0]);
     }
+    
   }, [availableDates, selectedDate]);
 
-  // İlk berberi seç
   useEffect(() => {
     if (!selectedBarber && barbers?.length) {
       setSelectedBarber(barbers[0].id);
@@ -52,7 +73,7 @@ export default function CustomerAppointments() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <FlatList
-        data={[1]} // dummy
+        data={[1]}
         keyExtractor={() => "header"}
         refreshControl={
           <RefreshControl
@@ -97,7 +118,13 @@ export default function CustomerAppointments() {
               selectedHour={selectedHour}
               onSelect={setSelectedHour}
             />
-
+            <TouchableOpacity activeOpacity={0.8} style={{ marginTop: 16, backgroundColor: "rgba(255,255,255,0.04)", borderRadius: 16 }}>
+              <Button
+                title={createAppointment.isPending ? "Randevu Oluşturuluyor..." : "Randevu Oluştur"}
+                onPress={onSubmit}
+                disabled={createAppointment.isPending}
+              />
+            </TouchableOpacity>
             <Space />
           </>
         }

@@ -26,7 +26,8 @@ export default function LastAppointmentCard({ lastAppt, loading }: Props) {
   if (!lastAppt) return null;
 
   const barberName = `${lastAppt.barber?.firstName ?? ""} ${lastAppt.barber?.lastName ?? ""}`.trim();
-  const serviceName = lastAppt.service?.name ?? "Servis";
+  const firstService = lastAppt.appointmentServices?.[0];
+  const serviceName = firstService?.service?.name ?? "Hizmet";
   const dateLabel = formatDate(lastAppt.appointmentStartAt);
   const initials = getInitials(lastAppt.barber?.firstName, lastAppt.barber?.lastName);
 

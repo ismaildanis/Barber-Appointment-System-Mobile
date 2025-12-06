@@ -3,7 +3,6 @@ export interface Appointment {
     id: number;
     customerId: number;
     barberId: number;
-    serviceId: number;
     appointmentStartAt: string;
     appointmentEndAt: string;
     status: Status;
@@ -16,7 +15,7 @@ export interface Appointment {
 
 export interface LastAppointment extends Appointment {
   barber?: Barber | null;
-  service?: Service | null;
+  appointmentServices?: AppointmentService[] | null;
 }
 
 export interface Barber {
@@ -31,10 +30,17 @@ export interface Service {
     image?: string;
 }
 
+export interface AppointmentService {
+    id: number;
+    appointmentId: number;
+    serviceId: number;
+    service: Service;
+}
+
 export interface CreateAppointmentRequest {
     barberId: number;
-    serviceId: number;
-    appointmentStartAt: Date;
+    serviceIds: number;
+    appointmentStartAt: string;
     notes?: string;
 }
 
