@@ -39,7 +39,7 @@ export interface AppointmentService {
 
 export interface CreateAppointmentRequest {
     barberId: number;
-    serviceIds: number;
+    serviceIds: number[];
     appointmentStartAt: string;
     notes?: string;
 }

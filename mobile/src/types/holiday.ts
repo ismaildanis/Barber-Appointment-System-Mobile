@@ -1,11 +1,11 @@
 export interface HolidayDate {
     id: number;
     reason: string;
-    date: Date;
-    createdAt: Date;
+    date: string;
+    createdAt: string;
 }
 
 export interface CreateHolidayRequest {
     reason: string;
-    date: Date;
+    date: string;
 }

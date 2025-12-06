@@ -5,8 +5,8 @@ export interface Service {
     price: string
     duration: number
     image?: string
-    createdAt: Date
-    updatedAt: Date
+    createdAt: string
+    updatedAt: string
 }
 
 export interface CreateService {

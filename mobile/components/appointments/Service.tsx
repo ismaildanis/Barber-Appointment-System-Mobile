@@ -6,7 +6,7 @@ import { Service } from "@/src/types/service";
 type ServicesProps = {
   services: Service[];
   loading?: boolean;
-  selectedService?: number;
+  selectedService?: Array<number>;
   onSelect?: (serviceId: number) => void;
 };
 
@@ -37,7 +37,7 @@ export default function Services({ services, loading, selectedService, onSelect 
         keyExtractor={(item) => String(item.id)}
         ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
         renderItem={({ item }) => {
-          const isSelected = selectedService === item.id;
+          const isSelected = selectedService?.includes(item.id)
           return (
             <TouchableOpacity
               activeOpacity={0.85}

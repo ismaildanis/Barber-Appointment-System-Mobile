@@ -17,7 +17,7 @@ export default function CustomerAppointments() {
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<string>();
   const [selectedBarber, setSelectedBarber] = useState<number>();
-  const [selectedService, setSelectedService] = useState<number>();
+  const [selectedService, setSelectedService] = useState<number[]>([]);
   const [selectedHour, setSelectedHour] = useState<string>();
 
   const { data: services, isLoading: sLoading, refetch: refetchServices } = useGetServices();
@@ -29,17 +29,27 @@ export default function CustomerAppointments() {
 
   const loading = sLoading || bLoading || meLoading || adLoading || ahLoading; 
 
+
+  const durationMinutes = services       //süre toplamı 
+    ?.filter((s) => selectedService.includes(s.id)) 
+    .reduce((sum, s) => sum + s.duration, 0) ?? 0;
+
+  const toggleService = (id: number) => // ekle ve cikar
+    setSelectedService((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+  );
+
   const onSubmit = () => {
     if (!selectedDate || !selectedBarber || !selectedService || !selectedHour) return alert("Lütfen gerekli alanları doldurun.");
     createAppointment.mutate({ 
       barberId: selectedBarber,
       serviceIds: selectedService,
-      appointmentStartAt: `${selectedDate}T${selectedHour}`
+      appointmentStartAt: `${selectedDate}T${selectedHour}` 
     }, {
       onSuccess: (data) => { ;
         setSelectedDate(undefined);
         setSelectedBarber(undefined);
-        setSelectedService(undefined);
+        setSelectedService([]);
         setSelectedHour(undefined);
         alert("Randevu oluşturuldu.");
         router.replace("/(customer)/profile");
@@ -108,12 +118,12 @@ export default function CustomerAppointments() {
               services={services ?? []}
               loading={sLoading}
               selectedService={selectedService}
-              onSelect={setSelectedService}
+              onSelect={toggleService}
             />
 
             <Hours
               hours={availableHours ?? []}
-              durationMinutes={services?.find((s) => s.id === selectedService)?.duration ?? 0}
+              durationMinutes={durationMinutes}
               loading={ahLoading}
               selectedHour={selectedHour}
               onSelect={setSelectedHour}
