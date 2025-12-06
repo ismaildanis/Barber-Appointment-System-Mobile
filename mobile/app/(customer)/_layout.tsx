@@ -4,6 +4,7 @@ import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { router } from "expo-router";
 
 export default function CustomerTabLayout () {
     const colorScheme = useColorScheme();
@@ -37,8 +38,21 @@ export default function CustomerTabLayout () {
             <Tabs.Screen
                 name="appointments"
                 options={{
-                    title: 'Randevu Oluştur',
-                    tabBarIcon: ({ color }) => <IconSymbol style={{ transform: [{ rotate: '270deg' }], marginBottom: 28 }} size={50} name="scissors" color={'#AD8C57'} />,
+                    title: "Randevu Oluştur",
+                    tabBarIcon: ({ color }) => (
+                    <IconSymbol
+                        style={{ transform: [{ rotate: "270deg" }], marginBottom: 28 }}
+                        size={50}
+                        name="scissors"
+                        color="#AD8C57"
+                    />
+                    ),
+                }}
+                listeners={{
+                    tabPress: (e) => {
+                    e.preventDefault(); // varsayılan tab navigation’ı durdur
+                    router.push("/(customer)/appointments/select-barber"); // direkt seçim ekranına git
+                    },
                 }}
             />
             <Tabs.Screen

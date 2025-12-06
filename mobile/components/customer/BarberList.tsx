@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text } from "react-native";
+import { FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Barber } from "@/src/types/barber";
@@ -6,9 +6,14 @@ import Spinner from "@/components/ui/Spinner";
 import { LinearGradient } from "expo-linear-gradient";
 import { myColors } from "@/constants/theme";
 
-type BarberListProps = { barbers: Barber[]; loading?: boolean };
+type BarberListProps = {
+  barbers: Barber[];
+  loading?: boolean;
+  selectedId?: number | null;
+  onSelect?: (id: number) => void;
+};
 
-export default function BarberList({ barbers, loading = false }: BarberListProps) {
+export default function BarberList({ barbers, loading = false, selectedId, onSelect }: BarberListProps) {
   if (loading) {
     return (
       <ThemedView style={styles.container}>
@@ -38,20 +43,29 @@ export default function BarberList({ barbers, loading = false }: BarberListProps
         keyExtractor={(item) => String(item.id)}
         ItemSeparatorComponent={() => <ThemedView style={{ height: 10, backgroundColor: "transparent" }} />}
         renderItem={({ item }) => (
-        <LinearGradient
-          colors={myColors.mainBackgroundGradient}
-          start={{ x: 1, y: 1 }}
-          end={{ x: 0.1, y: 0.5 }}
-          style={styles.card}
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={() => onSelect?.(item.id)}
+          style={[
+            styles.touchable,
+            selectedId === item.id && styles.selectedCard,
+          ]}
         >
-            
-          <Image source={{ uri: item.image }} style={styles.image}></Image>
-          <ThemedView style={styles.nameContainer}>
-            <ThemedText style={styles.name}>
-              {item.firstName} {item.lastName}
-            </ThemedText>
-          </ThemedView>
-        </LinearGradient>
+          <LinearGradient
+            colors={myColors.mainBackgroundGradient}
+            start={{ x: 1, y: 1 }}
+            end={{ x: 0.1, y: 0.5 }}
+            style={styles.card}
+          >
+              
+            <Image source={{ uri: item.image }} style={styles.image}></Image>
+            <ThemedView style={styles.nameContainer}>
+              <ThemedText style={styles.name}>
+                {item.firstName} {item.lastName}
+              </ThemedText>
+            </ThemedView>
+          </LinearGradient>
+        </TouchableOpacity>
         
         )}
       />
@@ -87,7 +101,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     overflow: "hidden",
   },
-
+  touchable: { borderRadius: 18 },
+  selectedCard: { borderColor: "#4ade80", borderWidth: 1 },
   sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 12, paddingTop: 8 },
   card: {
     padding: 14,
