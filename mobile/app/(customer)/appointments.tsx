@@ -37,8 +37,11 @@ export default function CustomerAppointments() {
   const toggleService = (id: number) => // ekle ve cikar
     setSelectedService((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-  );
+    );
 
+  const toggleHours = (hour: any) =>
+    setSelectedHour((prev) => (prev === hour) ? undefined : hour);
+    
   const onSubmit = () => {
     if (!selectedDate || !selectedBarber || !selectedService || !selectedHour) return alert("Lütfen gerekli alanları doldurun.");
     createAppointment.mutate({ 
@@ -126,7 +129,7 @@ export default function CustomerAppointments() {
               durationMinutes={durationMinutes}
               loading={ahLoading}
               selectedHour={selectedHour}
-              onSelect={setSelectedHour}
+              onSelect={toggleHours}
             />
             <TouchableOpacity activeOpacity={0.8} style={{ marginTop: 16, backgroundColor: "rgba(255,255,255,0.04)", borderRadius: 16 }}>
               <Button
