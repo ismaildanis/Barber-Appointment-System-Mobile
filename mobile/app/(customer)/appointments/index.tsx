@@ -4,12 +4,14 @@ import Hours from "@/components/appointments/Hours";
 import Services from "@/components/appointments/Service";
 import Space from "@/components/appointments/Space";
 import Spinner from "@/components/ui/Spinner";
+import { myColors } from "@/constants/theme";
 
 import { useAvailableDatesForAppointment, useAvailableHoursForAppointment, useCreateAppointment } from "@/src/hooks/useAppointmentQuery";
 import { useGetBarbers } from "@/src/hooks/useBarberQuery";
 import { useGetServices } from "@/src/hooks/useServiceQuery";
 import { useUnifiedMe } from "@/src/hooks/useUnifiedAuth";
 import { useAppointmentStore } from "@/src/store/appointmentStore";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, FlatList, RefreshControl, TouchableOpacity, View, ScrollView, Text, ImageBackground } from "react-native";
@@ -104,37 +106,43 @@ export default function CustomerAppointments() {
         resizeMode="contain"
       />
 
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={loading}
-            onRefresh={() => {
-              refetchServices();
-              refetchBarbers();
-              refetchMe();
-              refetchAvailableDates();
-              refetchAvailableHours();
-            }}
-          />
-        }
-        contentContainerStyle={{ paddingBottom: 32, paddingTop: 250 }}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Kart: hero’nun üstüne bindir */}
-        <View
+        <LinearGradient
+            colors={[    "#2c2c2c",
+            "#2b2b2b",
+            "#2b2b2b"]}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
+
           style={{
-            backgroundColor: "#121212",
-            borderTopLeftRadius: 28,
-            borderTopRightRadius: 28,
-            marginTop: -40,
+            borderTopLeftRadius: 40,
+            borderTopRightRadius: 40,
+            marginTop: 210,
             padding: 20,
             paddingTop: 32,
-            gap: 16,
+
             shadowColor: "#000",
-            shadowOpacity: 0.25,
-            shadowRadius: 12,
-            shadowOffset: { width: 0, height: -2 },
+            shadowOpacity: 3,
+            shadowRadius: 18,
+            shadowOffset: { width: 0, height: 6 },
+        
+            elevation: 0,
           }}
+        >
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={() => {
+                refetchServices();
+                refetchBarbers();
+                refetchMe();
+                refetchAvailableDates();
+                refetchAvailableHours();
+              }}
+            />
+          }
+          contentContainerStyle={{ paddingBottom: 32, paddingTop: 8 }}
+          showsVerticalScrollIndicator={false}
         >
           <Dates
             dates={availableDates ?? []}
@@ -150,12 +158,12 @@ export default function CustomerAppointments() {
             onSelect={setBarberId}
           />
 
-          <Services
+          {/* <Services
             services={services ?? []}
             loading={sLoading}
             selectedService={selectedService}
             onSelect={toggleService}
-          />
+          /> */}
 
           <Hours
             hours={availableHours ?? []}
@@ -177,8 +185,8 @@ export default function CustomerAppointments() {
           </TouchableOpacity>
 
           <Space />
-        </View>
       </ScrollView>
+        </LinearGradient>
     </SafeAreaView>
   );
 }

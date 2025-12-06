@@ -1,5 +1,6 @@
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Spinner from "../ui/Spinner";
+import { LinearGradient } from "expo-linear-gradient";
 
 type HourItem = { time: string; available: boolean };
 
@@ -64,37 +65,47 @@ export default function Hours({
             contentContainerStyle={{ gap: 10, paddingHorizontal: 20 }}
             keyExtractor={(item) => item.time}
             renderItem={({ item }) => {
-                const hasSpace = canPick(item.time, hours, durationMinutes);
-                const disabled = !item.available; // busy tıklanmaz
-                const inRange = isInRange(item.time, selectedHour, hours, durationMinutes);
+              const hasSpace = canPick(item.time, hours, durationMinutes);
+              const disabled = !item.available;
+              const inRange = isInRange(item.time, selectedHour, hours, durationMinutes);
 
-                return (
+              const gradientColors = disabled
+                ? ["#2b2b2b", "#242424"] as const
+                : inRange
+                ? ["#d6b370", "#b88b4e"] as const
+                : ["#3a3a3a", "#2f2f2f"] as const;
+
+              return (
                 <TouchableOpacity
-                    disabled={disabled}
-                    onPress={() => {
-                        if (!hasSpace) {
-                            Alert.alert("Uyarı", "Bu saat seçilen servis süresi için yeterli boşluk içermiyor.");
-                            return;
-                        }
-                        onSelect?.(item.time);
-                    }}
-                    activeOpacity={disabled ? 1 : 0.8}
-                    style={[
-                        styles.slot,
-                        inRange && styles.slotSelected,
-                        disabled && styles.slotDisabled,
-                    ]}
+                  disabled={disabled}
+                  onPress={() => {
+                    if (!hasSpace) {
+                      Alert.alert("Uyarı", "Bu saat seçilen servis süresi için yeterli boşluk içermiyor.");
+                      return;
+                    }
+                    onSelect?.(item.time);
+                  }}
+                  activeOpacity={disabled ? 1 : 0.8}
+                  style={styles.slotWrapper}
                 >
-                    <Text style={[styles.slotText, disabled && styles.slotTextDisabled]}>
-                    {item.time}
-                    </Text>
+                  <LinearGradient
+                    colors={gradientColors}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={[
+                      styles.slot,
+                      disabled && styles.slotDisabled,
+                    ]}
+                  >
+                    <Text style={[styles.slotText, disabled && styles.slotTextDisabled]}>{item.time}</Text>
                     {disabled && (
-                        <View style={styles.busyBadge}>
-                            <Text style={styles.busyText}>DOLU</Text>
-                        </View>
+                      <View style={styles.busyBadge}>
+                        <Text style={styles.busyText}>DOLU</Text>
+                      </View>
                     )}
+                  </LinearGradient>
                 </TouchableOpacity>
-                );
+              );
             }}
         />
 
@@ -126,25 +137,10 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   empty: { color: "#fff" },
-    slot: {
-    minWidth: 90,
-    paddingVertical: 14,
-    borderRadius: 14,
-    backgroundColor: "#2f2f2f",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
-    marginRight: 0, // gap ile kontrol
-    },
+
   slotSelected: {
     backgroundColor: "#AD8C57",
     borderColor: "#AD8C57",
-  },
-  slotDisabled: {
-    backgroundColor: "#1f1f1f",
-    borderColor: "rgba(255,255,255,0.05)",
-    opacity: 0.5,
   },
   slotText: {
     fontSize: 16,
@@ -153,6 +149,22 @@ const styles = StyleSheet.create({
   },
   slotTextDisabled: {
     color: "rgba(255,255,255,0.5)",
+  },
+  slotWrapper: {
+    borderRadius: 18,
+  },
+  slot: {
+    minWidth: 90,
+    paddingVertical: 14,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.06)",
+  },
+  slotDisabled: {
+    borderColor: "rgba(255,255,255,0.04)",
+    opacity: 0.7,
   },
   busyBadge: {
     marginTop: 6,

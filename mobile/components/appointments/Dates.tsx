@@ -1,10 +1,12 @@
-import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import Spinner from "../ui/Spinner";
+import { LinearGradient } from "expo-linear-gradient";
+import { myColors } from "@/constants/theme";
 
 export type DatesProps = {
-  dates: string[];         
+  dates: string[];
   loading: boolean;
   selectedDate?: string;
   onSelect?: (date: string) => void;
@@ -15,12 +17,10 @@ const formatDay = (dateStr: string) => {
   const dayNum = d.getDate().toString().padStart(2, "0");
   const weekday = d
     .toLocaleDateString("tr-TR", { weekday: "short" })
-    .toUpperCase()
+    .toLocaleUpperCase()
     .replace(".", "");
   return { dayNum, weekday };
-}; 
-
-
+};
 
 export default function Dates({ dates, loading, selectedDate, onSelect }: DatesProps) {
   if (loading) {
@@ -40,7 +40,6 @@ export default function Dates({ dates, loading, selectedDate, onSelect }: DatesP
       </ThemedView>
     );
   }
-  const toYMD = (d: Date) => d.toISOString().slice(0, 10);
 
   return (
     <ThemedView style={styles.container}>
@@ -49,27 +48,34 @@ export default function Dates({ dates, loading, selectedDate, onSelect }: DatesP
         data={dates}
         keyExtractor={(item) => item}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 10 }}
+        contentContainerStyle={{ gap: 14 }}
         renderItem={({ item }) => {
           const { dayNum, weekday } = formatDay(item);
           const isSelected = selectedDate === item;
+
+          const a = myColors.mainBackgroundGradient
+
           return (
-            <TouchableOpacity onPress={() => onSelect?.(item)} activeOpacity={0.8}>
-              <ThemedView
-                style={[
-                  styles.pill,
-                  isSelected && styles.pillSelected,
-                ]}
-                lightColor="transparent"
-                darkColor="transparent"
+            <TouchableOpacity
+              onPress={() => onSelect?.(item)}
+              activeOpacity={0.9}
+            >
+              <LinearGradient
+                colors={a}
+                start={{ x: 0.1, y: 0 }}
+                end={{ x: 0, y: 1.3 }}
+                style={[styles.pill, isSelected && styles.pillSelected]}
               >
-                <ThemedText style={[styles.dayNum, isSelected && styles.dayNumSelected]}>
-                  {dayNum}
-                </ThemedText>
-                <ThemedText style={[styles.weekday, isSelected && styles.weekdaySelected]}>
-                  {weekday}
-                </ThemedText>
-              </ThemedView>
+                <ThemedText style={styles.weekday}>{weekday}</ThemedText>
+
+                {isSelected ? (
+                  <View style={styles.dayCircle}>
+                    <ThemedText style={styles.dayNumSelected}>{dayNum}</ThemedText>
+                  </View>
+                ) : (
+                  <ThemedText style={styles.dayNum}>{dayNum}</ThemedText>
+                )}
+              </LinearGradient>
             </TouchableOpacity>
           );
         }}
@@ -82,7 +88,6 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 20,
     paddingVertical: 8,
-    borderRadius: 25,
     backgroundColor: "transparent",
   },
   sectionTitle: {
@@ -91,32 +96,51 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   pill: {
-    width: 64,
-    height: 72,
-    borderRadius: 16,
-    backgroundColor: "#3a3a3a",
+    width: 62,
+    height: 90,
+    borderRadius: 999,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.18)",
+
+    shadowColor: "#ffffffff",
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+  },
+  pillSelected: {
+    borderWidth: 2,
+    borderColor: "rgba(255,255,255,0.18)",
+  },
+  weekday: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "rgba(255,255,255,0.9)",
+    marginBottom: 8,
+  },
+  dayNum: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "rgba(255,255,255,0.7)",
+  },
+
+  dayCircle: {
+    marginTop: 2,
+    width: 45,
+    height: 45,
+    borderRadius: 25,
+    backgroundColor: "#F3E1BC",
     alignItems: "center",
     justifyContent: "center",
   },
-  pillSelected: {
-    backgroundColor: "#AD8C57",
-  },
-  dayNum: {
-    fontSize: 18,
-    fontWeight: "800",
-    color: "#fff",
-  },
-  weekday: {
-    marginTop: 4,
-    fontSize: 12,
-    fontWeight: "700",
-    color: "rgba(255,255,255,0.8)",
-  },
   dayNumSelected: {
-    color: "#fff",
-  },
-  weekdaySelected: {
-    color: "#fff",
+    fontSize: 17,
+    fontWeight: "700",
+    color: "#000",
   },
   empty: {
     fontSize: 14,
