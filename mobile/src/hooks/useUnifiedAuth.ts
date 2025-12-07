@@ -16,8 +16,12 @@ export const useUnifiedMe = () => {
   });
 
   useEffect(() => {
-    if (query.isError && axios.isAxiosError(query.error) && query.error.response?.status === 401) {
-      AsyncStorage.multiRemove(["unified_access", "unified_refresh"]).then(() => {
+    if (
+      query.isError &&
+      axios.isAxiosError(query.error) &&
+      query.error.response?.status === 401
+    ) {
+      AsyncStorage.multiRemove(["unified_access", "unified_refresh"]).finally(() => {
         router.replace("/(auth)/login");
       });
     }

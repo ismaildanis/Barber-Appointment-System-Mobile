@@ -22,7 +22,7 @@ export default function SelectService() {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, padding: 16 }} >
+        <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: "#000" }} >
             <ScrollView
                 refreshControl={
                     <RefreshControl refreshing={isLoading} onRefresh={() => refetch()} />

@@ -1,26 +1,5 @@
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_URL } from "../../config";
+import { authedApi as api } from "../api/unifiedAuthApi";
 import { CreateHolidayRequest, HolidayDate } from "../types/holiday";
-const api = axios.create({
-    baseURL: API_URL,
-    headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-    },
-});
-const ACCESS_KEY = "unified_access";
-
-api.interceptors.request.use(async (config) => {
-    const token = await AsyncStorage.getItem(ACCESS_KEY);
-    if (token) {
-        config.headers = {
-            ...config.headers,
-            Authorization: `Bearer ${token}`,
-        } as any;
-    }
-    return config;
-});
 
 export const holidayApi = {
     getHolidays: async () => await api.get<HolidayDate[]>("/holiday").then(r => r.data),

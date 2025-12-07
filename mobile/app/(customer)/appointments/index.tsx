@@ -17,6 +17,8 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, RefreshControl, TouchableOpacity, ScrollView, Text, ImageBackground, Image, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AppointmentSummary from "@/components/appointments/AppointmentSummary";
+import { AlertModal } from "@/components/ui/AlertModal";
 
 export default function CustomerAppointments() {
   const router = useRouter();
@@ -29,11 +31,14 @@ export default function CustomerAppointments() {
 
   const { data: services, isLoading: sLoading, refetch: refetchServices } = useGetServices();
   const { data: barbers, isLoading: bLoading, refetch: refetchBarbers } = useGetBarbers();
-  const { data: me, isLoading: meLoading, refetch: refetchMe } = useUnifiedMe();
+  const { data: me, isLoading: meLoading, refetch: refetchMe, error } = useUnifiedMe();
   const { data: availableDates, isLoading: adLoading, refetch: refetchAvailableDates } = useAvailableDatesForAppointment();
   const { data: availableHours, isLoading: ahLoading, refetch: refetchAvailableHours } = useAvailableHoursForAppointment(safeBarberId, selectedDate);
   const createAppointment = useCreateAppointment();
-
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMsg, setAlertMsg] = useState("");
+  if (error) return console.log(error);
   const loading = sLoading || bLoading || meLoading || adLoading || ahLoading; 
   
   useEffect(() => {
@@ -61,15 +66,16 @@ export default function CustomerAppointments() {
         setBarberId(null);
         setServiceIds([]);
         setSelectedHour(undefined);
-        alert("Randevu oluşturuldu.");
-        router.replace("/(customer)/profile");
+        setAlertTitle("Randevunuz Oluşturuldu");
+        setAlertMsg("Randevunuz oluşturuldu. Randevu detaylarını Randevularım sayfasından kontrol edebilirsiniz.");
+        setAlertVisible(true);
+        router.replace("/(customer)/home");
       },
       onError: (err: any) => {
-        const msg =
-          err?.response?.data?.message ||
-          err?.message ||
-          "Randevu oluşturulamadı.";
-        alert(msg);
+        const msg = err?.response?.data?.message || err?.message || "Randevu oluşturulamadı.";
+        setAlertTitle("Hata");
+        setAlertMsg(msg);
+        setAlertVisible(true);
       },
     }
    );
@@ -89,7 +95,6 @@ export default function CustomerAppointments() {
   ];
   const remaining = others.length - 1;
 
-
   const toggleHours = (hour: any) =>
     setSelectedHour((prev) => (prev === hour) ? undefined : hour);
     
@@ -97,6 +102,7 @@ export default function CustomerAppointments() {
   const heroSource = hero ? { uri: hero } : require("@/assets/images/default-service.png"); 
 
   if (!availableDates) return <Spinner />;
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "transparent" }}>
       {/* Hero foto */}
@@ -294,21 +300,53 @@ export default function CustomerAppointments() {
             selectedHour={selectedHour}
             onSelect={toggleHours}
           />
-
+        {selectedServices.length > 0 && selectedHour && barberId &&
+          <AppointmentSummary
+            date={selectedDate}
+            time={selectedHour}
+            barberName={`${barbers?.find(b => b.id === barberId)?.firstName} ${barbers?.find(b => b.id === barberId)?.lastName}`}
+            services={selectedServices.map(s => ({ name: s.name, price: Number(s.price), duration: s.duration }))}
+            totalPrice={totalPrice}
+            totalDuration={totalDuration}
+          />
+        }
+        {selectedServices.length > 0 && selectedHour && barberId &&
           <TouchableOpacity
+            onPress={onSubmit}
             activeOpacity={0.8}
-            style={{ marginTop: 8, backgroundColor: "rgba(255,255,255,0.14)", borderRadius: 16, padding: 12 }}
+            disabled={createAppointment.isPending}
+            style={{
+              marginTop: 20,
+              paddingVertical: 24,
+              borderRadius: 24,
+              backgroundColor: createAppointment.isPending ? "rgba(173,140,87,0.6)" : "#AD8C57",
+              opacity: createAppointment.isPending ? 0.8 : 1,
+            }}
           >
-            <Button
-              title={createAppointment.isPending ? "Randevu Oluşturuluyor..." : "Randevu Oluştur"}
-              onPress={onSubmit}
-              disabled={createAppointment.isPending}
-            />
+            <Text
+              style={{
+                color: "#fff",
+                textAlign: "center",
+                fontWeight: "800",
+                letterSpacing: 0.3,
+              }}
+            >
+              {createAppointment.isPending ? "Randevu Oluşturuluyor..." : "Randevu Oluştur"}
+            </Text>
           </TouchableOpacity>
-
+        }
           <Space />
       </ScrollView>
         </LinearGradient>
+          <AlertModal
+            visible={alertVisible}
+            title={alertTitle}
+            message={alertMsg}
+            onClose={() => setAlertVisible(false)}
+            onConfirm={() => setAlertVisible(false)}
+            confirmText="Tamam"
+            cancelText="Kapat"
+          />
     </SafeAreaView>
   );
 }

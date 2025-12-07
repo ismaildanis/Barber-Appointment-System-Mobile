@@ -1,4 +1,4 @@
-import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
 import Spinner from "../ui/Spinner";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -6,9 +6,9 @@ type HourItem = { time: string; available: boolean };
 
 type HoursProps = {
   hours: HourItem[];
-  durationMinutes: number;   // seçilen servisin süresi (dk)
+  durationMinutes: number;
   loading?: boolean;
-  selectedHour?: string;     // başlangıç slotu
+  selectedHour?: string;
   onSelect?: (hour: string) => void;
 };
 
@@ -32,17 +32,10 @@ const isInRange = (time: string, selected: string | undefined, hours: HourItem[]
   return idx >= start && idx < start + need;
 };
 
-export default function Hours({
-  hours,
-  durationMinutes,
-  loading,
-  selectedHour,
-  onSelect,
-}: HoursProps) {
+export default function Hours({ hours, durationMinutes, loading, selectedHour, onSelect }: HoursProps) {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Text style={styles.sectionTitle}>Saatler</Text>
         <Spinner size="small" />
       </View>
     );
@@ -50,33 +43,56 @@ export default function Hours({
   if (!hours?.length) {
     return (
       <View style={styles.container}>
-        <Text style={styles.sectionTitle}>Saatler</Text>
-        <Text style={styles.empty}>Bu gün için saat bulunamadı.</Text>
+        <Text style={styles.empty}>Bu gün için saat bulunamadı. Sayfayı yenileyin ya da farklı bir tarih seçin.</Text>
       </View>
     );
   }
 
+  const PAGE_W = Dimensions.get("window").width - 40; // aynı kalsın
+  const GAP = 12;
+  const ITEM_W = (PAGE_W - 2 * GAP) / 3; // 3 sütun, 2 ara boşluk
+
+  const pages: HourItem[][] = [];
+  for (let i = 0; i < hours.length; i += 9) pages.push(hours.slice(i, i + 9));
+
   return (
-    <View style={styles.container}>
-        <FlatList
-            data={hours}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 10, paddingHorizontal: 20 }}
-            keyExtractor={(item) => item.time}
-            renderItem={({ item }) => {
+    <LinearGradient
+      colors={["#4A4A4A", "#3A3A3A", "#2b2b2b"]}
+      start={{ x: 0, y: 1.3 }}
+      end={{ x: 0.3, y: 0 }}
+      style={styles.container}
+    >
+      <Text style={styles.sectionTitle}>Randevu Başlangıç Saati Seçin</Text>
+      <FlatList
+        data={pages}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
+        contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 10 }}
+        renderItem={({ item: page }) => (
+          <View
+            style={{
+              width: PAGE_W,
+              flexDirection: "row",
+              flexWrap: "wrap",
+              columnGap: GAP,
+              rowGap: GAP,
+              justifyContent: "flex-start",
+            }}
+          >
+            {page.map((item) => {
               const hasSpace = canPick(item.time, hours, durationMinutes);
               const disabled = !item.available;
               const inRange = isInRange(item.time, selectedHour, hours, durationMinutes);
-
               const gradientColors = disabled
-                ? ["#2b2b2b", "#242424"] as const
+                ? ["#4A4A4A", "#4A4A4A"] as const
                 : inRange
                 ? ["#d6b370", "#b88b4e"] as const
-                : ["#3a3a3a", "#2f2f2f"] as const;
+                : ["#2b2b2b", "#4A4A4A"] as const;
 
               return (
                 <TouchableOpacity
+                  key={item.time}
                   disabled={disabled}
                   onPress={() => {
                     if (!hasSpace) {
@@ -86,43 +102,36 @@ export default function Hours({
                     onSelect?.(item.time);
                   }}
                   activeOpacity={disabled ? 1 : 0.8}
-                  style={styles.slotWrapper}
+                  style={{ width: ITEM_W, borderRadius: 18 }}
                 >
                   <LinearGradient
                     colors={gradientColors}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={[
-                      styles.slot,
-                      disabled && styles.slotDisabled,
-                    ]}
+                    start={{ x: 1, y: 1 }}
+                    end={{ x: 1, y: 0 }}
+                    style={[styles.slot, disabled && styles.slotDisabled]}
                   >
                     <Text style={[styles.slotText, disabled && styles.slotTextDisabled]}>{item.time}</Text>
-                    {disabled && (
-                      <View style={styles.busyBadge}>
-                        <Text style={styles.busyText}>DOLU</Text>
-                      </View>
-                    )}
                   </LinearGradient>
                 </TouchableOpacity>
               );
-            }}
-        />
-
-    </View>
+            })}
+          </View>
+        )}
+      />
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     marginTop: 40,
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 20,
     borderRadius: 22,
     backgroundColor: "rgba(255,255,255,0.04)",
-    borderWidth: 5,
+    borderWidth: 1,
     borderColor: "rgba(255,255,255,0.08)",
     shadowColor: "#000",
     shadowOpacity: 0.15,
@@ -137,11 +146,6 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   empty: { color: "#fff" },
-
-  slotSelected: {
-    backgroundColor: "#AD8C57",
-    borderColor: "#AD8C57",
-  },
   slotText: {
     fontSize: 16,
     fontWeight: "700",
@@ -150,12 +154,10 @@ const styles = StyleSheet.create({
   slotTextDisabled: {
     color: "rgba(255,255,255,0.5)",
   },
-  slotWrapper: {
-    borderRadius: 18,
-  },
   slot: {
     minWidth: 90,
-    paddingVertical: 14,
+    height: 58,
+    paddingVertical: 12,
     borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
@@ -163,19 +165,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.06)",
   },
   slotDisabled: {
-    borderColor: "rgba(255,255,255,0.04)",
-    opacity: 0.7,
-  },
-  busyBadge: {
-    marginTop: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-    backgroundColor: "rgba(255,255,255,0.12)",
-  },
-  busyText: {
-    color: "rgba(255,255,255,0.8)",
-    fontSize: 12,
-    fontWeight: "700",
+    borderColor: "rgba(255,255,255,0.03)",
+    opacity: 0.45,
   },
 });

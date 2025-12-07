@@ -1,11 +1,9 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "../../config";
-import { useRouter } from "expo-router";
 
 const ACCESS_KEY = "unified_access";
 const REFRESH_KEY = "unified_refresh";
-const router = useRouter();
 
 const api = axios.create({
   baseURL: API_URL,
@@ -70,7 +68,6 @@ api.interceptors.response.use(
       if (axios.isAxiosError(err) && err.response?.status === 401) {
         await AsyncStorage.multiRemove([ACCESS_KEY, REFRESH_KEY]);
       }
-      router.replace('/(auth)/login')
       queue.forEach((cb) => cb(null));
       queue = [];
       return Promise.reject(err);
@@ -93,3 +90,5 @@ export const unifiedAuthApi = {
     await AsyncStorage.multiRemove([ACCESS_KEY, REFRESH_KEY]);
   },
 };
+
+export { api as authedApi };

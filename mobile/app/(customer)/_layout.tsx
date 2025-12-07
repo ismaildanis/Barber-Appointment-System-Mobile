@@ -17,7 +17,7 @@ export default function CustomerTabLayout () {
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
             paddingTop: 20,
-            backgroundColor: Colors[colorScheme ?? "light"].background,
+            backgroundColor: Colors[colorScheme ?? "dark"].background,
             height: 100,                 
             position: "absolute",
             overflow: "hidden",             
@@ -55,6 +55,12 @@ export default function CustomerTabLayout () {
                 //     },
                 // }}
             />
+
+            <Tabs.Screen
+                name="(modals)"
+                options={{ href: null }} // tab bar’da görünmez, rotaya yine push edebilirsin
+            />
+            
             <Tabs.Screen
                 name="profile"
                 options={{

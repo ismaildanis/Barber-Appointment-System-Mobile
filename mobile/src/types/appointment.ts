@@ -1,4 +1,22 @@
 export type Status = 'SCHEDULED' | 'COMPLETED' | 'NO_SHOW' | 'EXPIRED' | 'BARBER_CANCELLED' |'CANCELLED';
+
+export const statusLabel: Record<Status, string> = {
+  SCHEDULED: "Planlandı",
+  COMPLETED: "Tamamlandı",
+  NO_SHOW: "Gelinmedi",
+  EXPIRED: "Süresi Doldu",
+  BARBER_CANCELLED: "Berber İptali",
+  CANCELLED: "İptal Edildi",
+};
+
+export const statusColor: Record<Status, string> = {
+  SCHEDULED: "#4ade80",        // yeşil
+  COMPLETED: "#22c55e",        // koyu yeşil
+  NO_SHOW: "#f59e0b",          // amber
+  EXPIRED: "#a855f7",          // mor
+  BARBER_CANCELLED: "#ef4444", // kırmızı
+  CANCELLED: "#ef4444",        // kırmızı
+};
 export interface Appointment {
     id: number;
     customerId: number;
