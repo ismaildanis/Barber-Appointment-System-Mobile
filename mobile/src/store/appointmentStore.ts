@@ -5,7 +5,7 @@ type AppointmentState = {
   setBarberId: (id: number | null) => void;
 };
 
-export const useAppointmentStore = create<AppointmentState>((set: any) => ({
+export const useAppointmentStore = create<AppointmentState>((set) => ({
   barberId: null,
-  setBarberId: (id : any) => set({ barberId: id }),
+  setBarberId: (id: number | null) => set({ barberId: id }),
 }));

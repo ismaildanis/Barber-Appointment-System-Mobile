@@ -48,12 +48,12 @@ export default function CustomerTabLayout () {
                     />
                     ),
                 }}
-                listeners={{
-                    tabPress: (e) => {
-                    e.preventDefault(); // varsayılan tab navigation’ı durdur
-                    router.push("/(customer)/appointments/select-barber"); // direkt seçim ekranına git
-                    },
-                }}
+                // listeners={{
+                //     tabPress: (e) => {
+                //     e.preventDefault(); // varsayılan tab navigation’ı durdur
+                //     router.push("/(customer)/appointments/select-barber"); // direkt seçim ekranına git
+                //     },
+                // }}
             />
             <Tabs.Screen
                 name="profile"

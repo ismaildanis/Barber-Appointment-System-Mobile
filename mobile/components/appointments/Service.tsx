@@ -1,10 +1,10 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import Spinner from "../ui/Spinner";
 import { Service } from "@/src/types/service";
 
 
 type ServicesProps = {
-  services: Service[];
+  services: Service[] | undefined;
   loading?: boolean;
   selectedService?: Array<number>;
   onSelect?: (serviceId: number) => void;
@@ -28,18 +28,15 @@ export default function Services({ services, loading, selectedService, onSelect 
       </View>
     );
   }
-
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>Hizmetler</Text>
-      <FlatList
-        data={services}
-        keyExtractor={(item) => String(item.id)}
-        ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-        renderItem={({ item }) => {
-          const isSelected = selectedService?.includes(item.id)
+      <View style={{ gap: 12 }}>
+        {services.map((item) => {
+          const isSelected = selectedService?.includes(item.id);
           return (
             <TouchableOpacity
+              key={item.id}
               activeOpacity={0.85}
               onPress={() => onSelect?.(item.id)}
               style={[styles.card, isSelected && styles.cardSelected]}
@@ -63,10 +60,11 @@ export default function Services({ services, loading, selectedService, onSelect 
               </View>
             </TouchableOpacity>
           );
-        }}
-      />
+        })}
+      </View>
     </View>
   );
+
 }
 
 const styles = StyleSheet.create({
