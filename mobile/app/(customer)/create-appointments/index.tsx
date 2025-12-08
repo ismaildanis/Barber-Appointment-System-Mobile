@@ -244,9 +244,12 @@ export default function CreateAppointments() {
           contentContainerStyle={{ paddingBottom: 32, paddingTop: 8 }}
           showsVerticalScrollIndicator={false}
         > 
-          <View style={{ flexDirection: "row", justifyContent:"center", alignItems: "center", gap: 8, paddingHorizontal: 8 }}>
-            <Text style={{ fontWeight: "700", fontSize: 40, color: "#fff" }}>{`${selected?.firstName}`}</Text>
-            <Text style={{ fontWeight: "700", fontSize: 40, color: "#fff" }}>{`${selected?.lastName}`}</Text>
+          <View style={{ flexDirection: "row", justifyContent:"space-between", alignItems: "center", gap: 8, paddingHorizontal: 8 }}>
+            <Text style={{ fontWeight: "700", fontSize: 28, color: "#fff" }}>Berber:</Text>
+            <View style={{ flexDirection: "row", gap: 8 }}>
+              <Text style={{ fontWeight: "700", fontSize: 28, color: "#fff" }}>{`${selected?.firstName}`}</Text>
+              <Text style={{ fontWeight: "700", fontSize: 28, color: "#fff" }}>{`${selected?.lastName}`}</Text>
+            </View>
           </View>
 
           <View
@@ -269,7 +272,7 @@ export default function CreateAppointments() {
           <TouchableOpacity
             activeOpacity={0.85}
             onPress={() => router.push("/(customer)/create-appointments/select-service")}
-            style={{ marginTop: 12, borderRadius: 16, overflow: "hidden" }}
+            style={{ marginTop: 20, borderRadius: 16, overflow: "hidden" }}
           >
             <LinearGradient
               colors={["#C8AA7A", "#E4D2AC"]}
@@ -320,7 +323,7 @@ export default function CreateAppointments() {
           {selectedServices.length > 0 && selectedHour && barberId && (
             <View
               style={{
-                marginTop: 12,
+                marginTop: 20,
                 padding: 12,
                 borderRadius: 16,
                 backgroundColor: "rgba(255,255,255,0.05)",

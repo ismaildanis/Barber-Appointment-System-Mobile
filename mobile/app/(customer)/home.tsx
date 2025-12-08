@@ -1,6 +1,4 @@
 import { ScrollView, RefreshControl, StyleSheet, View, TouchableOpacity } from "react-native";
-import Logo from "../../assets/logo/a.svg";
-
 import ShopHeader from "@/components/customer/ShopHeader";
 import ServiceList from "@/components/customer/ServiceList";
 import BarberList from "@/components/customer/BarberList";
@@ -9,23 +7,17 @@ import { useGetServices } from "@/src/hooks/useServiceQuery";
 import { useGetBarbers } from "@/src/hooks/useBarberQuery";
 import { useUnifiedLogout, useUnifiedMe } from "@/src/hooks/useUnifiedAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemedView } from "@/components/themed-view";
 import LastAppointmentCard from "@/components/appointments/LastAppointmentCard";
 import { useGetCustomerLastAppointment, useGetCustomerScheduledAppointment } from "@/src/hooks/useAppointmentQuery";
 import { myColors } from "@/constants/theme";
 import { LinearGradient } from 'expo-linear-gradient';
-import OwnerLogo from "@/components/customer/OwnerLogo";
 import { useEffect, useState } from "react";
 import ScheduledAppointment from "@/components/appointments/ScheduledAppointment";
 import { useRouter } from "expo-router";
-import { useAppointmentStore } from "@/src/store/appointmentStore";
 
 
 export default function CustomerHome() {
   const router = useRouter();
-
-  const { appointmentId, setAppointmentId } = useAppointmentStore()
-
   const { data: services, isLoading: sLoading, refetch: refetchServices } = useGetServices();
   const { data: barbers, isLoading: bLoading, refetch: refetchBarbers } = useGetBarbers();
   const { data: me, isLoading: meLoading, refetch: refetchMe } = useUnifiedMe();

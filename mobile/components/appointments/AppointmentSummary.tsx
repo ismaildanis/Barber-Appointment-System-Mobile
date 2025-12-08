@@ -88,7 +88,7 @@ export default function AppointmentSummary({
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 16,
+        marginTop: 20,
         padding: 16,
         borderRadius: 16,
         backgroundColor: "rgba(255,255,255,0.05)",

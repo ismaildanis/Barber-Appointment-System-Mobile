@@ -1,13 +1,9 @@
-import { StyleSheet, useWindowDimensions, View, Text, Button } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, useWindowDimensions, View, Text, Button,TouchableOpacity } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { myColors } from "@/constants/theme";
 import { Customer } from "@/src/types/customerAuth";
-import OwnerLogo from "@/components/customer/OwnerLogo";
-import Logo from "../../assets/logo/a.svg";
-import { success } from "zod";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 type ShopHeaderProps = {
   customer: Customer;
@@ -52,6 +48,15 @@ export default function ShopHeader({ customer, logout }: ShopHeaderProps) {
               <View style={{ flex: 1, alignItems: "flex-end" }}>
                 <Button title="Cıkıs Yap" onPress={onSubmit}  />
               </View>
+              <TouchableOpacity onPress={() => router.push("/profile")}>
+                <Ionicons
+                  name="person"
+                  size={24}
+                  color="#E4D2AC"
+                  style={{ marginLeft: 10 }}
+
+                /> 
+              </TouchableOpacity>
             </View>
           </View>
       </ThemedView>

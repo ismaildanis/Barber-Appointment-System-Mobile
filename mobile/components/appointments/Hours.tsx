@@ -142,7 +142,7 @@ export default function Hours({ hours, durationMinutes, loading, selectedHour, o
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
+    marginTop: 20,
     flexDirection: "column",
     alignItems: "center",
     paddingHorizontal: 20,
