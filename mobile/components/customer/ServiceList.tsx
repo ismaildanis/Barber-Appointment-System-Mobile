@@ -2,7 +2,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Service } from "@/src/types/service";
 import Spinner from "@/components/ui/Spinner";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, memo } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { FlatList, NativeScrollEvent, NativeSyntheticEvent, StyleSheet, Text, useWindowDimensions } from "react-native";
 import { myColors } from "@/constants/theme";
@@ -13,6 +13,33 @@ export type ServiceListProps = {
   loading: boolean;
   autoPlay?: boolean;
 };
+
+type ServiceCardProps = {
+  item: Service;
+  cardWidth: number;
+  cardHeight: number;
+};
+
+const ServiceCard = memo(({ item, cardWidth, cardHeight }: ServiceCardProps) => (
+  <LinearGradient
+    colors={myColors.mainBackgroundGradient}
+    start={{ x: 0, y: 0.5 }}
+    end={{ x: 1, y: 0.5 }}
+    style={[styles.card, { width: cardWidth, height: cardHeight }]}
+  >
+    <Image 
+      source={{ uri: item.image, cache: "force-cache" }} 
+      style={styles.cardImage}>
+    </Image>
+    <Text style={styles.cardTitle} numberOfLines={1}>
+      {item.name}
+    </Text>
+    <Text style={styles.cardPrice}>{item.price} ₺</Text>
+    <ThemedText style={styles.cardMeta} numberOfLines={2}>
+      {item.description}
+    </ThemedText>
+  </LinearGradient>
+));
 
 export default function ServiceList({ services, loading = false, autoPlay = true }: ServiceListProps) {
   const { width } = useWindowDimensions();
@@ -59,25 +86,7 @@ export default function ServiceList({ services, loading = false, autoPlay = true
 
   const renderItem = useCallback(
     ({ item }: { item: Service }) => (
-      <LinearGradient
-        colors={myColors.mainBackgroundGradient}
-        start={{ x: 0, y: 0.5 }}
-        end={{ x: 1, y: 0.5 }}
-        style={[styles.card, { width: cardWidth, height: cardHeight }]}
-      >
-        <Image 
-          source={{ uri: item.image }} 
-          style={styles.cardImage}>
-
-        </Image>
-        <Text style={styles.cardTitle} numberOfLines={1}>
-          {item.name}
-        </Text>
-        <Text style={styles.cardPrice}>{item.price} ₺</Text>
-        <ThemedText style={styles.cardMeta} numberOfLines={2}>
-          {item.description}
-        </ThemedText>
-      </LinearGradient>
+      <ServiceCard item={item} cardWidth={cardWidth} cardHeight={cardHeight} />
     ),
     [cardWidth, cardHeight]
   );
@@ -109,6 +118,9 @@ export default function ServiceList({ services, loading = false, autoPlay = true
         bounces={false}
         ref={listRef}
         horizontal
+        initialNumToRender={2}
+        maxToRenderPerBatch={3}
+        windowSize={5}
         data={services}
         keyExtractor={keyExtractor}
         showsHorizontalScrollIndicator={false}
