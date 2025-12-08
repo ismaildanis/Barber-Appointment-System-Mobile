@@ -1,4 +1,4 @@
-import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
 import Spinner from "../ui/Spinner";
 import { LinearGradient } from "expo-linear-gradient";
 import { AlertModal } from "../ui/AlertModal";
@@ -55,12 +55,9 @@ export default function Hours({ hours, durationMinutes, loading, selectedHour, o
     );
   }
 
-  const PAGE_W = Dimensions.get("window").width - 40;
-  const GAP = 12;
-  const ITEM_W = (PAGE_W - 2 * GAP) / 3;
-
-  const pages: HourItem[][] = [];
-  for (let i = 0; i < hours.length; i += 9) pages.push(hours.slice(i, i + 9));
+  const GAP = 10;
+  const COLS = 10; // 10 sütun
+  const ITEM_W = 70;
 
   return (
     <LinearGradient
@@ -70,71 +67,67 @@ export default function Hours({ hours, durationMinutes, loading, selectedHour, o
       style={styles.container}
     >
       <Text style={styles.sectionTitle}>Randevu Başlangıç Saati Seçin</Text>
-      <FlatList
-        data={pages}
+      <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
         contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 10 }}
-        renderItem={({ item: page }) => (
-          <View
-            style={{
-              width: PAGE_W,
-              flexDirection: "row",
-              flexWrap: "wrap",
-              columnGap: GAP,
-              rowGap: GAP,
-              justifyContent: "flex-start",
-            }}
-          >
-            {page.map((item) => {
-              const hasSpace = canPick(item.time, hours, durationMinutes);
-              const disabled = !item.available;
-              const inRange = isInRange(item.time, selectedHour, hours, durationMinutes);
-              const gradientColors = disabled
-                ? ["#4A4A4A", "#4A4A4A"] as const
-                : inRange
-                ? ["#d6b370", "#b88b4e"] as const
-                : ["#2b2b2b", "#4A4A4A"] as const;
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            columnGap: GAP,
+            rowGap: GAP,
+            width: COLS * ITEM_W + (COLS - 1) * GAP,
+          }}
+        >
+          {hours.map((item) => {
+            const hasSpace = canPick(item.time, hours, durationMinutes);
+            const disabled = !item.available;
+            const inRange = isInRange(item.time, selectedHour, hours, durationMinutes);
+            const gradientColors = disabled
+              ? ["#4A4A4A", "#4A4A4A"] as const
+              : inRange
+              ? ["#d6b370", "#b88b4e"] as const
+              : ["#2b2b2b", "#4A4A4A"] as const;
 
-              return (
-                <TouchableOpacity
-                  key={item.time}
-                  disabled={disabled}
-                  onPress={() => {
-                    if (!hasSpace) {
-                      setAlertTitle("Uyarı")
-                      setAlertMsg("Bu saat seçilen servis süresi için yeterli boşluk içermiyor.")
-                      setAlertVisible(true);                     
-                      return;
-                    }
-                    onSelect?.(item.time);
-                  }}
-                  activeOpacity={disabled ? 1 : 0.8}
-                  style={{ width: ITEM_W, borderRadius: 18 }}
+            return (
+              <TouchableOpacity
+                key={item.time}
+                disabled={disabled}
+                onPress={() => {
+                  if (!hasSpace) {
+                    setAlertTitle("Uyarı")
+                    setAlertMsg("Bu saat seçilen servis süresi için yeterli boşluk içermiyor.")
+                    setAlertVisible(true);                     
+                    return;
+                  }
+                  onSelect?.(item.time);
+                }}
+                activeOpacity={disabled ? 1 : 0.8}
+                style={{ width: ITEM_W }}
+              >
+                <LinearGradient
+                  colors={gradientColors}
+                  start={{ x: 1, y: 1 }}
+                  end={{ x: 1, y: 0 }}
+                  style={[styles.slot, disabled && styles.slotDisabled]}
                 >
-                  <LinearGradient
-                    colors={gradientColors}
-                    start={{ x: 1, y: 1 }}
-                    end={{ x: 1, y: 0 }}
-                    style={[styles.slot, disabled && styles.slotDisabled]}
-                  >
-                    <Text style={[styles.slotText, disabled && styles.slotTextDisabled]}>{item.time}</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        )}
-      />
+                  <Text style={[styles.slotText, disabled && styles.slotTextDisabled]}>{item.time}</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </ScrollView>
       <AlertModal
         visible={alertVisible}
         title={alertTitle}
         message={alertMsg}
         onClose={() => setAlertVisible(false)}
         onConfirm={() => setAlertVisible(false)}
-      confirmText="Tamam"          
-      cancelText="Kapat"
+        confirmText="Tamam"          
+        cancelText="Kapat"
       />
     </LinearGradient>
   );
@@ -163,9 +156,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     color: "#fff",
   },
-  empty: { color: "#fff" },
+  empty: { 
+    color: "#fff",
+    fontSize: 14,
+    textAlign: "center",
+  },
   slotText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "700",
     color: "#fff",
   },
@@ -173,10 +170,8 @@ const styles = StyleSheet.create({
     color: "rgba(255,255,255,0.5)",
   },
   slot: {
-    minWidth: 90,
-    height: 58,
-    paddingVertical: 12,
-    borderRadius: 18,
+    height: 50,
+    borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,

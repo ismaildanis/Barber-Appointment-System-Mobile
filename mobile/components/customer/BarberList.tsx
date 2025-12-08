@@ -35,15 +35,9 @@ export default function BarberList({ barbers, loading = false, selectedId, onSel
   return (
     <ThemedView style={styles.container}>
       <ThemedText style={styles.sectionTitle}>Berberlerimiz</ThemedText>
-      <FlatList
-        data={barbers}
-        style={{ backgroundColor: "transparent" }}
-        scrollEnabled={false}
-        nestedScrollEnabled={false}
-        keyExtractor={(item) => String(item.id)}
-        ItemSeparatorComponent={() => <ThemedView style={{ height: 10, backgroundColor: "transparent" }} />}
-        renderItem={({ item }) => (
+      {barbers.map((item) => (
         <TouchableOpacity
+          key={item.id}
           activeOpacity={0.9}
           onPress={() => onSelect?.(item.id)}
           style={[
@@ -66,9 +60,7 @@ export default function BarberList({ barbers, loading = false, selectedId, onSel
             </ThemedView>
           </LinearGradient>
         </TouchableOpacity>
-        
-        )}
-      />
+      ))}
     </ThemedView>
   );
 }
