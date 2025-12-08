@@ -27,6 +27,13 @@ export const useGetCustomerLastAppointment = () =>
         staleTime: 5 * 60 * 1000,
     });
 
+export const useGetCustomerScheduledAppointment = () =>
+    useQuery({
+        queryKey: ["appointment", "last-scheduled"],
+        queryFn: () => appointmentApi.getCustomerScheduledAppointment(),
+        staleTime: 5 * 60 * 1000,
+    });
+
 export const useCreateAppointment = () => {
     const queryClient = useQueryClient()
     return useMutation({

@@ -36,7 +36,7 @@ export default function CustomerTabLayout () {
                 }}
             />
             <Tabs.Screen
-                name="appointments"
+                name="create-appointments"
                 options={{
                     title: "Randevu Oluştur",
                     tabBarIcon: ({ color }) => (
@@ -48,21 +48,15 @@ export default function CustomerTabLayout () {
                     />
                     ),
                 }}
-                // listeners={{
-                //     tabPress: (e) => {
-                //     e.preventDefault(); // varsayılan tab navigation’ı durdur
-                //     router.push("/(customer)/appointments/select-barber"); // direkt seçim ekranına git
-                //     },
-                // }}
             />
 
             <Tabs.Screen
-                name="(modals)"
-                options={{ href: null }} // tab bar’da görünmez, rotaya yine push edebilirsin
+                name="profile"
+                options={{ href: null }}
             />
             
             <Tabs.Screen
-                name="profile"
+                name="appointments"
                 options={{
                     title: 'Randevularım',
                     tabBarIcon: ({ color }) => <IconSymbol size={28} name="comb.fill" color={'#AD8C57'} />,

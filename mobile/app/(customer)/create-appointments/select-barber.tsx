@@ -1,7 +1,7 @@
 import { Button, FlatList, RefreshControl, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { useAppointmentStore } from "@/src/store/appointmentStore";
+import { useBarberStore } from "@/src/store/barberStore";
 import { useGetBarbers } from "@/src/hooks/useBarberQuery";
 import { useRouter } from "expo-router";
 import Spinner from "@/components/ui/Spinner";
@@ -12,18 +12,19 @@ import { useRef } from "react";
 export default function SelectBarber() {
     const router = useRouter();
     const { data: barbers, isLoading, refetch, error } = useGetBarbers();
-    const { barberId, setBarberId } = useAppointmentStore();
+    const { barberId, setBarberId } = useBarberStore();
     
     const hideIdsRef = useRef<number>(barberId);
 
     const onCancel = () => {
         setBarberId(hideIdsRef.current);
-        router.replace("/(customer)/appointments");
+        router.back();
     };
     const onSelect = (id: number) => {
         setBarberId(id);
-        router.replace("/(customer)/appointments");
+        router.back();
     };
+
     if (isLoading || !barbers) return <Spinner size={"large"}/>
 
     return (

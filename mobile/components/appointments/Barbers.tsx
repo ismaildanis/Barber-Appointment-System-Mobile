@@ -2,6 +2,7 @@ import { Barber } from "@/src/types/barber";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Spinner from "../ui/Spinner";
+import { useEffect } from "react";
 
 type BarbersProps = {
   barbers: Barber[];
@@ -19,14 +20,15 @@ export default function Barbers({ barbers, loading = false, selectedBarber, onSe
       </View>
     );
   }
-
+useEffect(() => {
+  barbers?.forEach(b => {
+    if (b.image) Image.prefetch(b.image);
+  });
+}, [barbers]);
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>Berberler</Text>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
-      >
+      <View style={{ gap: 12 }}>
         {barbers.map((barber) => {
           const isSelected = selectedBarber === barber.id;
           return (
@@ -37,7 +39,7 @@ export default function Barbers({ barbers, loading = false, selectedBarber, onSe
                 end={{ x: 1, y: 0.5 }}
                 style={[styles.pill, isSelected && styles.pillSelected]}
               >
-                <Image source={{ uri: barber.image }} style={styles.image} />
+                <Image source={{ uri: barber.image, cache: "force-cache" }} style={styles.image} />
                 <View style={{ flex: 1, alignItems: "flex-end", gap: 4, paddingRight: 12 }}>
                   <Text style={[styles.name, isSelected && styles.nameSelected]} numberOfLines={1}>
                     {`${barber.firstName ?? ""} ${barber.lastName ?? ""}`}
@@ -47,7 +49,7 @@ export default function Barbers({ barbers, loading = false, selectedBarber, onSe
             </TouchableOpacity>
           );
         })}
-      </ScrollView>
+      </View>
     </View>
   );
 }

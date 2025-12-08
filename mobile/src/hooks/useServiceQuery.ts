@@ -8,7 +8,10 @@ export const useGetServices = () =>
     useQuery({
         queryKey: key,
         queryFn: () => serviceApi.getServices(),
-        staleTime: 5 * 60 * 1000
+        gcTime: 30 * 60 * 1000,
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
     });
 
 export const useGetService = (id: number) => 

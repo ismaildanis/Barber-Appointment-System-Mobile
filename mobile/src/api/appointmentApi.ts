@@ -6,6 +6,7 @@ export const appointmentApi = {
     getCustomerAppointments: async () => await  api.get<LastAppointment[]>("/appointment").then(r => r.data),
     getCustomerOneAppointment: async (id: number) => await api.get<LastAppointment>(`/appointment/${id}`).then(r => r.data),
     getCustomerLastAppointment: async () => await api.get<LastAppointment | null>(`/appointment/last`).then(r => r.data),
+    getCustomerScheduledAppointment: async () => await api.get<LastAppointment | null>(`/appointment/last-scheduled`).then(r => r.data),
     createAppointment: async (data: CreateAppointmentRequest) => await api.post<Appointment | null>("/appointment", data).then(r => r.data),
     updateCustomerAppointment: async (data: UpdateAppointmentRequest) => await api.put<Appointment>("/appointment", data).then(r => r.data),
     cancelCustomerAppointment: async (id: number) => await api.put(`/appointment/cancel/${id}`).then(r => r.data),

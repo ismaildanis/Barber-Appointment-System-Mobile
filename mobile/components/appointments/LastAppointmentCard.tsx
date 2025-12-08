@@ -31,42 +31,43 @@ export default function LastAppointmentCard({ lastAppt, loading }: Props) {
   const dateLabel = formatDate(lastAppt.appointmentStartAt);
   const initials = getInitials(lastAppt.barber?.firstName, lastAppt.barber?.lastName);
 
-return (
-  <View style={styles.shadowWrapper}>
-    <BlurView intensity={40} tint="dark" style={styles.blurContainer}>
-      <LinearGradient
-        colors={myColors.mainBackgroundGradient}
-        start={{ x: 0, y: 0.5 }}
-        end={{ x: 1, y: 0.5 }}
-        locations={[0, 0.5, 1]}
-        style={styles.content}
-      >
-        <View style={styles.avatarWrapper}>
-          <LinearGradient
-            colors={["#C8AA7A", "#E4D2AC"]}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
-            style={styles.avatar}
-          >
-            <Text style={styles.avatarText}>{initials}</Text>
-          </LinearGradient>
-        </View>
-
-        <View style={styles.info}>
-          <Text style={styles.title} numberOfLines={1}>{barberName}</Text>
-          <Text style={styles.meta} numberOfLines={1}>{serviceName}</Text>
-          <Text style={styles.meta}>{dateLabel}</Text>
-        </View>
-
-        <View style={styles.badgeWrapper}>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>Son Randevu</Text>
+  return (
+    <View style={styles.shadowWrapper}>
+      <BlurView intensity={40} tint="dark" style={styles.blurContainer}>
+        <LinearGradient
+          colors={myColors.mainBackgroundGradient}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
+          locations={[0, 0.5, 1]}
+          style={styles.content}
+        >
+          <View style={styles.avatarWrapper}>
+            <LinearGradient
+              colors={["#C8AA7A", "#E4D2AC"]}
+              start={{ x: 0, y: 0.5 }}
+              end={{ x: 1, y: 0.5 }}
+              style={styles.avatar}
+            >
+              <Text style={styles.avatarText}>{initials}</Text>
+            </LinearGradient>
           </View>
-        </View>
-      </LinearGradient>
-    </BlurView>
-  </View>
-);
+
+          <View style={styles.info}>
+            <Text style={styles.title} numberOfLines={1}>{barberName}</Text>
+            <Text style={styles.meta} numberOfLines={1}>{serviceName}</Text>
+            <Text style={styles.meta}>{dateLabel}</Text>
+          </View>
+
+          <View style={styles.badgeWrapper}>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>Son Randevu</Text>
+            </View>
+          </View>
+        </LinearGradient>
+      </BlurView>
+    </View>
+
+  );
 }
 
 const styles = StyleSheet.create({

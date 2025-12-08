@@ -6,9 +6,13 @@ const key = ['barber'] as const
 
 export const useGetBarbers = () => 
     useQuery({ 
-        queryKey: key, 
+        queryKey: [key],
         queryFn: () => barberApi.getBarbers(), 
-        staleTime: 5 * 60 * 1000 
+        staleTime: 5 * 60 * 1000,
+        gcTime: 30 * 60 * 1000,
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
     });
 
 export const useGetBarber = (id: number) => 

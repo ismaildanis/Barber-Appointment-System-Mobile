@@ -1,4 +1,4 @@
-import { ScrollView, RefreshControl, StyleSheet, View } from "react-native";
+import { ScrollView, RefreshControl, StyleSheet, View, TouchableOpacity } from "react-native";
 import Logo from "../../assets/logo/a.svg";
 
 import ShopHeader from "@/components/customer/ShopHeader";
@@ -11,26 +11,39 @@ import { useUnifiedLogout, useUnifiedMe } from "@/src/hooks/useUnifiedAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedView } from "@/components/themed-view";
 import LastAppointmentCard from "@/components/appointments/LastAppointmentCard";
-import { useGetCustomerLastAppointment } from "@/src/hooks/useAppointmentQuery";
+import { useGetCustomerLastAppointment, useGetCustomerScheduledAppointment } from "@/src/hooks/useAppointmentQuery";
 import { myColors } from "@/constants/theme";
 import { LinearGradient } from 'expo-linear-gradient';
 import OwnerLogo from "@/components/customer/OwnerLogo";
 import { useEffect, useState } from "react";
+import ScheduledAppointment from "@/components/appointments/ScheduledAppointment";
+import { useRouter } from "expo-router";
+import { useAppointmentStore } from "@/src/store/appointmentStore";
 
 
 export default function CustomerHome() {
+  const router = useRouter();
+
+  const { appointmentId, setAppointmentId } = useAppointmentStore()
+
   const { data: services, isLoading: sLoading, refetch: refetchServices } = useGetServices();
   const { data: barbers, isLoading: bLoading, refetch: refetchBarbers } = useGetBarbers();
   const { data: me, isLoading: meLoading, refetch: refetchMe } = useUnifiedMe();
   const { data: lastAppt, isLoading: lastLoading, refetch: refetchLastAppt } = useGetCustomerLastAppointment();
+  const { data: ScheduledAppt, isLoading: ScheduledLoading, refetch: refetchScheduledAppt } = useGetCustomerScheduledAppointment();
+
   const logoutMutation = useUnifiedLogout();
-  const loading = sLoading || bLoading || meLoading || lastLoading;
+
+  const loading = sLoading || bLoading || meLoading || lastLoading || ScheduledLoading;
+
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   if (!mounted) {
     return null
   }
+
   if (!me) return <Spinner />;
+
   return (
     <LinearGradient
       colors={myColors.mainBackgroundGradient}
@@ -51,6 +64,7 @@ export default function CustomerHome() {
             refetchBarbers();
             refetchMe();
             refetchLastAppt();
+            refetchScheduledAppt();
           }} 
         />
       }
@@ -60,6 +74,9 @@ export default function CustomerHome() {
       ) : (
         <>
           <View style={styles.container}>
+            <TouchableOpacity onPress={() => router.push(`/(customer)/appointments/${ScheduledAppt?.id}`)}>
+              <ScheduledAppointment scheduledAppt={ScheduledAppt} loading={lastLoading}/>
+            </TouchableOpacity>
             <LastAppointmentCard lastAppt={lastAppt} loading={lastLoading} />
             <ServiceList services={services ?? []} loading={sLoading} />
             <BarberList barbers={barbers ?? []} loading={bLoading} />
@@ -75,7 +92,7 @@ export default function CustomerHome() {
 
 export const styles = StyleSheet.create({
   container: {
-    paddingTop: 40,
+    paddingTop: 10,
     flexDirection: "column",
     justifyContent: "space-between",
     gap: 40,

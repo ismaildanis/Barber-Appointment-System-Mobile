@@ -14,11 +14,11 @@ export default function SelectService() {
     const hideIdsRef = useRef<number[]>(serviceIds);
 
     const onSave = () => {
-        router.replace("/(customer)/appointments");
+        router.back();
     };
     const onCancel = () => {
         setServiceIds(hideIdsRef.current);
-        router.replace("/(customer)/appointments");
+        router.back();
     };
 
     return (

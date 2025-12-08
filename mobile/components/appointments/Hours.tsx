@@ -1,6 +1,8 @@
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
 import Spinner from "../ui/Spinner";
 import { LinearGradient } from "expo-linear-gradient";
+import { AlertModal } from "../ui/AlertModal";
+import { useState } from "react";
 
 type HourItem = { time: string; available: boolean };
 
@@ -33,6 +35,11 @@ const isInRange = (time: string, selected: string | undefined, hours: HourItem[]
 };
 
 export default function Hours({ hours, durationMinutes, loading, selectedHour, onSelect }: HoursProps) {
+  
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMsg, setAlertMsg] = useState("");
+  
   if (loading) {
     return (
       <View style={styles.container}>
@@ -43,7 +50,7 @@ export default function Hours({ hours, durationMinutes, loading, selectedHour, o
   if (!hours?.length) {
     return (
       <View style={styles.container}>
-        <Text style={styles.empty}>Bu gün için saat bulunamadı. Sayfayı yenileyin ya da farklı bir tarih seçin.</Text>
+        <Text style={styles.empty}>Bugün için saat bulunamadı. Sayfayı yenileyin ya da farklı bir tarih seçin.</Text>
       </View>
     );
   }
@@ -96,7 +103,9 @@ export default function Hours({ hours, durationMinutes, loading, selectedHour, o
                   disabled={disabled}
                   onPress={() => {
                     if (!hasSpace) {
-                      Alert.alert("Uyarı", "Bu saat seçilen servis süresi için yeterli boşluk içermiyor.");
+                      setAlertTitle("Uyarı")
+                      setAlertMsg("Bu saat seçilen servis süresi için yeterli boşluk içermiyor.")
+                      setAlertVisible(true);                     
                       return;
                     }
                     onSelect?.(item.time);
@@ -117,6 +126,15 @@ export default function Hours({ hours, durationMinutes, loading, selectedHour, o
             })}
           </View>
         )}
+      />
+      <AlertModal
+        visible={alertVisible}
+        title={alertTitle}
+        message={alertMsg}
+        onClose={() => setAlertVisible(false)}
+        onConfirm={() => setAlertVisible(false)}
+      confirmText="Tamam"          
+      cancelText="Kapat"
       />
     </LinearGradient>
   );
