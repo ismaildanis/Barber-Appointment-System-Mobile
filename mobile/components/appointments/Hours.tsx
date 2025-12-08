@@ -55,9 +55,9 @@ export default function Hours({ hours, durationMinutes, loading, selectedHour, o
     );
   }
 
-  const PAGE_W = Dimensions.get("window").width - 40; // aynı kalsın
+  const PAGE_W = Dimensions.get("window").width - 40;
   const GAP = 12;
-  const ITEM_W = (PAGE_W - 2 * GAP) / 3; // 3 sütun, 2 ara boşluk
+  const ITEM_W = (PAGE_W - 2 * GAP) / 3;
 
   const pages: HourItem[][] = [];
   for (let i = 0; i < hours.length; i += 9) pages.push(hours.slice(i, i + 9));
