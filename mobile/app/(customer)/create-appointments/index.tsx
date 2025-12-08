@@ -15,7 +15,7 @@ import { useServiceStore } from "@/src/store/serviceStore";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Button, RefreshControl, TouchableOpacity, ScrollView, Text, ImageBackground, Image, View } from "react-native";
+import { Button, RefreshControl, TouchableOpacity, ScrollView, Text, ImageBackground, Image, View, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppointmentSummary from "@/components/appointments/AppointmentSummary";
 import { AlertModal } from "@/components/ui/AlertModal";
@@ -41,7 +41,7 @@ export default function CreateAppointments() {
   const [alertMode, setAlertMode] = useState<AlertMode>("info-success");
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMsg, setAlertMsg] = useState("");
-
+  const [notes, setNotes] = useState<string>();
   const loading = sLoading || bLoading || meLoading || adLoading || ahLoading; 
   useEffect(() => {
     barbers?.forEach(b => Image.prefetch(b.image as string));
@@ -72,13 +72,15 @@ export default function CreateAppointments() {
     createAppointment.mutate({ 
       barberId,
       serviceIds,
-      appointmentStartAt: `${selectedDate}T${selectedHour}` 
+      notes,
+      appointmentStartAt: `${selectedDate}T${selectedHour}`,
     }, {
       onSuccess: (data) => { ;
         setSelectedDate(undefined);
         setBarberId(null);
         setServiceIds([]);
         setSelectedHour(undefined);
+        setNotes(undefined);
         setAlertTitle("Randevunuz Oluşturuldu");
         setAlertMsg("Randevunuz oluşturuldu. Randevu detaylarını Randevularım sayfasından kontrol edebilirsiniz.");
         setAlertMode("info-success");
@@ -315,6 +317,35 @@ export default function CreateAppointments() {
             selectedHour={selectedHour}
             onSelect={toggleHours}
           />
+          {selectedServices.length > 0 && selectedHour && barberId && (
+            <View
+              style={{
+                marginTop: 12,
+                padding: 12,
+                borderRadius: 16,
+                backgroundColor: "rgba(255,255,255,0.05)",
+                borderColor: "rgba(255,255,255,0.12)",
+                borderWidth: 1,
+              }}
+            >
+              <Text style={{ fontSize: 16, fontWeight: "700", color: "#fff", marginBottom: 8 }}>
+                Not (isteğe bağlı)
+              </Text>
+              <TextInput
+                value={notes}
+                onChangeText={setNotes}
+                multiline
+                placeholder="Berber için not bırakabilirsiniz"
+                placeholderTextColor="rgba(255,255,255,0.6)"
+                style={{
+                  fontSize: 15,
+                  color: "#f3f3f3",
+                  minHeight: 80,
+                  textAlignVertical: "top",
+                }}
+              />
+            </View>
+          )}
         {selectedServices.length > 0 && selectedHour && barberId &&
           <AppointmentSummary
             date={selectedDate}
