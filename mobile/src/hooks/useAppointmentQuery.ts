@@ -1,5 +1,5 @@
-import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, LastAppointment } from "../types/appointment";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber } from "../types/appointment";
 import { appointmentApi } from "../api/appointmentApi";
 
 const key = ["appointment"] as const;
@@ -85,10 +85,26 @@ export const  useAvailableDatesForAppointment = () =>
 
 //Barber
 
-export const useGetBarberAppointments = () => 
+export const useGetBarberAppointments = (date?: string) => 
     useQuery({
-        queryKey: key,
-        queryFn: () => appointmentApi.getBarberAppointments(),
+        queryKey: ["barber-appointments", date],
+        queryFn: () => appointmentApi.getBarberAppointments(date!),
+        enabled: !!date,
+        staleTime: 5 * 60 * 1000
+    })
+
+export const useGetBarberOneAppointment = (id?: number) => 
+    useQuery({
+        queryKey: ["barber-appointment", id],
+        queryFn: () => appointmentApi.getBarberOneAppointment(id!),
+        enabled: !!id,
+        staleTime: 5 * 60 * 1000
+    })
+
+export const useGetBarberTodayAppointments = () => 
+    useQuery({
+        queryKey: ["barber-today-appointments"],
+        queryFn: () => appointmentApi.getBarberTodayAppointments(),
         staleTime: 5 * 60 * 1000
     })
 

@@ -4,7 +4,6 @@ import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { router } from "expo-router";
 
 export default function CustomerTabLayout () {
     const colorScheme = useColorScheme();
@@ -18,7 +17,7 @@ export default function CustomerTabLayout () {
             borderTopRightRadius: 24,
             paddingTop: 20,
             backgroundColor: Colors[colorScheme ?? "dark"].background,
-            height: 100,                 
+            height: "auto",                 
             position: "absolute",
             overflow: "hidden",             
             borderTopWidth: 0,             

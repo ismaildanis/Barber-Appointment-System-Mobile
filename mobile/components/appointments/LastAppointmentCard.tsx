@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { LastAppointment } from "@/src/types/appointment";
+import { Appointment } from "@/src/types/appointment";
 import Spinner from "../ui/Spinner";
 import { myColors } from "@/constants/theme";
 import { BlurView } from "expo-blur";
 
 
-type Props = { lastAppt?: LastAppointment | null; loading: boolean };
+type Props = { lastAppt?: Appointment | null; loading: boolean };
 
 const getInitials = (firstName?: string, lastName?: string) =>
   `${firstName?.[0] ?? "B"}${lastName?.[0] ?? ""}`.toUpperCase();

@@ -1,3 +1,5 @@
+import { Customer } from "./customerAuth";
+
 export type Status = 'SCHEDULED' | 'COMPLETED' | 'NO_SHOW' | 'EXPIRED' | 'BARBER_CANCELLED' |'CANCELLED';
 
 export const statusLabel: Record<Status, string> = {
@@ -29,11 +31,24 @@ export interface Appointment {
     createdAt: string;
     updatedAt: string;
     cancelledAt?: string | null; 
+    barber?: Barber | null;
+    appointmentServices?: AppointmentService[] | null;
 }
 
-export interface LastAppointment extends Appointment {
-  barber?: Barber | null;
-  appointmentServices?: AppointmentService[] | null;
+export interface BarberAppointment {
+    id: number;
+    customerId: number;
+    barberId: number;
+    appointmentStartAt: string;
+    appointmentEndAt: string;
+    status: Status;
+    notes?: string;
+    cancelReason?: string;
+    createdAt: string;
+    updatedAt: string;
+    cancelledAt?: string | null;
+    customer?: Customer | null;
+    appointmentServices?: AppointmentService[] | null;
 }
 
 export interface Barber {

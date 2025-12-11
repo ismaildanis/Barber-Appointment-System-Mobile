@@ -6,6 +6,7 @@ import { unifiedAuthApi } from "../api/unifiedAuthApi";
 import { useEffect } from "react";
 
 const keyMe = ["unified", "me"] as const;
+const router = useRouter();
 export const useUnifiedMe = () => {
   const router = useRouter();
   const query = useQuery({
@@ -47,7 +48,9 @@ export const useUnifiedLogout = () => {
   return useMutation({
     mutationFn: () => unifiedAuthApi.logout(),
     onSuccess: async () => {
+      await AsyncStorage.multiRemove(["unified_access", "unified_refresh"]);
       await qc.removeQueries({ queryKey: keyMe });
+      router.replace("/(auth)/login");
     },
   });
 };

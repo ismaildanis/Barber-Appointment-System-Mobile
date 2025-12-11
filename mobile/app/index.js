@@ -19,7 +19,7 @@ export default function Index() {
 
     if (data.role === "customer") router.replace("/(customer)/home");
     else if (data.role === "admin") router.replace("/(admin)/dashboard");
-    else if (data.role === "barber") router.replace("/(barber)/calendar");
+    else if (data.role === "barber") router.replace("/(barber)/todayAppointments");
     else router.replace("/(auth)/login");
   }, [nav, isLoading, isError, data, router]);
 

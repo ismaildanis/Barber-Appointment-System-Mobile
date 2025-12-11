@@ -1,12 +1,12 @@
 import { authedApi as api } from "../api/unifiedAuthApi";
-import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, LastAppointment } from "../types/appointment";
+import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, BarberAppointment } from "../types/appointment";
 
 export const appointmentApi = {
     //Customer
-    getCustomerAppointments: async () => await  api.get<LastAppointment[]>("/appointment").then(r => r.data),
-    getCustomerOneAppointment: async (id: number) => await api.get<LastAppointment>(`/appointment/${id}`).then(r => r.data),
-    getCustomerLastAppointment: async () => await api.get<LastAppointment | null>(`/appointment/last`).then(r => r.data),
-    getCustomerScheduledAppointment: async () => await api.get<LastAppointment | null>(`/appointment/last-scheduled`).then(r => r.data),
+    getCustomerAppointments: async () => await  api.get<Appointment[]>("/appointment").then(r => r.data),
+    getCustomerOneAppointment: async (id: number) => await api.get<Appointment>(`/appointment/${id}`).then(r => r.data),
+    getCustomerLastAppointment: async () => await api.get<Appointment | null>(`/appointment/last`).then(r => r.data),
+    getCustomerScheduledAppointment: async () => await api.get<Appointment | null>(`/appointment/last-scheduled`).then(r => r.data),
     createAppointment: async (data: CreateAppointmentRequest) => await api.post<Appointment | null>("/appointment", data).then(r => r.data),
     updateCustomerAppointment: async (data: UpdateAppointmentRequest) => await api.put<Appointment>("/appointment", data).then(r => r.data),
     cancelCustomerAppointment: async (id: number) => await api.put(`/appointment/cancel/${id}`).then(r => r.data),
@@ -14,7 +14,9 @@ export const appointmentApi = {
     availableDatesForAppointment: async () => await api.get(`/appointment/available-dates`).then(r => r.data),
 
     //Barber
-    getBarberAppointments: async () => await api.get<Appointment[]>(`/appointment/barber`).then(r => r.data),
+    getBarberAppointments: async (date: string) => await api.get<BarberAppointment[]>(`/appointment/barber`, { params: { date } }).then(r => r.data),
+    getBarberOneAppointment: async (id: number) => await api.get<BarberAppointment>(`/appointment/barber/${id}`).then(r => r.data),
+    getBarberTodayAppointments: async () => await api.get<BarberAppointment[]>(`/appointment/barber/today`).then(r => r.data),
     cancelBarberAppointment: async (id: number) => await api.post(`/appointment/barber-cancel/${id}`).then(r => r.data),
     createBreakForBarber: async (data: CreateBreakForBarber) => await api.post(`/appointment/barber-break`, data).then(r => r.data),
 

@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
-import { LastAppointment } from "@/src/types/appointment";
+import { Appointment } from "@/src/types/appointment";
 import Spinner from "../ui/Spinner";
 import { myColors } from "@/constants/theme";
 
 type Props = { 
-    scheduledAppt?: LastAppointment | null; 
+    scheduledAppt?: Appointment | null; 
     loading: boolean;
 };
 

@@ -1,5 +1,5 @@
 import { useGetCustomerAppointments } from "@/src/hooks/useAppointmentQuery";
-import { AppointmentService, LastAppointment, statusLabel, statusColor } from "@/src/types/appointment";
+import { AppointmentService, Appointment, statusLabel, statusColor } from "@/src/types/appointment";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import Spinner from "@/components/ui/Spinner";
@@ -40,7 +40,7 @@ export default function CustomerAppointments() {
     <ThemedView style={styles.container}>
       <ThemedText style={styles.title}>Randevularım</ThemedText>
       <FlatList
-        data={data as LastAppointment[]}
+        data={data as Appointment[]}
         keyExtractor={(item) => String(item.id)}
           refreshControl={
                 <RefreshControl refreshing={isRefetching} onRefresh={refetch} />

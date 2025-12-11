@@ -15,7 +15,7 @@ import { useServiceStore } from "@/src/store/serviceStore";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Button, RefreshControl, TouchableOpacity, ScrollView, Text, ImageBackground, Image, View, TextInput } from "react-native";
+import { Button, RefreshControl, TouchableOpacity, ScrollView, Text, ImageBackground, Image, View, TextInput, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppointmentSummary from "@/components/appointments/AppointmentSummary";
 import { AlertModal } from "@/components/ui/AlertModal";
@@ -24,6 +24,7 @@ type AlertMode = "confirm" | "info-success" | "info-error";
 
 export default function CreateAppointments() {
   const router = useRouter();
+  const { height } = useWindowDimensions();
   const { barberId, setBarberId } = useBarberStore();
   const { serviceIds, setServiceIds } = useServiceStore();
   const [selectedDate, setSelectedDate] = useState<string>();
@@ -144,7 +145,7 @@ export default function CreateAppointments() {
             overflow: "hidden",
             borderRadius: 999,
             position: "absolute",
-            top: 200,
+            top: height * 0.23,
             right: 5,
           }}
         >
