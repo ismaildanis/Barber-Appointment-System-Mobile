@@ -27,6 +27,7 @@ export default function CreateAppointments() {
   const { height } = useWindowDimensions();
   const { barberId, setBarberId } = useBarberStore();
   const { serviceIds, setServiceIds } = useServiceStore();
+  
   const [selectedDate, setSelectedDate] = useState<string>();
   const [selectedHour, setSelectedHour] = useState<string>();
 
@@ -60,6 +61,11 @@ export default function CreateAppointments() {
       setBarberId(barbers[0].id)
     }
   }, [barbers, barberId]);
+
+  const onSelect = () => {
+    setSelectedHour(undefined);
+    router.push("/(customer)/create-appointments/select-service")
+  }
 
   const onClick = () => {
     setAlertTitle("Uyarı");
@@ -272,7 +278,7 @@ export default function CreateAppointments() {
 
           <TouchableOpacity
             activeOpacity={0.85}
-            onPress={() => router.push("/(customer)/create-appointments/select-service")}
+            onPress={onSelect}
             style={{ marginTop: 20, borderRadius: 16, overflow: "hidden" }}
           >
             <LinearGradient

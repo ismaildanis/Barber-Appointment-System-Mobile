@@ -40,7 +40,7 @@ export default function BarberTabLayout() {
             <Tabs.Screen 
                 name="createBreak"
                 options={{
-                    title: 'İzin Oluştur',
+                    title: 'Mola Oluştur',
                     tabBarIcon: ({ color }) => <IconSymbol size={28} name="clock.fill" color={'#AD8C57'} />,
                 }}
             /> 

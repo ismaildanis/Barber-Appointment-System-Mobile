@@ -1,5 +1,6 @@
 import Services from "@/components/appointments/Service";
 import { useGetServices } from "@/src/hooks/useServiceQuery";
+import { useHourStore } from "@/src/store/hourStore";
 import { useServiceStore } from "@/src/store/serviceStore";
 import { useRouter } from "expo-router";
 import { useRef } from "react";

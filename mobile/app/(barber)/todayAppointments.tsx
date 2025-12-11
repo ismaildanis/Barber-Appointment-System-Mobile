@@ -1,89 +1,54 @@
 import { useRouter } from "expo-router";
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
+import { ScrollView, View, Text, StyleSheet, RefreshControl } from "react-native";
 import { useGetBarberTodayAppointments } from "@/src/hooks/useAppointmentQuery";
-import Spinner from "@/components/ui/Spinner";
-import { statusLabel, statusColor, AppointmentService } from "@/src/types/appointment";
-import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import TodayAppointmentCard from "@/components/barber/TodayAppointmentCard";
+import { useMemo } from "react";
 
 export default function TodayAppointments() {
   const router = useRouter();
-  const { data, isLoading, isError, refetch, isRefetching } = useGetBarberTodayAppointments();
-
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Spinner size="large" />
-      </View>
-    );
-  }
-
-  const hasData = !!data?.length;
-  const total = hasData ? data!.length : 0;
-  const planned = hasData ? data!.filter((a) => a.status === "SCHEDULED").length : 0;
-  const done = hasData ? data!.filter((a) => a.status === "COMPLETED").length : 0;
-  const cancelled = hasData ? data!.filter((a) => a.status === "CANCELLED").length : 0;
+  const { data: todayAppointments, isLoading, isError, refetch, isRefetching } = useGetBarberTodayAppointments();
+  const today = useMemo(
+      () =>
+          new Intl.DateTimeFormat("en-CA", {
+          timeZone: "Europe/Istanbul",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          }).format(new Date()),
+      []
+  );
+  const hasData = !!todayAppointments?.length;
+  const total = hasData ? todayAppointments!.length : 0;
+  const planned = hasData ? todayAppointments!.filter((a) => a.status === "SCHEDULED").length : 0;
+  const done = hasData ? todayAppointments!.filter((a) => a.status === "COMPLETED").length : 0;
+  const cancelled = hasData ? todayAppointments!.filter((a) => a.status === "CANCELLED").length : 0;
+  const weekday = new Date(today)
+    .toLocaleDateString("tr-TR", { weekday: "long" })
+    .replace(".", "");
 
   return (
     <SafeAreaView style={{ flex: 1, padding: 16 }}>
-      <ScrollView
-        contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: 32 }}
-        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
-      >
-        <Text style={styles.title}>Bugünkü Randevular</Text>
 
+        <View style={{flexDirection: "row",justifyContent: "center",alignItems: "center", marginBottom: 12} }>
+          <Text style={{color: "#fff", fontSize: 16, fontWeight: "900"}}>Günün Randevuları</Text>
+        </View>
+
+        <View style={{flexDirection: "row",justifyContent: "center",alignItems: "center", marginBottom: 12} }>
+          <Text style={{color: "#a3a3a3", fontSize: 16, fontWeight: "700"}}>Tarih: {today.slice(0, 10)} -- {weekday}</Text>
+        </View>
+        
         <View style={styles.summary}>
           <Text style={styles.summaryText}>Toplam: {total}</Text>
           <Text style={styles.summaryText}>Planlı: {planned}</Text>
           <Text style={styles.summaryText}>Tamamlandı: {done}</Text>
           <Text style={styles.summaryText}>İptal: {cancelled}</Text>
         </View>
-
-        {!hasData || isError ? (
-          <View style={{ alignItems: "center", justifyContent: "center", paddingVertical: 40 }}>
-            <Text style={{ color: "#a3a3a3", fontSize: 16, fontWeight: "700", textAlign: "center" }}>
-              {isError ? "Randevular yüklenemedi. Yenilemeyi deneyin." : "Bugün için randevu bulunamadı."}
-            </Text>
-          </View>
-        ) : (
-          data!.map((item) => {
-            const timeRange = `${item.appointmentStartAt?.slice(11, 16)} - ${item.appointmentEndAt?.slice(11, 16)}`;
-            const services =
-              item.appointmentServices?.map((s: AppointmentService) => s.service?.name).join(", ") || "Hizmet bilgisi yok";
-
-            return (
-              <TouchableOpacity
-                key={item.id}
-                onPress={() =>
-                  router.push({
-                    pathname: "/(barber)/calendar/[id]",
-                    params: { id: String(item.id) },
-                  })
-                }
-                style={styles.card}
-                activeOpacity={0.8}
-              >
-                <View style={styles.rowBetween}>
-                  <Text style={styles.time}>{timeRange}</Text>
-                  <View style={[styles.badge, { backgroundColor: statusColor[item.status] || "#a3a3a3" }]}>
-                    <Text style={styles.badgeText}>{statusLabel[item.status] || item.status}</Text>
-                  </View>
-                </View>
-                <Text style={styles.name} numberOfLines={1}>
-                  {item.customer?.firstName} {item.customer?.lastName}
-                </Text>
-                <Text style={styles.meta} numberOfLines={2}>
-                  {services}
-                </Text>
-                {item.notes ? <Text style={styles.note}>Not: {item.notes}</Text> : null}
-                <View style={styles.detailRow}>
-                  <Text style={styles.detailText}>Detay</Text>
-                  <Ionicons name="chevron-forward" size={16} color="#d1d5db" />
-                </View>
-              </TouchableOpacity>
-            );
-          })
-        )}
+      <ScrollView
+        contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: 32 }}
+        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+      >
+        <TodayAppointmentCard todayAppointments={todayAppointments} loading={isLoading} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -91,7 +56,6 @@ export default function TodayAppointments() {
 
 const styles = StyleSheet.create({
   container: { padding: 16, backgroundColor: "#0f0f0f", justifyContent: "center" },
-  title: { fontSize: 20, fontWeight: "800", color: "#fff", marginBottom: 8 },
   empty: { color: "#ccc" },
   summary: {
     flexDirection: "row",

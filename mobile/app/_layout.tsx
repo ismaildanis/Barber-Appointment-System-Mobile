@@ -16,7 +16,7 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack screenOptions={{ headerShown: false }}>
+          <Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
             <Stack.Screen name="(auth)" />
             <Stack.Screen name="(customer)" />
             <Stack.Screen name="(barber)" />
