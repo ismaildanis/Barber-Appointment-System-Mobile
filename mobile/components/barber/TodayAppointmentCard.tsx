@@ -29,7 +29,7 @@ export default function TodayAppointmentCard({ todayAppointments, loading }: Tod
         );
     }
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, gap: 16 }}>
 
         {todayAppointments!.map((item) => {
             const timeRange = `${item.appointmentStartAt?.slice(11, 16)} - ${item.appointmentEndAt?.slice(11, 16)}`;
