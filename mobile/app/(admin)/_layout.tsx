@@ -10,7 +10,6 @@ export default function AdminTabLayout() {
 
     return (
         <Tabs     
-        initialRouteName="dashboard"
         screenOptions={{
             headerShown: false,
             tabBarStyle: {

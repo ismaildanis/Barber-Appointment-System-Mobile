@@ -35,6 +35,23 @@ export interface Appointment {
     appointmentServices?: AppointmentService[] | null;
 }
 
+export interface AdminAppointment {
+    id: number;
+    customerId: number;
+    barberId: number;
+    appointmentStartAt: string;
+    appointmentEndAt: string;
+    status: Status;
+    notes?: string;
+    cancelReason?: string;
+    createdAt: string;
+    updatedAt: string;
+    cancelledAt?: string | null;
+    barber?: Barber | null;
+    customer?: Customer | null;
+    appointmentServices?: AppointmentService[] | null; 
+}
+
 export interface BarberAppointment {
     id: number;
     customerId: number;
@@ -61,6 +78,7 @@ export interface Service {
     id: number;
     name: string;
     image?: string;
+    price: string;
 }
 
 export interface AppointmentService {
