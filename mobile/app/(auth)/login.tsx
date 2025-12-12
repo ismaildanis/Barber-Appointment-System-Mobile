@@ -33,7 +33,7 @@ export default function LoginScreen() {
     login.mutate(values, {
       onSuccess: (data) => {
         if (data.role === "customer") router.replace("/(customer)/home");
-        else if (data.role === "barber") router.replace("/(barber)/calendar");
+        else if (data.role === "barber") router.replace("/(barber)/todayAppointments");
         else router.replace("/(admin)/dashboard");
       }
     });

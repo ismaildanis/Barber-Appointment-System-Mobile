@@ -1,5 +1,5 @@
 import { authedApi as api } from "../api/unifiedAuthApi";
-import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, BarberAppointment } from "../types/appointment";
+import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, BarberAppointment, Status } from "../types/appointment";
 
 export const appointmentApi = {
     //Customer
@@ -21,6 +21,8 @@ export const appointmentApi = {
     createBreakForBarber: async (data: CreateBreakForBarber) => await api.post(`/appointment/barber-break`, data).then(r => r.data),
 
     //Admin
+    getAdminAppointments: async (status: Status) => await  api.get<Appointment[]>("/appointment/admin", { params: { status } }).then(r => r.data),
+    getAdminOneAppointment: async (id: number) => await api.get<Appointment>(`/appointment/admin/${id}`).then(r => r.data),
     markCanceledAppointment: async (id: number) => await api.post(`/appointment/mark-cancel/${id}`).then(r => r.data),
     markNoShowAppointment: async (id: number) => await api.post(`/appointment/mark-no-show/${id}`).then(r => r.data),
     markCompletedAppointment: async (id: number) => await api.post(`/appointment/mark-completed/${id}`).then(r => r.data),
