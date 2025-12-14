@@ -193,7 +193,7 @@ export default function AdminAppointments({ appointments, loading, status, setSt
                                 <TouchableOpacity
                                     onPress={() => {
                                         router.replace({
-                                            pathname: "/(admin)/dashboard/[id]",
+                                            pathname: "/(admin)/(tabs)/dashboard/[id]",
                                             params: { id: String(item.id) },
                                         })
                                     }}
