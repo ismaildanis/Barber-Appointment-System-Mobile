@@ -1,61 +1,41 @@
-import { Tabs } from "expo-router";
-import React from "react";
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Drawer } from "expo-router/drawer";
 
-export default function AdminTabLayout() {
-    const colorScheme = useColorScheme();
-
-    return (
-        <Tabs     
-        screenOptions={{
-            headerShown: false,
-            tabBarStyle: {
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-            paddingTop: 20,
-            backgroundColor: Colors[colorScheme ?? "dark"].background,
-            height: "auto",                 
-            position: "absolute",
-            overflow: "hidden",             
-            borderTopWidth: 0,             
-            elevation: 0,                   
-            },
-            tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-            tabBarButton: HapticTab,
+export default function AdminLayout() {
+  return (
+    <Drawer
+      screenOptions={{
+        headerShown: false,
+        drawerPosition: "right",
+        drawerType: "front",
+        drawerStyle: { width: "60%", backgroundColor: "#121212" },
+        overlayColor: "rgba(0,0,0,0.35)",
+      }}
+    >
+      <Drawer.Screen
+        name="(tabs)"
+        options={{
+          drawerItemStyle: { display: "none" },
         }}
-        >
-
-            <Tabs.Screen 
-                name="dashboard"
-                options={{
-                    title: 'Randevular',
-                    tabBarIcon: ({ color }) => <IconSymbol size={28} name="calendar.badge.clock" color={'#AD8C57'} />,
-                }}
-            /> 
-
-            <Tabs.Screen 
-                name="barbers"
-                options={{
-                    title: 'Berberler',
-                    tabBarIcon: ({ color }) => <IconSymbol size={28} name="clock.fill" color={'#AD8C57'} />,
-                }}
-            /> 
-            
-            
-            <Tabs.Screen 
-                name="reports"
-                options={{ title: 'Raporlarım',
-                    tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={'#AD8C57'} />
-                }}
-            />
-
-            <Tabs.Screen 
-                name="profile"
-                options={{ href: null }}
-            />
-        </Tabs>
-    )
+      />
+      <Drawer.Screen
+        name="dashboard"
+        options={{
+          drawerItemStyle: { display: "none" },
+        }}
+      />
+      <Drawer.Screen
+        name="drawer"
+        options={{
+          drawerItemStyle: { display: "none" },
+        }}
+      />
+      <Drawer.Screen
+        name="profile"
+        options={{
+            title: "Profil",
+        }}
+      />
+     
+    </Drawer>
+  );
 }
