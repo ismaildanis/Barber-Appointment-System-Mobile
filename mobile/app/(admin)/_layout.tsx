@@ -29,10 +29,17 @@ export default function AdminLayout() {
           drawerItemStyle: { display: "none" },
         }}
       />
+      
       <Drawer.Screen
         name="profile"
         options={{
             title: "Profil",
+        }}
+      />
+      <Drawer.Screen
+        name="holiday"
+        options={{
+            title: "Tatil Günleri",
         }}
       />
      

@@ -39,6 +39,13 @@
           }
         }
       ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Profil fotoğrafı yüklemek için galeri erişimi gerekli.",
+          "cameraPermission": "Profil fotoğrafı çekmek için kamera erişimi gerekli."
+        }
+      ],
       "expo-web-browser"
     ],
     "experiments": {

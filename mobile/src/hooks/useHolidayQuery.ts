@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { holidayApi } from '../api/holidayApi'
-import { HolidayDate } from '../types/holiday'
+import { CreateHolidayRequest, HolidayDate } from '../types/holiday'
 
 const key = ['holiday'] as const
 
@@ -14,7 +14,7 @@ export const useGetHolidays = () =>
 export const useCreateHoliday = () => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: (data: HolidayDate) => holidayApi.createHoliday(data),
+        mutationFn: (data: CreateHolidayRequest) => holidayApi.createHoliday(data),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: key })
         },
