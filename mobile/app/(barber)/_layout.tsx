@@ -60,6 +60,11 @@ export default function BarberTabLayout() {
                     tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={'#AD8C57'} />
                 }}
             />
+
+            <Tabs.Screen 
+                name="workingHour"
+                options={{ href: null }}
+            />
         </Tabs>
     )
 }

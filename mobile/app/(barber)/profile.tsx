@@ -50,6 +50,13 @@ export default function BarberProfile() {
         </View>
 
         <TouchableOpacity
+          style={styles.workingHourBtn}
+          onPress={() => router.replace("/(barber)/workingHour")}
+        >
+          <Text style={styles.workingHourText}>Çalışma Saatlerim</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           onPress={() =>
             logout.mutate(undefined, {
               onSuccess: () => router.replace("/(auth)/login"),
@@ -80,8 +87,21 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.08)",
     gap: 8,
   },
+
   label: { fontSize: 13, color: "rgba(255,255,255,0.7)" },
   value: { fontSize: 16, fontWeight: "700", color: "#fff" },
-  logoutBtn: { marginTop: 4, padding: 14, borderRadius: 14, backgroundColor: "#ef4444" },
+  workingHourBtn: {
+    padding: 14,
+    borderRadius: 14,
+    backgroundColor: "#fbbf24",
+    alignItems: "center",
+  },
+  workingHourText: { color: "#121212", fontWeight: "800" },
+  logoutBtn: {
+    padding: 14,
+    borderRadius: 14,
+    backgroundColor: "#ef4444",
+    alignItems: "center",
+  },
   logoutText: { color: "#fff", fontWeight: "800", textAlign: "center" },
 });
