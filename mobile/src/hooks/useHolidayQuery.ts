@@ -21,10 +21,10 @@ export const useCreateHoliday = () => {
     })
 }
 
-export const useDeleteHoliday = (id: number) => {
+export const useDeleteHoliday = () => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: () => holidayApi.deleteHoliday(id),
+        mutationFn: (id: number) => holidayApi.deleteHoliday(id),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: key })
         },

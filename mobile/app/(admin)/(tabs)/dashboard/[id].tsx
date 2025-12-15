@@ -104,7 +104,7 @@ export default function DashboardAppointmentDetail() {
   return (
     <SafeAreaView style={styles.container}>
       {isWorking && <Spinner />}
-      <TouchableOpacity onPress={() => router.replace("/(admin)/dashboard")} style={styles.backBtn}>
+      <TouchableOpacity onPress={() => router.replace("/(admin)/(tabs)/dashboard")} style={styles.backBtn}>
         <Ionicons name="arrow-back" size={22} color="#fff" />
       </TouchableOpacity>
 

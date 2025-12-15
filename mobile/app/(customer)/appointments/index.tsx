@@ -6,10 +6,13 @@ import Spinner from "@/components/ui/Spinner";
 import { FlatList, View, Text, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { ScrollView } from "react-native-gesture-handler";
+import { useEffect, useState } from "react";
 
 export default function CustomerAppointments() {
   const { data, isLoading, isError, isRefetching, refetch, error} = useGetCustomerAppointments();
     const router = useRouter();
+
   if (isLoading) {
     return (
       <ThemedView style={styles.container}>

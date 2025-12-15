@@ -34,7 +34,7 @@ export default function LoginScreen() {
       onSuccess: (data) => {
         if (data.role === "customer") router.replace("/(customer)/home");
         else if (data.role === "barber") router.replace("/(barber)/todayAppointments");
-        else router.replace("/(admin)/dashboard");
+        else router.replace("/(admin)/(tabs)/dashboard");
       }
     });
   });
@@ -44,8 +44,6 @@ export default function LoginScreen() {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
     >
       <ParallaxScrollView
         headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}

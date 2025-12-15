@@ -11,6 +11,8 @@ import {
   ScrollView,
   Modal,
   Switch,
+  KeyboardAvoidingView,
+  Platform
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -32,7 +34,7 @@ export default function BarbersScreen() {
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const updateActivity = useUpdateActivityBarberr(editingId || 0);
-  const deleteBarber = useDeleteBarber(editingId || 0);
+  const deleteBarber = useDeleteBarber();
   const uploadImage = useUploadImage();
   const deleteImage = useDeleteImage(editingId || 0);
 
@@ -118,8 +120,7 @@ export default function BarbersScreen() {
           text: "Sil",
           style: "destructive",
           onPress: () => {
-            const del = useDeleteBarber(id);
-            del.mutate(undefined, {
+            deleteBarber.mutate(id, {
               onSuccess: () => {
                 Alert.alert("Başarılı", "Berber silindi.");
                 refetch();
@@ -295,6 +296,9 @@ export default function BarbersScreen() {
         transparent={true}
         onRequestClose={resetForm}
       >
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{flex: 1}}
+        >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
@@ -453,6 +457,7 @@ export default function BarbersScreen() {
             </View>
           </View>
         </View>
+        </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
   );

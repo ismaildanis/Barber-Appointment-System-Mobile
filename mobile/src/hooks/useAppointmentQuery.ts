@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, Status } from "../types/appointment";
 import { appointmentApi } from "../api/appointmentApi";
 
@@ -9,7 +9,10 @@ export const useGetCustomerAppointments = () =>
     useQuery({
         queryKey: key,
         queryFn: () => appointmentApi.getCustomerAppointments(),
-        staleTime: 5 * 60 * 1000
+        staleTime: 5 * 60 * 1000,
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
     })
 
 export const useGetCustomerOneAppointment = (id: number) => 
@@ -143,33 +146,56 @@ export const useGetAdminOneAppointment = (id: number) =>
         queryFn: () => appointmentApi.getAdminOneAppointment(id),
         enabled: !!id
     })
+const makeOptimistic = (queryClient: QueryClient, status: Status) => ({
+  onMutate: async (id: number) => {
+    await queryClient.cancelQueries({ queryKey: key });
+    await queryClient.cancelQueries({ queryKey: [key, id] });
+
+    const prevList = queryClient.getQueryData<Appointment[]>(key);
+    const prevOne = queryClient.getQueryData<Appointment>([key, id]);
+
+    if (prevList) {
+      queryClient.setQueryData(
+        key,
+        prevList.map((a) => (a.id === id ? { ...a, status } : a))
+      );
+    }
+    if (prevOne) {
+      queryClient.setQueryData([key, id], { ...prevOne, status });
+    }
+
+    return { prevList, prevOne };
+  },
+  onError: (_err: any, id: number, ctx?: any) => {
+    if (ctx?.prevList) queryClient.setQueryData(key, ctx.prevList);
+    if (ctx?.prevOne) queryClient.setQueryData([key, id], ctx.prevOne);
+  },
+  onSettled: (_data: any, _err: any, id: number) => {
+    queryClient.invalidateQueries({ queryKey: key });
+    queryClient.invalidateQueries({ queryKey: [key, id] });
+  },
+});
 
 export const useMarkCanceledAppointment = () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-        mutationFn: (id: number) => appointmentApi.markCanceledAppointment(id),
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: key })
-        },
-    })
-}
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => appointmentApi.markCanceledAppointment(id),
+    ...makeOptimistic(queryClient, "CANCELLED"),
+  });
+};
 
 export const useMarkNoShowAppointment = () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-        mutationFn: (id: number) => appointmentApi.markNoShowAppointment(id),
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: key })
-        },
-    })
-}
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => appointmentApi.markNoShowAppointment(id),
+    ...makeOptimistic(queryClient, "NO_SHOW"),
+  });
+};
 
 export const useMarkCompletedAppointment = () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-        mutationFn: (id: number) => appointmentApi.markCompletedAppointment(id),
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: key })
-        },
-    })
-}
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => appointmentApi.markCompletedAppointment(id),
+    ...makeOptimistic(queryClient, "COMPLETED"),
+  });
+};

@@ -28,12 +28,12 @@ import Spinner from "@/components/ui/Spinner";
 
 export default function ServicesScreen() {
   const { data: services, isLoading, isRefetching, refetch } = useGetServices();
-
+  
+  const deleteService = useDeleteService();
   const createService = useCreateService();
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const updateService = useUpdateService(editingId || 0);
-  const deleteService = useDeleteService(editingId || 0);
   const uploadImage = useUploadImage(editingId || 0);
   const deleteImage = useDeleteImage(editingId || 0);
 
@@ -69,6 +69,12 @@ export default function ServicesScreen() {
       return;
     }
 
+    const dur = Number(duration);
+    if (Number.isNaN(dur) || dur <= 0 || dur % 15 !== 0) {
+      Alert.alert("Geçersiz süre", "Süre 15’in katı ve pozitif olmalı (ör. 15, 30, 45).");
+      return;
+    }
+
     const serviceData = {
       name: name.trim(),
       description: description.trim() || undefined,
@@ -97,18 +103,17 @@ export default function ServicesScreen() {
 
   const onDelete = (id: number, itemName: string) => {
     Alert.alert(
-      "Servisi Sil",
-      `"${itemName}" servisini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`,
+      "Hizmeti Sil",
+      `"${itemName}" hizmeti silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`,
       [
         { text: "Vazgeç", style: "cancel" },
         {
           text: "Sil",
           style: "destructive",
           onPress: () => {
-            const del = useDeleteService(id);
-            del.mutate(undefined, {
+            deleteService.mutate(id, {
               onSuccess: () => {
-                Alert.alert("Başarılı", "Servis silindi.");
+                Alert.alert("Başarılı", "Hizmet silindi.");
                 refetch();
               },
             });
@@ -117,7 +122,6 @@ export default function ServicesScreen() {
       ]
     );
   };
-
   const startEdit = (item: Service) => {
     setEditingId(item.id);
     setName(item.name);

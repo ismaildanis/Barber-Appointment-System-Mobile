@@ -40,10 +40,10 @@ export const useUpdateService = (id: number) => {
     })
 }
 
-export const useDeleteService = (id: number) => {
+export const useDeleteService = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => serviceApi.deleteService(id),
+        mutationFn: (id: number) => serviceApi.deleteService(id),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: key });
         },

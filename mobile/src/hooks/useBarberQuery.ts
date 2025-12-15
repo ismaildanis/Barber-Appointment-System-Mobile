@@ -42,10 +42,10 @@ export const useUpdateActivityBarberr = (id: number) => {
     })
 }
 
-export const useDeleteBarber = (id: number) => {
+export const useDeleteBarber = () => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: () => barberApi.deleteBarber(id),
+        mutationFn: (id: number) => barberApi.deleteBarber(id),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: key })
         },

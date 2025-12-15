@@ -38,6 +38,7 @@ export const useUnifiedLogin = () => {
     mutationFn: (payload: { email: string; password: string }) =>
       unifiedAuthApi.login(payload),
     onSuccess: async () => {
+      await qc.clear();
       await qc.invalidateQueries({ queryKey: keyMe });
     },
   });
@@ -49,6 +50,7 @@ export const useUnifiedLogout = () => {
     mutationFn: () => unifiedAuthApi.logout(),
     onSuccess: async () => {
       await AsyncStorage.multiRemove(["unified_access", "unified_refresh"]);
+      await qc.clear();
       await qc.removeQueries({ queryKey: keyMe });
       router.replace("/(auth)/login");
     },

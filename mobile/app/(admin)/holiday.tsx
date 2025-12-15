@@ -9,6 +9,7 @@ import {
   Alert,
   Modal,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -20,13 +21,14 @@ import {
 } from "@/src/hooks/useHolidayQuery";
 import { HolidayDate } from "@/src/types/holiday";
 import Spinner from "@/components/ui/Spinner";
+import { useNavigation } from "expo-router";
 
 export default function Holiday() {
+  const navigation = useNavigation<any>();
   const { data: holidays, isLoading, isRefetching, refetch } = useGetHolidays();
 
   const createHoliday = useCreateHoliday();
-  const [deletingId, setDeletingId] = useState<number | null>(null);
-  const deleteHoliday = useDeleteHoliday(deletingId || 0);
+  const deleteHoliday = useDeleteHoliday();
 
   const [showFormModal, setShowFormModal] = useState(false);
   const [reason, setReason] = useState("");
@@ -78,9 +80,7 @@ export default function Holiday() {
           text: "Sil",
           style: "destructive",
           onPress: () => {
-            setDeletingId(id);
-            const del = useDeleteHoliday(id);
-            del.mutate(undefined, {
+            deleteHoliday.mutate(id, {
               onSuccess: () => {
                 Alert.alert("Başarılı", "Tatil günü silindi.");
                 refetch();
@@ -190,13 +190,23 @@ export default function Holiday() {
             {sortedHolidays.length} tatil günü kayıtlı
           </Text>
         </View>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => setShowFormModal(true)}
-          activeOpacity={0.8}
-        >
-          <Ionicons name="add" size={24} color="#121212" />
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row" , gap: 16}}>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => setShowFormModal(true)}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="add" size={24} color="#121212" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={() => navigation.openDrawer()}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="menu-sharp" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.searchContainer}>
@@ -242,6 +252,10 @@ export default function Holiday() {
         transparent={true}
         onRequestClose={resetForm}
       >
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }} 
+        >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
@@ -327,6 +341,7 @@ export default function Holiday() {
             </View>
           </View>
         </View>
+        </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
   );
@@ -337,7 +352,8 @@ const styles = StyleSheet.create({
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
   title: { fontSize: 28, fontWeight: "800", color: "#fff", letterSpacing: 0.5 },
   subtitle: { fontSize: 14, color: "rgba(255,255,255,0.6)", marginTop: 4 },
-  addButton: { width: 48, height: 48, borderRadius: 24, backgroundColor: "#AD8C57", alignItems: "center", justifyContent: "center", shadowColor: "#AD8C57", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
+  addButton: { paddingHorizontal: 16, paddingVertical: 16, borderRadius: 24, backgroundColor: "#AD8C57", alignItems: "center", justifyContent: "center", shadowColor: "#AD8C57", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
+  menuButton: { paddingHorizontal: 16, paddingVertical: 16, borderRadius: 24, alignItems: "center", justifyContent: "center", shadowColor: "#AD8C57", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
   searchContainer: { flexDirection: "row", alignItems: "center", backgroundColor: "#121212", borderRadius: 12, paddingHorizontal: 12, marginBottom: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.08)" },
   searchInput: { flex: 1, color: "#fff", fontSize: 15, paddingVertical: 12, paddingHorizontal: 8 },
   listContent: { paddingBottom: 20 },
