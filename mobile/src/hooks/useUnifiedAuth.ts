@@ -2,12 +2,12 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { unifiedAuthApi } from "../api/unifiedAuthApi";
+import { ChangePassword, unifiedAuthApi } from "../api/unifiedAuthApi";
 import { useEffect } from "react";
 import { RegisterRequest } from "../types/customerAuth";
 
 const keyMe = ["unified", "me"] as const;
-const router = useRouter();
+
 export const useUnifiedMe = () => {
   const router = useRouter();
   const query = useQuery({
@@ -54,6 +54,7 @@ export const useRegister = () => {
 
 export const useUnifiedLogout = () => {
   const qc = useQueryClient();
+  const router = useRouter();
   return useMutation({
     mutationFn: () => unifiedAuthApi.logout(),
     onSuccess: async () => {
@@ -75,9 +76,14 @@ export const useVerifyReset = () =>
     mutationFn: (data: { code: string; }) => unifiedAuthApi.verifyReset(data),
   });
 
-
 export const useResetPassword = () => 
   useMutation({
     mutationFn: (data: { resetSessionId: string; newPassword: string; }) => unifiedAuthApi.resetPassword(data),
+  });
+
+
+export const useChangePassword = () => 
+  useMutation({
+    mutationFn: (data: ChangePassword) => unifiedAuthApi.changePassword(data),
   });
 

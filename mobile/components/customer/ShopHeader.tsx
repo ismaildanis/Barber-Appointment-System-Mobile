@@ -33,32 +33,30 @@ export default function ShopHeader({ customer, logout }: ShopHeaderProps) {
           },
         ]}
       >
-          <View style={styles.left}>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 75 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
 
-              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-                <View style={styles.avatar}>
-                  <Text style={styles.avatarText}>{initials}</Text>
-                </View>
-                <View style={{ gap: 0 }}>
-                  <ThemedText style={[styles.name, { fontSize: subtitleSize + 3 }]}>
-                    {customer.firstName ?? "Kullanıcı"} {customer.lastName ?? ""}
-                  </ThemedText>
-                  <ThemedText style={[styles.email, { fontSize: subtitleSize }]}>{customer.email}</ThemedText>
-                </View>
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10 }}>
+              <View style={styles.avatar}>
+                <Text style={styles.avatarText}>{initials}</Text>
               </View>
-
-                <TouchableOpacity onPress={() => router.push("/profile")}>
-                  <Ionicons
-                    name="person"
-                    size={24}
-                    color="#E4D2AC"
-                    style={{ marginLeft: 10 }}
-
-                  /> 
-                </TouchableOpacity>
-
+              <View style={{ gap: 0 }}>
+                <ThemedText style={[styles.name, { fontSize: subtitleSize + 3 }]}>
+                  {customer.firstName ?? "Kullanıcı"} {customer.lastName ?? ""}
+                </ThemedText>
+                <ThemedText style={[styles.email, { fontSize: subtitleSize }]}>{customer.email}</ThemedText>
+              </View>
             </View>
+            
+              <TouchableOpacity onPress={() => router.push("/profile")}>
+                <Ionicons
+                  name="person"
+                  size={24}
+                  color="#E4D2AC"
+                  style={{ marginLeft: 10 }}
+
+                /> 
+              </TouchableOpacity>
+
           </View>
       </ThemedView>
     </ThemedView>
@@ -77,7 +75,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.45,
   },
   logoRow: { alignItems: "center", justifyContent: "center"},
-  left: { flexDirection: "row", alignItems: "center", gap: 10 },
   name: { fontWeight: "600", color: "#fff" },
   email: { color: "#c0c2bdff", fontWeight: "500" },
   avatar: {

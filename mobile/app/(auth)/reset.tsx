@@ -50,7 +50,10 @@ export default function Reset() {
         onSuccess: () => {
             Alert.alert("Başarılı", "Şifreniz yenilenmiştir.");
             router.replace("/(auth)/login")
-        }
+        },
+        onError: (err: any) => {
+          Alert.alert("Hata", err?.response?.data?.message || "Şifre yenileme basarısız.");
+        },
       }
     );
   });

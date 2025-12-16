@@ -35,7 +35,6 @@ export default function CreateAppointments() {
 
   const { data: services, isLoading: sLoading, refetch: refetchServices } = useGetServices();
   const { data: barbers, isLoading: bLoading, refetch: refetchBarbers } = useGetBarbers();
-  const { data: me, isLoading: meLoading, refetch: refetchMe, error } = useUnifiedMe();
   const { data: availableDates, isLoading: adLoading, refetch: refetchAvailableDates } = useAvailableDatesForAppointment();
   const { data: availableHours, isLoading: ahLoading, refetch: refetchAvailableHours } = useAvailableHoursForAppointment(safeBarberId, selectedDate);
   const createAppointment = useCreateAppointment();
@@ -44,7 +43,7 @@ export default function CreateAppointments() {
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMsg, setAlertMsg] = useState("");
   const [notes, setNotes] = useState<string>();
-  const loading = sLoading || bLoading || meLoading || adLoading || ahLoading; 
+  const loading = sLoading || bLoading  || adLoading || ahLoading; 
   useEffect(() => {
     barbers?.forEach(b => Image.prefetch(b.image as string));
   }, [barbers]);
@@ -119,6 +118,10 @@ export default function CreateAppointments() {
   ];
   const remaining = others.length - 1;
 
+  const onSelectDate = (date: string) => {
+    setSelectedHour(undefined);
+    setSelectedDate(date);
+  }
   const toggleHours = (hour: any) =>
     setSelectedHour((prev) => (prev === hour) ? undefined : hour);
     
@@ -242,7 +245,6 @@ export default function CreateAppointments() {
               onRefresh={() => {
                 refetchServices();
                 refetchBarbers();
-                refetchMe();
                 refetchAvailableDates();
                 refetchAvailableHours();
               }}
@@ -273,7 +275,7 @@ export default function CreateAppointments() {
             dates={availableDates ?? []}
             loading={adLoading}
             selectedDate={selectedDate}
-            onSelect={setSelectedDate}
+            onSelect={onSelectDate}
           />
 
           <TouchableOpacity

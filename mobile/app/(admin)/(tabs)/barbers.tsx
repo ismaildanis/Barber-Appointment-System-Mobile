@@ -21,8 +21,8 @@ import {
   useCreateBarber,
   useUpdateActivityBarberr,
   useDeleteBarber,
-  useUploadImage,
-  useDeleteImage,
+  useBarberUploadImage,
+  useBarberDeleteImage,
 } from "@/src/hooks/useBarberQuery";
 import { Barber } from "@/src/types/barber";
 import Spinner from "@/components/ui/Spinner";
@@ -35,8 +35,8 @@ export default function BarbersScreen() {
 
   const updateActivity = useUpdateActivityBarberr(editingId || 0);
   const deleteBarber = useDeleteBarber();
-  const uploadImage = useUploadImage();
-  const deleteImage = useDeleteImage(editingId || 0);
+  const uploadImage = useBarberUploadImage();
+  const deleteImage = useBarberDeleteImage();
 
   const [showFormModal, setShowFormModal] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -104,6 +104,9 @@ export default function BarbersScreen() {
             Alert.alert("Başarılı", "Yeni berber eklendi!");
             resetForm();
             refetch();
+          },
+          onError: (err: any) => {
+            Alert.alert("Hata", err.response.data.message || "Ekleme basarısız.");
           },
         }
       );
