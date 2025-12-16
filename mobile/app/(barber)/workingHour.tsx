@@ -67,7 +67,25 @@ export default function WorkingHourPage() {
     setModalVisible(false);
     setEditingId(null);
   };
-
+  const onDelete = (w: WorkingHour) => {
+    Alert.alert("Uyarı", "Silmek istediginizden emin misiniz?", [
+      { text: "Vazgeç", style: "cancel" },
+      {
+        text: "Sil",
+        style: "destructive",
+        onPress: () => {
+          deleteWorkingHour.mutate(w.id, {
+            onSuccess: () => {
+              refetch();
+            },
+            onError: (err: any) => {
+              Alert.alert("Hata", err?.response?.data?.message || "Silme basarısız.");
+            },
+          });
+        },
+      },
+    ])
+  }
   const onSubmit = () => {
     if (values.endMin <= values.startMin) {
       Alert.alert("Uyarı", "Bitiş saati başlangıçtan sonra olmalı.");
@@ -124,8 +142,9 @@ export default function WorkingHourPage() {
               <TouchableOpacity
                 onPress={(e) => {
                   e.stopPropagation();
-                  deleteWorkingHour.mutate(w.id, { onSuccess: refetch });
+                  onDelete(w);
                 }}
+                style={{ padding: 8, backgroundColor:"#631919ff", borderRadius: 14, alignItems: "center" }}
               >
                 <Text style={styles.deleteText}>Sil</Text>
               </TouchableOpacity>
@@ -257,7 +276,7 @@ function TimeSelector({ label, selectedMin, onSelect }: {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#1e1e1e" },
+  container: { flex: 1, backgroundColor: "#1e1e1e", marginBottom: 32 },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -279,7 +298,7 @@ const styles = StyleSheet.create({
   },
   cardRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 8 },
   day: { color: "#AD8C57", fontWeight: "700" },
-  deleteText: { color: "#F44336", fontWeight: "600" },
+  deleteText: { color: "#F44336", fontWeight: "600"},
   time: { color: "#fff", fontSize: 16 },
   overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "flex-end" },
   modal: { backgroundColor: "#2a2a2a", borderTopLeftRadius: 16, borderTopRightRadius: 16, padding: 20 },

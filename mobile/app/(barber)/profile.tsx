@@ -2,12 +2,17 @@ import { useUnifiedMe, useUnifiedLogout } from "@/src/hooks/useUnifiedAuth";
 import Spinner from "@/components/ui/Spinner";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, TouchableOpacity, StyleSheet, RefreshControl, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, RefreshControl, ScrollView, Image, Alert } from "react-native";
+import { useBarberUploadImage, useBarberDeleteImage } from "@/src/hooks/useBarberQuery";
+import * as ImagePicker from "expo-image-picker";
 
 export default function BarberProfile() {
   const router = useRouter();
   const { data, isLoading, isError, refetch, isRefetching } = useUnifiedMe();
   const logout = useUnifiedLogout();
+
+  const uploadImage = useBarberUploadImage();
+  const deleteImage = useBarberDeleteImage();
 
   if (isLoading) {
     return (
@@ -19,7 +24,7 @@ export default function BarberProfile() {
 
   if (isError || !data) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container}> 
         <Text style={styles.title}>Profil</Text>
         <View style={styles.center}>
           <Text style={styles.empty}>Profil yüklenemedi. Yenilemeyi deneyin.</Text>
@@ -28,13 +33,70 @@ export default function BarberProfile() {
     );
   }
 
+  const pickImage = async () => {
+    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!perm.granted) {
+      Alert.alert("Uyarı", "Galeri izni verilmedi");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 0.8,
+    });
+    if (result.canceled) return;
+
+    const asset = result.assets[0];
+    const formData = new FormData();
+    formData.append("file", {
+      uri: asset.uri,
+      name: `barber-${Date.now()}.jpg`,
+      type: "image/jpeg",
+    } as any);
+
+    uploadImage.mutate(formData, {
+      onSuccess: () => Alert.alert("Başarılı", "Resim Yüklendi"),
+      onError: (err: any) => {
+        console.log(err)
+        Alert.alert("Hata", err?.response?.data?.message || "Yüklenemedi");
+      },
+    })
+  }
+
+    const onRemoveImage = () => {
+    Alert.alert("Resmi Kaldır", "Servis resmini kaldırmak istediğinizden emin misiniz?", [
+      { text: "Vazgeç", style: "cancel" },
+      {
+        text: "Kaldır",
+        style: "destructive",
+        onPress: () => {
+          deleteImage.mutate(undefined, { onSuccess: () => refetch() });
+        },
+      },
+    ]);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Profil</Text>
       <ScrollView
+        showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
         contentContainerStyle={{ gap: 16, paddingBottom: 32 }}
       >
+        <Image 
+          source={{ uri: data.image, cache: "force-cache" }}
+          style={styles.cardImage}
+        /> 
+        <View style={{ flexDirection: "row", justifyContent: "center", gap: 8, alignItems: "center" }}>
+          <TouchableOpacity onPress={pickImage} style={{ backgroundColor: "#AD8C57", padding: 8, borderRadius: 10, width: "45%" }}>
+            <Text style={{ color: "#000", fontSize: 16, alignSelf: "center", fontWeight: "700" }}>Resim Yükle</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onRemoveImage} style={{ backgroundColor: "#631919ff", padding: 8, borderRadius: 10, width: "45%", marginRight: 0 }}>
+            <Text style={{ color: "#fff", fontSize: 16, alignSelf: "center", fontWeight: "700" }}>Resim Sil</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.card}>
           <Text style={styles.label}>Ad Soyad</Text>
           <Text style={styles.value}>{`${data.firstName ?? ""} ${data.lastName ?? ""}`.trim()}</Text>
@@ -75,7 +137,7 @@ export default function BarberProfile() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#0f0f0f" },
+  container: { flex: 1, padding: 16, backgroundColor: "#0f0f0f", marginBottom: 32 },
   center: { flex: 1, alignItems: "center", justifyContent: "center", padding: 20 },
   title: { fontSize: 22, fontWeight: "800", marginBottom: 8, color: "#fff", marginTop: 16 },
   empty: { color: "#ccc", marginTop: 8 },
@@ -93,15 +155,26 @@ const styles = StyleSheet.create({
   workingHourBtn: {
     padding: 14,
     borderRadius: 14,
-    backgroundColor: "#fbbf24",
+    backgroundColor: "#AD8C57",
     alignItems: "center",
   },
   workingHourText: { color: "#121212", fontWeight: "800" },
   logoutBtn: {
     padding: 14,
     borderRadius: 14,
-    backgroundColor: "#ef4444",
+    backgroundColor: "#631919ff",
     alignItems: "center",
   },
   logoutText: { color: "#fff", fontWeight: "800", textAlign: "center" },
+  
+  cardImage: {
+    width: "100%",
+    height: 200,
+    borderRadius: 14,
+    borderCurve: "continuous",
+    resizeMode: "contain", 
+    marginBottom: 10,
+    backgroundColor: "transparent",
+    overflow: "hidden",
+  },
 });

@@ -53,7 +53,7 @@ export const useDeleteService = () => {
 export const useUploadImage = (id: number) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: any) => serviceApi.uploadImage(data,id),
+        mutationFn: (formData: FormData) => serviceApi.uploadImage(formData, id),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: key });
         },

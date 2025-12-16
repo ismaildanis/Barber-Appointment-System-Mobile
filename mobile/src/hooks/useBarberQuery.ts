@@ -52,20 +52,20 @@ export const useDeleteBarber = () => {
     })
 }
 
-export const useUploadImage = () => {
+export const useBarberUploadImage = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: any) => barberApi.uploadImage(data),
+        mutationFn: (formData: FormData) => barberApi.uploadImage(formData),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: key });
         },
     }) 
 }
 
-export const useDeleteImage = (id: number) => {
+export const useBarberDeleteImage = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => barberApi.deleteImage(id),
+        mutationFn: () => barberApi.deleteImage(),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: key });
         },

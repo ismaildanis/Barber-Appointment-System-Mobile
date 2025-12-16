@@ -22,6 +22,7 @@ import Spinner from "@/components/ui/Spinner";
 import { ServiceCard } from "@/components/admin/ServiceCard";
 import { ServiceFormModal } from "@/components/admin/ServiceFormModal";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as ImagePicker from "expo-image-picker";
 
 type FormValues = {
   name: string;
@@ -146,8 +147,33 @@ export default function ServicesScreen() {
   };
 
   const pickAndUpload = async () => {
-    Alert.alert("Bilgi", "Image picker entegrasyonunu burada ekleyin.");
-    // Seçim sonrası formData ile uploadImage.mutate(formData)
+    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!perm.granted) {
+        Alert.alert("Uyarı", "Galeri izni verilmedi");
+        return;
+      }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 0.8,
+    })
+    if (result.canceled) return;
+
+    const asset = result.assets[0];
+    const formData = new FormData();
+      formData.append("file", {
+        uri: asset.uri,
+        name: `service-${Date.now()}.jpg`,
+        type: "image/jpeg",
+      } as any);
+
+      uploadImage.mutate(formData, {
+        onSuccess: () => Alert.alert("Başarılı", "Resim Yüklendi"),
+        onError: (err: any) => {
+          console.log(err)
+          Alert.alert("Hata", err?.response?.data?.message || "Yüklenemedi");
+        },
+      });
   };
 
   const onRemoveImage = () => {

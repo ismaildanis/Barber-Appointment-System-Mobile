@@ -31,7 +31,7 @@ export default function BarberList({ barbers, loading = false, selectedId, onSel
       </ThemedView>
     );
   }
-  
+
   return (
     <ThemedView style={styles.container}>
       <ThemedText style={styles.sectionTitle}>Berberlerimiz</ThemedText>
