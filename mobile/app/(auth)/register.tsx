@@ -1,9 +1,143 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  View,
+  TouchableOpacity,
+  Text,
+} from "react-native";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+import ParallaxScrollView from "@/components/parallax-scroll-view";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerSchema, RegisterSchema } from "@/src/schemas/register";
+import { useRegister } from "@/src/hooks/useUnifiedAuth";
+import { AlertModal } from "@/components/ui/AlertModal";
+import { useState } from "react";
 
 export default function Register() {
-    return (
-        <View>
-            <Text>Register</Text>
+  const router = useRouter();
+  const register = useRegister();
+  const { control, handleSubmit, formState: { errors } } = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: { email: "", firstName: "", lastName: "", phone: "", password: "" },
+  });
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMsg, setAlertMsg] = useState("");
+
+  const onSubmit = handleSubmit((values) => {
+    register.mutate(values, {
+      onSuccess: () => {
+        setAlertTitle("Kayıt Başarılı");
+        setAlertMsg("Giriş ekranına dönebilirsiniz.");
+        setAlertVisible(true);
+      },
+    });
+  });
+
+  const apiError = (register.error as any)?.response?.data?.message;
+  const zodErrors = Object.values(errors).map((e) => e?.message).filter(Boolean);
+
+  return (
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <ParallaxScrollView
+        headerBackgroundColor={{ light: "#AD8C57", dark: "#AD8C57" }}
+        headerImage={<Image source={require("@/assets/logo/a.png")} style={styles.logo} />}
+      >
+        <View style={styles.container}>
+          <Text style={styles.title}>Kayıt Ol</Text>
+
+          {apiError && <Text style={styles.error}>{apiError}</Text>}
+          {zodErrors.map((m, i) => (
+            <Text key={i} style={styles.error}>{m}</Text>
+          ))}
+
+          {([
+            { name: "email", label: "Email", secure: false, keyboard: "email-address" },
+            { name: "firstName", label: "Ad", secure: false, keyboard: "default" },
+            { name: "lastName", label: "Soyad", secure: false, keyboard: "default" },
+            { name: "phone", label: "Telefon", secure: false, keyboard: "phone-pad" },
+            { name: "password", label: "Şifre", secure: true, keyboard: "default" },
+          ] as const).map((field) => (
+            <Controller
+              key={field.name}
+              control={control}
+              name={field.name}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder={field.label}
+                  placeholderTextColor="#4e4e4e"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  secureTextEntry={field.secure}
+                  autoCapitalize="none"
+                  keyboardType={field.keyboard as any}
+                />
+              )}
+            />
+          ))}
+
+          <View style={styles.actions}>
+            <TouchableOpacity onPress={onSubmit} style={styles.primaryBtn} disabled={register.isPending}>
+              <Text style={styles.primaryText}>
+                {register.isPending ? "Kaydediliyor..." : "Kayıt Ol"}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => router.replace("/(auth)/login")} activeOpacity={0.7}>
+              <Text style={styles.link}>Zaten hesabın var mı? Giriş yap</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-    );
+      </ParallaxScrollView>
+
+      <AlertModal
+        visible={alertVisible}
+        title={alertTitle}
+        message={alertMsg}
+        onClose={() => setAlertVisible(false)}
+        onConfirm={() => {
+          setAlertVisible(false);
+          router.replace("/(auth)/login");
+        }}
+        confirmText="Tamam"
+        cancelText="Kapat"
+      />
+    </KeyboardAvoidingView>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 24, gap: 14 },
+  logo: { width: "100%", height: "100%", resizeMode: "contain" },
+  title: { fontSize: 26, fontWeight: "800", color: "#fff", alignSelf: "center", marginBottom: 8 },
+  error: { color: "#ff4d4f" },
+  input: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.1)",
+    padding: 14,
+    borderRadius: 12,
+    backgroundColor: "#1f1f1f",
+    fontSize: 16,
+    color: "#fff",
+  },
+  actions: { alignItems: "center", gap: 16, marginTop: 12 },
+  primaryBtn: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    backgroundColor: "#AD8C57",
+    borderRadius: 10,
+    width: "100%",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  primaryText: { color: "#1e1e1e", fontSize: 16, fontWeight: "bold" },
+  link: { color: "#AD8C57", fontSize: 16, fontWeight: "bold" },
+});

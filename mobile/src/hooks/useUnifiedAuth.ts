@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { unifiedAuthApi } from "../api/unifiedAuthApi";
 import { useEffect } from "react";
+import { RegisterRequest } from "../types/customerAuth";
 
 const keyMe = ["unified", "me"] as const;
 const router = useRouter();
@@ -44,6 +45,13 @@ export const useUnifiedLogin = () => {
   });
 };
 
+export const useRegister = () => {
+  return useMutation({
+    mutationFn: (payload: RegisterRequest) =>
+      unifiedAuthApi.register(payload),
+  });
+};
+
 export const useUnifiedLogout = () => {
   const qc = useQueryClient();
   return useMutation({
@@ -56,3 +64,20 @@ export const useUnifiedLogout = () => {
     },
   });
 };
+
+export const useForgotPassword = () => 
+  useMutation({
+    mutationFn: (email: string) => unifiedAuthApi.forgot(email),
+  });
+
+export const useVerifyReset = () => 
+  useMutation({
+    mutationFn: (data: { code: string; }) => unifiedAuthApi.verifyReset(data),
+  });
+
+
+export const useResetPassword = () => 
+  useMutation({
+    mutationFn: (data: { resetSessionId: string; newPassword: string; }) => unifiedAuthApi.resetPassword(data),
+  });
+

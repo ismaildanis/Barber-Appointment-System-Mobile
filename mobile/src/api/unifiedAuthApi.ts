@@ -1,6 +1,9 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "../../config";
+import { RegisterRequest } from "../types/customerAuth";
+
+export type VerifyResponse = { resetSessionId: string; role: 'customer'|'barber'|'admin' };
 
 const ACCESS_KEY = "unified_access";
 const REFRESH_KEY = "unified_refresh";
@@ -89,6 +92,10 @@ export const unifiedAuthApi = {
     await api.post("/unified-auth/logout");
     await AsyncStorage.multiRemove([ACCESS_KEY, REFRESH_KEY]);
   },
+  register: async (data: RegisterRequest) => await api.post("/auth/register", data).then(r => r.data),
+  forgot: async (email: string) => await api.post("/unified-auth/forgot", { email }).then(r => r.data),
+  verifyReset: async (data: { code: string; }) => await api.post<VerifyResponse>("/unified-auth/verify-reset", data).then(r => r.data),
+  resetPassword: async (data: { resetSessionId: string; newPassword: string; }) => await api.post("/unified-auth/reset-password", data).then(r => r.data),
 };
 
 export { api as authedApi };

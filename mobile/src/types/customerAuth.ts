@@ -21,14 +21,10 @@ export interface LoginResponse {
   refreshToken: string;
 }
 
-export interface RegisterRequest {
-  name: string;
+export type RegisterRequest = {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   phone?: string;
-}
-
-export interface RegisterResponse {
-    message?: string;
-    customerId: string;
 }
