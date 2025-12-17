@@ -131,6 +131,23 @@ export const useCreateBreakForBarber = () => {
     })
 }
 
+export const useDeleteBreakForBarber = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (id: number) => appointmentApi.deleteBreakForBarber(id),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: key })
+        },
+    })
+}
+
+export const useGetBreaksForBarber = () =>
+    useQuery({
+        queryKey: ["barber-breaks"],
+        queryFn: () => appointmentApi.getBreaksForBarber(),
+        staleTime: 5 * 60 * 1000
+    })
+
 //Admin
 
 export const useGetAdminAppointments = (status: Status) => 

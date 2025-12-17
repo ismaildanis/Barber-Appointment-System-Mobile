@@ -85,7 +85,7 @@ export default function AppointmentDetail() {
         />
       }>
       <View style={{flexDirection: "column", alignItems: "flex-start", marginTop: 16}}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => router.push("/(customer)/appointments")}>
+        <TouchableOpacity style={styles.backBtn} onPress={() => router.replace("/(customer)/appointments")}>
           <Ionicons name="arrow-back" size={20} color="#fff" />
         </TouchableOpacity>
       </View>

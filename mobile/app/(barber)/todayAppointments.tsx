@@ -4,6 +4,7 @@ import { useGetBarberTodayAppointments } from "@/src/hooks/useAppointmentQuery";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TodayAppointmentCard from "@/components/barber/TodayAppointmentCard";
 import { useMemo } from "react";
+import { todayAppointmentsColors } from "@/constants/theme/barber/todayAppt";
 
 export default function TodayAppointments() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function TodayAppointments() {
     .replace(".", "");
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: 16 }}>
+    <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: todayAppointmentsColors.containerBackground }}>
 
         <View style={{flexDirection: "row",justifyContent: "center",alignItems: "center", marginBottom: 12} }>
           <Text style={{color: "#fff", fontSize: 16, fontWeight: "900"}}>Günün Randevuları</Text>
@@ -55,7 +56,7 @@ export default function TodayAppointments() {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 16, backgroundColor: "#0f0f0f", justifyContent: "center" },
+  container: { padding: 16, backgroundColor: todayAppointmentsColors.containerBackground, justifyContent: "center" },
   empty: { color: "#ccc" },
   summary: {
     flexDirection: "row",

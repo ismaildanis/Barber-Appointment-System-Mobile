@@ -1,5 +1,5 @@
 import { authedApi as api } from "../api/unifiedAuthApi";
-import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, BarberAppointment, Status, AdminAppointment } from "../types/appointment";
+import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, BarberAppointment, Status, AdminAppointment, GetBreaksForBarber } from "../types/appointment";
 
 export const appointmentApi = {
     //Customer
@@ -19,7 +19,8 @@ export const appointmentApi = {
     getBarberTodayAppointments: async () => await api.get<BarberAppointment[]>(`/appointment/barber/today`).then(r => r.data),
     cancelBarberAppointment: async (id: number) => await api.post(`/appointment/barber-cancel/${id}`).then(r => r.data),
     createBreakForBarber: async (data: CreateBreakForBarber) => await api.post(`/appointment/barber-break`, data).then(r => r.data),
-
+    deleteBreakForBarber: async (id: number) => await api.delete(`/appointment/barber-break/${id}`).then(r => r.data),
+    getBreaksForBarber: async () => await api.get<GetBreaksForBarber[]>(`/appointment/barber-break`).then(r => r.data),
     //Admin
     getAdminAppointments: async (status: Status) => await  api.get<AdminAppointment[]>("/appointment/admin", { params: { status } }).then(r => r.data),
     getAdminOneAppointment: async (id: number) => await api.get<AdminAppointment>(`/appointment/admin/${id}`).then(r => r.data),

@@ -1,4 +1,5 @@
 import { Customer } from "./customerAuth";
+import { WorkingHour } from "./workingHour";
 
 export type Status = 'SCHEDULED' | 'COMPLETED' | 'NO_SHOW' | 'EXPIRED' | 'BARBER_CANCELLED' |'CANCELLED';
 
@@ -105,4 +106,12 @@ export interface UpdateAppointmentRequest {
 export interface CreateBreakForBarber {
     startMin: number;
     endMin: number;
+}
+
+export interface GetBreaksForBarber {
+    id: number;
+    startMin: number;
+    endMin: number;
+    workinHourId: number;
+    workingHour: WorkingHour;
 }

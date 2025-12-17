@@ -1,9 +1,10 @@
 import CreateBreakForm from "@/components/barber/CreateBreakForm";
 import { AlertModal } from "@/components/ui/AlertModal";
+import { todayAppointmentsColors } from "@/constants/theme/barber/todayAppt";
 import { useCreateBreakForBarber } from "@/src/hooks/useAppointmentQuery";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { View, Text, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type AlertMode = "confirm" | "info-success" | "info-error";
@@ -26,7 +27,7 @@ export default function CreateBreak() {
     };
     const onSubmit = () => {
         if (startMin && endMin) {
-            createBreak.mutate({ 
+            createBreak.mutate({
                 startMin, endMin 
             },{
                 onSuccess: () => {
@@ -49,12 +50,17 @@ export default function CreateBreak() {
         }
     }
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#1e1e1e", marginBottom: 60 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: todayAppointmentsColors.containerBackground, marginBottom: 60, padding: 16 }}>
             <View style={{ flexDirection: "column", gap: 12, alignItems: "center", justifyContent: "center", marginTop: 16 }}>
                 <Text style={{ fontSize: 32,color:"#fff" }}>Mola Oluştur</Text>
                 
             </View>
             <View style={{flex:1, marginBottom: 20, justifyContent: "space-between" }}>
+                <View style={{flexDirection: "row", justifyContent: "center"}}>
+                    <TouchableOpacity onPress={() => router.replace("/(barber)/breaks")} style={{marginTop: 20, paddingVertical: 20, width: "90%", borderRadius: 24, backgroundColor: "#AD8C57"}}>
+                        <Text style={{color: "#fff", fontSize: 16, alignSelf: "center", fontWeight: "800", letterSpacing: 0.3}}>Molalarım</Text>
+                    </TouchableOpacity>
+                </View>
                 <CreateBreakForm selectedStartMin={startMin} selectedEndMin={endMin} onSelectStartMin={setStartMin} onSelectEndMin={setEndMin}  />
             {startMin && endMin && (
                 <TouchableOpacity

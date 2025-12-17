@@ -65,6 +65,11 @@ export default function BarberTabLayout() {
                 name="workingHour"
                 options={{ href: null }}
             />
+
+            <Tabs.Screen 
+                name="breaks"
+                options={{ href: null }}
+            />
         </Tabs>
     )
 }

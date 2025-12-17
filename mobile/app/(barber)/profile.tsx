@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TouchableOpacity, StyleSheet, RefreshControl, ScrollView, Image, Alert } from "react-native";
 import { useBarberUploadImage, useBarberDeleteImage } from "@/src/hooks/useBarberQuery";
 import * as ImagePicker from "expo-image-picker";
+import { todayAppointmentsColors } from "@/constants/theme/barber/todayAppt";
 
 export default function BarberProfile() {
   const router = useRouter();
@@ -137,7 +138,7 @@ export default function BarberProfile() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#0f0f0f", marginBottom: 32 },
+  container: { flex: 1, padding: 16, backgroundColor: todayAppointmentsColors.containerBackground, marginBottom: 32 },
   center: { flex: 1, alignItems: "center", justifyContent: "center", padding: 20 },
   title: { fontSize: 22, fontWeight: "800", marginBottom: 8, color: "#fff", marginTop: 16 },
   empty: { color: "#ccc", marginTop: 8 },

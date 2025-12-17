@@ -27,6 +27,7 @@ import { Calendar } from "react-native-calendars";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { todayAppointmentsColors } from "@/constants/theme/barber/todayAppt";
 
 type CardProps = { item: BarberAppointment };
 
@@ -148,7 +149,7 @@ export default function BarberCalendar() {
 
 const styles = StyleSheet.create({
   loader: { flex: 1, padding: 16, justifyContent: "center" },
-  container: { flex: 1, padding: 16, backgroundColor: "#0f0f0f" },
+  container: { flex: 1, padding: 16, backgroundColor: todayAppointmentsColors.containerBackground },
   calendarWrap: { borderRadius: 16, overflow: "hidden", marginBottom: 12, backgroundColor: "#1a1a1a" },
   card: {
     padding: 14,
