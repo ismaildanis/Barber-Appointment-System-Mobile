@@ -95,7 +95,7 @@ export const unifiedAuthApi = {
   },
   register: async (data: RegisterRequest) => await api.post("/auth/register", data).then(r => r.data),
   forgot: async (email: string) => await api.post("/unified-auth/forgot", { email }).then(r => r.data),
-  verifyReset: async (data: { code: string; }) => await api.post<VerifyResponse>("/unified-auth/verify-reset", data).then(r => r.data),
+  verifyReset: async (data: { email: string; code: string; }) => await api.post<VerifyResponse>("/unified-auth/verify-reset", data).then(r => r.data),
   resetPassword: async (data: { resetSessionId: string; newPassword: string; }) => await api.post("/unified-auth/reset-password", data).then(r => r.data),
   changePassword: async (data: ChangePassword) => await api.post("/unified-auth/change-password", data).then(r => r.data),
 };

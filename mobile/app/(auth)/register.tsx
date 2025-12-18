@@ -90,7 +90,7 @@ export default function Register() {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => router.replace("/(auth)/login")} activeOpacity={0.7}>
+            <TouchableOpacity onPress={() => router.replace("/login")} activeOpacity={0.7}>
               <Text style={styles.link}>Zaten hesabın var mı? Giriş yap</Text>
             </TouchableOpacity>
           </View>
@@ -104,7 +104,7 @@ export default function Register() {
         onClose={() => setAlertVisible(false)}
         onConfirm={() => {
           setAlertVisible(false);
-          router.replace("/(auth)/login");
+          router.replace("/login");
         }}
         confirmText="Tamam"
         cancelText="Kapat"

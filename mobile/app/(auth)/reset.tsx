@@ -49,7 +49,7 @@ export default function Reset() {
       {
         onSuccess: () => {
             Alert.alert("Başarılı", "Şifreniz yenilenmiştir.");
-            router.replace("/(auth)/login")
+            router.replace("/login")
         },
         onError: (err: any) => {
           Alert.alert("Hata", err?.response?.data?.message || "Şifre yenileme basarısız.");
@@ -116,7 +116,7 @@ export default function Reset() {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => router.replace("/(auth)/login")} activeOpacity={0.7}>
+            <TouchableOpacity onPress={() => router.replace("/login")} activeOpacity={0.7}>
               <Text style={styles.link}>Giriş ekranına dön</Text>
             </TouchableOpacity>
           </View>

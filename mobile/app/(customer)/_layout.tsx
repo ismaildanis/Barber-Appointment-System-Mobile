@@ -53,6 +53,10 @@ export default function CustomerTabLayout () {
                 name="profile"
                 options={{ href: null }}
             />
+            <Tabs.Screen
+                name="change-password"
+                options={{ href: null }}
+            />
             
             <Tabs.Screen
                 name="appointments"

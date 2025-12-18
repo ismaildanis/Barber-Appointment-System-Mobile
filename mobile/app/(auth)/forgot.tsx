@@ -33,7 +33,8 @@ export default function Forgot() {
 
   const onSubmit = handleSubmit((values) => {
     forgot.mutate(values.email, {
-      onSuccess: () => router.replace("/(auth)/verify"),
+      onSuccess: () => router.replace({ pathname: "/verify", params: { email: values.email } }),
+      onError: (err: any) => console.log(err),
     });
   });
 

@@ -6,14 +6,16 @@ import {
   View,
   TouchableOpacity,
   Text,
+  Alert,
 } from "react-native";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useVerifyReset } from "@/src/hooks/useUnifiedAuth"; // verify-reset mutation
+import { useVerifyReset } from "@/src/hooks/useUnifiedAuth";
+
 export type VerifyResponse = {
   resetSessionId: string;
   role: string;
@@ -29,6 +31,7 @@ type VerifySchema = z.infer<typeof verifySchema>;
 
 export default function Verify() {
   const router = useRouter();
+  const { email } = useLocalSearchParams<{ email?: string }>();
   const verifyReset = useVerifyReset();
 
   const {
@@ -41,10 +44,18 @@ export default function Verify() {
   });
 
   const onSubmit = handleSubmit((values) => {
-    verifyReset.mutate(values, {
+      if (!email) {
+        Alert.alert("Uyarı", "Lütfen önce e-posta ile kod isteyin.");
+        return;
+      }
+    verifyReset.mutate({...values, email: email as string}, {
       onSuccess: (data: VerifyResponse) => {
+        if (!data?.resetSessionId) {
+          Alert.alert("Hata", "Kod giriş hatası.");
+          return;
+        }
         router.replace({
-          pathname: "/(auth)/reset",
+          pathname: "/reset",
           params: { token: data.resetSessionId, role: data.role },
         });
       },
@@ -62,7 +73,7 @@ export default function Verify() {
       >
         <View style={styles.container}>
           <Text style={styles.title}>Gönderilen 6 Haneli Kodu Girin</Text>
-
+          {email && <Text style={styles.subtitle}>Email: {email}</Text>}
           {apiError && <Text style={styles.error}>{apiError}</Text>}
           {zodCodeError && <Text style={styles.error}>{zodCodeError}</Text>}
 
@@ -127,4 +138,6 @@ const styles = StyleSheet.create({
   },
   primaryText: { color: "#1e1e1e", fontSize: 16, fontWeight: "bold" },
   link: { color: "#AD8C57", fontSize: 16, fontWeight: "bold" },
+  subtitle: { color: "#ccc", fontSize: 14, textAlign: "center", marginBottom: 8 },
+
 });

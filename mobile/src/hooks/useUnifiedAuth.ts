@@ -73,7 +73,7 @@ export const useForgotPassword = () =>
 
 export const useVerifyReset = () => 
   useMutation({
-    mutationFn: (data: { code: string; }) => unifiedAuthApi.verifyReset(data),
+    mutationFn: (data: { email: string; code: string; }) => unifiedAuthApi.verifyReset(data),
   });
 
 export const useResetPassword = () => 

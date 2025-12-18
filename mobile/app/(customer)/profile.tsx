@@ -34,7 +34,7 @@ export default function CustomerProfile() {
         contentContainerStyle={{ gap: 16 }}
       >
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-            <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+            <TouchableOpacity style={styles.backBtn} onPress={() => router.replace("/(customer)/home")}>
             <Ionicons name="arrow-back" size={20} color="#fff" />
             </TouchableOpacity>
         </View>
@@ -51,8 +51,6 @@ export default function CustomerProfile() {
           <Text style={styles.label}>Telefon</Text>
           <Text style={styles.value}>{data.phone ?? "—"}</Text>
 
-          <Text style={styles.label}>Rol</Text>
-          <Text style={styles.value}>{data.role ?? "customer"}</Text>
         </View>
 
         <TouchableOpacity
@@ -65,6 +63,15 @@ export default function CustomerProfile() {
         >
           <Text style={styles.logoutText}>
             {logout.isPending ? "Çıkış yapılıyor..." : "Çıkış Yap"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => router.replace("/change-password")}
+          style={styles.changeBtn}
+        >
+          <Text style={styles.logoutText}>
+            Şifre Değiştir
           </Text>
         </TouchableOpacity>
       </ScrollView>
@@ -91,6 +98,13 @@ const styles = StyleSheet.create({
         padding: 14,
         borderRadius: 14,
         backgroundColor: "#ef4444",
+    },
+
+    changeBtn: {
+        marginTop: 4,
+        padding: 14,
+        borderRadius: 14,
+        backgroundColor: "#AD8C57",
     },
     logoutText: { color: "#fff", fontWeight: "800", textAlign: "center" },
     backBtn: {
