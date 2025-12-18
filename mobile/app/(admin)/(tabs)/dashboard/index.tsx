@@ -21,11 +21,6 @@ export default function AdminDashboard() {
   useEffect(() => {
       aRefetch();
   }, [status, aRefetch]);
-  const onLogout = () => {
-    logout.mutate(undefined, {
-      onSettled: () => router.replace("/(auth)/login"),
-    });
-  };
   
   if (laoding) return <Spinner />;
   

@@ -52,7 +52,7 @@ export default function ChangePasswordBarber() {
         onSuccess: () => {
             reset();
             Alert.alert("Başarılı", "Şifre güncellendi. Lütfen Tekrar Giriş Yapınız", [
-                { text: "Tamam", onPress: () => router.replace("/(auth)/login") },
+                { text: "Tamam", onPress: () => router.replace("/login") },
             ]);
         },
       }

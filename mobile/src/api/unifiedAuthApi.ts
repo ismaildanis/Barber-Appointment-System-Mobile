@@ -98,6 +98,8 @@ export const unifiedAuthApi = {
   verifyReset: async (data: { email: string; code: string; }) => await api.post<VerifyResponse>("/unified-auth/verify-reset", data).then(r => r.data),
   resetPassword: async (data: { resetSessionId: string; newPassword: string; }) => await api.post("/unified-auth/reset-password", data).then(r => r.data),
   changePassword: async (data: ChangePassword) => await api.post("/unified-auth/change-password", data).then(r => r.data),
+
+  registerNotification: async (token: string) => await api.post("/unified-auth/push/register", { token }).then(r => r.data),
 };
 
 export { api as authedApi };

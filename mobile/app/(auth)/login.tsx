@@ -12,13 +12,13 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
-import { useUnifiedLogin, useForgotPassword } from "@/src/hooks/useUnifiedAuth";
+import { useUnifiedLogin, useRegisterNotification } from "@/src/hooks/useUnifiedAuth";
 import { loginSchema, type LoginSchema } from "@/src/schemas/auth";
 
 export default function LoginScreen() {
   const router = useRouter();
+  const notifyRegister = useRegisterNotification();
   const login = useUnifiedLogin();
-  const forgotPassword = useForgotPassword();
 
   const {
     control,
@@ -32,12 +32,19 @@ export default function LoginScreen() {
   const onSubmit = handleSubmit((values) => {
     login.mutate(values, {
       onSuccess: (data) => {
-        if (data.role === "customer") router.replace("/(customer)/home");
-        else if (data.role === "barber") router.replace("/(barber)/todayAppointments");
-        else router.replace("/(admin)/(tabs)/dashboard");
-      }
+        notifyRegister.mutate(undefined, { onError: (e) => console.log('push register err', e) });
+
+        if (data.role === "customer") {
+          router.replace("/(customer)/home");
+        } else if (data.role === "barber") {
+          router.replace("/(barber)/todayAppointments");
+        } else {
+          router.replace("/(admin)/(tabs)/dashboard");
+        }
+      },
     });
   });
+
   const handleZodError = errors.email ? errors.email.message : errors.password?.message;
   const apiError = (login.error as any)?.response?.data?.message;
 
