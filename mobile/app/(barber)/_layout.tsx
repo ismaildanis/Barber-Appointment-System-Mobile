@@ -70,6 +70,11 @@ export default function BarberTabLayout() {
                 name="breaks"
                 options={{ href: null }}
             />
+            
+            <Tabs.Screen 
+                name="change-password-barber"
+                options={{ href: null }}
+            />
         </Tabs>
     )
 }

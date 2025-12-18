@@ -19,6 +19,7 @@ import { Button, RefreshControl, TouchableOpacity, ScrollView, Text, ImageBackgr
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppointmentSummary from "@/components/appointments/AppointmentSummary";
 import { AlertModal } from "@/components/ui/AlertModal";
+import { createAppointmentsIndexColors } from "@/constants/theme/createAppt";
 
 type AlertMode = "confirm" | "info-success" | "info-error";
 
@@ -138,7 +139,7 @@ export default function CreateAppointments() {
         style={{ 
           height: 290, 
           width: "100%", 
-          backgroundColor: "#151718",
+          backgroundColor: createAppointmentsIndexColors.imageBackground,
           position: "absolute",
           top: 0,
           left: 0,
@@ -159,7 +160,7 @@ export default function CreateAppointments() {
           }}
         >
           <LinearGradient
-            colors={myColors.mainBackgroundGradient}
+            colors={createAppointmentsIndexColors.containerGradient}
             start={{ x: 0.1, y: 0 }}
             end={{ x: 0, y: 1.3 }}
             style={{

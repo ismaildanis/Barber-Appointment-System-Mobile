@@ -40,7 +40,7 @@ export default function AdminTabLayout() {
                 name="barbers"
                 options={{
                     title: 'Berberler',
-                    tabBarIcon: ({ color }) => <IconSymbol size={28} name="clock.fill" color={'#AD8C57'} />,
+                    tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={'#AD8C57'} />,
                 }}
             /> 
             
@@ -48,7 +48,7 @@ export default function AdminTabLayout() {
             <Tabs.Screen 
                 name="services"
                 options={{ title: 'Hizmetler',
-                    tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={'#AD8C57'} />
+                    tabBarIcon: ({ color }) => <IconSymbol size={28} name="comb.fill" color={'#AD8C57'} />
                 }}
             />
 

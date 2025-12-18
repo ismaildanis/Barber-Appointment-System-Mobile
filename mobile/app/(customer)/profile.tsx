@@ -3,6 +3,7 @@ import Spinner from "@/components/ui/Spinner";
 import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { createAppointmentsIndexColors } from "@/constants/theme/createAppt";
 
 export default function CustomerProfile() {
 
@@ -80,7 +81,7 @@ export default function CustomerProfile() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, backgroundColor: "transparent", paddingBottom: 90, marginTop: 40 },
+    container: { flex: 1, padding: 16, backgroundColor: createAppointmentsIndexColors.imageBackground , paddingBottom: 90, marginTop: 40 },
     title: { fontSize: 22, fontWeight: "800", marginBottom: 8, color: "#fff", marginTop: 16 },
     empty: { color: "#ccc", marginTop: 8 },
     card: {

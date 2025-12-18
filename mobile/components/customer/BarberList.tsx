@@ -1,6 +1,4 @@
-import { FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import { FlatList, Image, StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { Barber } from "@/src/types/barber";
 import Spinner from "@/components/ui/Spinner";
 import { LinearGradient } from "expo-linear-gradient";
@@ -16,25 +14,25 @@ type BarberListProps = {
 export default function BarberList({ barbers, loading = false, selectedId, onSelect }: BarberListProps) {
   if (loading) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.sectionTitle}>Berberlerimiz</ThemedText>
+      <View style={styles.container}>
+        <Text style={styles.sectionTitle}>Berberlerimiz</Text>
         <Spinner size="small" />
-      </ThemedView>
+      </View>
     ); 
   } 
  
   if (!barbers || barbers.length === 0) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.sectionTitle}>Berberlerimiz</ThemedText>
-        <ThemedText style={styles.empty}>Henüz berber bulunamadı.</ThemedText>
-      </ThemedView>
+      <View style={styles.container}>
+        <Text style={styles.sectionTitle}>Berberlerimiz</Text>
+        <Text style={styles.empty}>Henüz berber bulunamadı.</Text>
+      </View>
     );
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText style={styles.sectionTitle}>Berberlerimiz</ThemedText>
+    <View style={styles.container}>
+      <Text style={styles.sectionTitle}>Berberlerimiz</Text>
       {barbers.map((item) => (
         <TouchableOpacity
           key={item.id}
@@ -53,15 +51,15 @@ export default function BarberList({ barbers, loading = false, selectedId, onSel
           >
               
             <Image source={{ uri: item.image }} style={styles.image}></Image>
-            <ThemedView style={styles.nameContainer}>
-              <ThemedText style={styles.name}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.name}>
                 {item.firstName} {item.lastName}
-              </ThemedText>
-            </ThemedView>
+              </Text>
+            </View>
           </LinearGradient>
         </TouchableOpacity>
       ))}
-    </ThemedView>
+    </View>
   );
 }
 
@@ -95,7 +93,7 @@ const styles = StyleSheet.create({
   },
   touchable: { borderRadius: 18 },
   selectedCard: { borderColor: "#4ade80", borderWidth: 1 },
-  sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 12, paddingTop: 8 },
+  sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 12, paddingTop: 8, color: "#fff" },
   card: {
     padding: 14,
     borderRadius: 16,

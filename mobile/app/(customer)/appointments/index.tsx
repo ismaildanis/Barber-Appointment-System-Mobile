@@ -1,13 +1,9 @@
 import { useGetCustomerAppointments } from "@/src/hooks/useAppointmentQuery";
 import { AppointmentService, Appointment, statusLabel, statusColor } from "@/src/types/appointment";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import Spinner from "@/components/ui/Spinner";
 import { FlatList, View, Text, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView } from "react-native-gesture-handler";
-import { useEffect, useState } from "react";
 
 export default function CustomerAppointments() {
   const { data, isLoading, isError, isRefetching, refetch, error} = useGetCustomerAppointments();
@@ -15,33 +11,41 @@ export default function CustomerAppointments() {
 
   if (isLoading) {
     return (
-      <ThemedView style={styles.container}>
+      <View style={styles.container}>
         <Spinner size="large" />
-      </ThemedView>
+      </View>
     );
   }
 
   if (!data?.length) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.title}>Randevularım</ThemedText>
-        <ThemedText style={styles.empty}>Henüz randevu bulunamadı.</ThemedText>
-      </ThemedView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Randevularım</Text>
+        <View style={styles.emptyContainer}>
+          <View style={styles.emptyIconContainer}>
+            <Text style={styles.emptyIcon}>📅</Text>
+          </View>
+          <Text style={styles.emptyTitle}>Henüz Randevunuz Yok</Text>
+          <Text style={styles.emptyDescription}>
+            Yeni bir randevu oluşturarak başlayın
+          </Text>
+        </View>
+      </View>
     ); 
   }
 
   if(isError) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.title}>Randevularım</ThemedText>
-        <ThemedText style={styles.empty}>Randevu yükleme hatası. Lütfen sayfayı yenileyiniz veya uygulamayı tekrardan başlatınız.</ThemedText>
-      </ThemedView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Randevularım</Text>
+        <Text style={styles.empty}>Randevu yükleme hatası. Lütfen sayfayı yenileyiniz veya uygulamayı tekrardan başlatınız.</Text>
+      </View>
     ); 
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>Randevularım</ThemedText>
+    <View style={styles.container}>
+      <Text style={styles.title}>Randevularım</Text>
       <FlatList
         data={data as Appointment[]}
         keyExtractor={(item) => String(item.id)}
@@ -82,12 +86,12 @@ export default function CustomerAppointments() {
           );
         }}
       />
-    </ThemedView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#000", paddingBlockEnd: 105 },
+  container: { flex: 1, padding: 16, backgroundColor: "#0f0f0f", paddingBlockEnd: 105 },
   title: { fontSize: 20, fontWeight: "700", marginBottom: 12, color: "#fff", marginTop: 40 },
   empty: { color: "#ccc", marginTop: 8 },
   card: {
@@ -102,11 +106,42 @@ const styles = StyleSheet.create({
   meta: { fontSize: 13, color: "rgba(255,255,255,0.8)" },
   note: { marginTop: 3, fontSize: 12, color: "#f3d9a4" },
   detailBadge: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: "#C8AA7A",
+      width: 32,
+      height: 32,
+      borderRadius: 16,
+      backgroundColor: "#C8AA7A",
+      alignItems: "center",
+      justifyContent: "center",
+  },
+  emptyContainer: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
-},
+    paddingHorizontal: 40,
+  },
+  emptyIconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "#1a1a1a",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  emptyIcon: {
+    fontSize: 40,
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#fff",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  emptyDescription: {
+    fontSize: 14,
+    color: "#888",
+    textAlign: "center",
+    lineHeight: 20,
+  }
 });

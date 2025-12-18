@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, TextInput, Alert } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, TextInput, Alert, Platform, KeyboardAvoidingView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -102,6 +102,7 @@ export default function DashboardAppointmentDetail() {
   const canAct = status === "SCHEDULED" || status === "EXPIRED";
 
   return (
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
     <SafeAreaView style={styles.container}>
       {isWorking && <Spinner />}
       <TouchableOpacity onPress={() => router.replace("/(admin)/(tabs)/dashboard")} style={styles.backBtn}>
@@ -182,6 +183,7 @@ export default function DashboardAppointmentDetail() {
         cancelText="Kapat"
       />
     </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 

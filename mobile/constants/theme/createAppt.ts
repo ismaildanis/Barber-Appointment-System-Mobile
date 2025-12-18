@@ -4,7 +4,7 @@ import { myColors } from "../theme";
 
 export const createAppointmentsIndexColors = {
   safeAreaBackground: "transparent",                          // SafeAreaView backgroundColor
-  imageBackground: "#151718",                                 // ImageBackground backgroundColor
+  imageBackground: "#0f0f0f",                                 // ImageBackground backgroundColor
   mainGradient: myColors.mainBackgroundGradient,             // LinearGradient colors (mevcut tema)
   shadowColor: "#2b2b2b",                                     // shadowColor, FontAwesome5 color
   borderColor: "rgba(255, 255, 255, 0.49)",                  // borderColor

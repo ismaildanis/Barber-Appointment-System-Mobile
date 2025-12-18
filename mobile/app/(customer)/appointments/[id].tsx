@@ -4,8 +4,6 @@ import {
   useCancelCustomerAppointment,
 } from "@/src/hooks/useAppointmentQuery";
 import { statusLabel, statusColor, AppointmentService } from "@/src/types/appointment";
-import { ThemedView } from "@/components/themed-view";
-import { ThemedText } from "@/components/themed-text";
 import Spinner from "@/components/ui/Spinner";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -28,8 +26,8 @@ export default function AppointmentDetail() {
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMsg, setAlertMsg] = useState("");
 
-  if (isLoading) return <ThemedView style={styles.container}><Spinner size="large" /></ThemedView>;
-  if (isError || !data) return <ThemedView style={[styles.container, { marginTop: 20 }]}><ThemedText>Randevu yükleme hatası. Lütfen sayfayı yenileyiniz veya uygulamayı tekrardan başlatınız.</ThemedText></ThemedView>;
+  if (isLoading) return <View style={styles.container}><Spinner size="large" /></View>;
+  if (isError || !data) return <View style={[styles.container, { marginTop: 20 }]}><Text>Randevu yükleme hatası. Lütfen sayfayı yenileyiniz veya uygulamayı tekrardan başlatınız.</Text></View>;
 
   const fmtTR = (iso?: string, withTime = true) => {
     if (!iso) return "—";

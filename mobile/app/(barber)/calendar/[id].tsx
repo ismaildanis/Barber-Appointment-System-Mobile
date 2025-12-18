@@ -37,10 +37,11 @@ export default function CalendarDetails() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backBtn} onPress={() => router.replace("/(barber)/calendar")}>
-        <Ionicons name="arrow-back" size={22} color="#fff" />
-      </TouchableOpacity>
-
+     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10, marginTop: 24 }}>
+        <TouchableOpacity style={styles.backBtn} onPress={() => router.replace("/(barber)/calendar")}>
+          <Ionicons name="arrow-back" size={20} color="#fff" />
+        </TouchableOpacity>
+      </View>
       <ScrollView contentContainerStyle={{ gap: 16, paddingTop: 6 }}>
         <Text style={styles.title}>Randevu Detayı</Text>
 
@@ -91,10 +92,13 @@ export default function CalendarDetails() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 18, backgroundColor: "#0f0f0f", paddingBottom: 100 },
   backBtn: {
-    width: 40, height: 40, borderRadius: 20,
-    backgroundColor: "rgba(255,255,255,0.10)",
-    alignItems: "center", justifyContent: "center",
-    marginBottom: 10, marginTop: 20,
+      padding: 12,
+      borderRadius: 18,
+      backgroundColor: "rgba(255,255,255,0.08)",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 12,
+      marginTop: 12,
   },
   title: { fontSize: 24, fontWeight: "800", color: "#fff", marginBottom: 4 },
   heroCard: {

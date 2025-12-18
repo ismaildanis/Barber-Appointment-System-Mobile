@@ -1,6 +1,4 @@
-import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import { FlatList, StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import Spinner from "../ui/Spinner";
 import { LinearGradient } from "expo-linear-gradient";
 import { myColors } from "@/constants/theme";
@@ -25,24 +23,24 @@ const formatDay = (dateStr: string) => {
 export default function Dates({ dates, loading, selectedDate, onSelect }: DatesProps) {
   if (loading) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.sectionTitle}>Günler</ThemedText>
+      <View style={styles.container}>
+        <Text style={styles.sectionTitle}>Günler</Text>
         <Spinner size="small" />
-      </ThemedView>
+      </View>
     );
   }
 
   if (!dates || dates.length === 0) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.sectionTitle}>Günler</ThemedText>
-        <ThemedText style={styles.empty}>Günler bulunamadı.</ThemedText>
-      </ThemedView>
+      <View style={styles.container}>
+        <Text style={styles.sectionTitle}>Günler</Text>
+        <Text style={styles.empty}>Günler bulunamadı.</Text>
+      </View>
     );
   }
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <FlatList
         horizontal
         data={dates}
@@ -66,21 +64,21 @@ export default function Dates({ dates, loading, selectedDate, onSelect }: DatesP
                 end={{ x: 0, y: 1.3 }}
                 style={[styles.pill, isSelected && styles.pillSelected]}
               >
-                <ThemedText style={styles.weekday}>{weekday}</ThemedText>
+                <Text style={styles.weekday}>{weekday}</Text>
 
                 {isSelected ? (
                   <View style={styles.dayCircle}>
-                    <ThemedText style={styles.dayNumSelected}>{dayNum}</ThemedText>
+                    <Text style={styles.dayNumSelected}>{dayNum}</Text>
                   </View>
                 ) : (
-                  <ThemedText style={styles.dayNum}>{dayNum}</ThemedText>
+                  <Text style={styles.dayNum}>{dayNum}</Text>
                 )}
               </LinearGradient>
             </TouchableOpacity>
           );
         }}
       />
-    </ThemedView>
+    </View>
   );
 }
 

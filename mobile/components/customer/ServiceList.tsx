@@ -1,10 +1,8 @@
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import { Service } from "@/src/types/service";
 import Spinner from "@/components/ui/Spinner";
 import { useCallback, useEffect, useRef, useState, memo } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { FlatList, NativeScrollEvent, NativeSyntheticEvent, StyleSheet, Text, useWindowDimensions } from "react-native";
+import { FlatList, NativeScrollEvent, NativeSyntheticEvent, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { myColors } from "@/constants/theme";
 import { Image } from "react-native";
 
@@ -35,9 +33,9 @@ const ServiceCard = memo(({ item, cardWidth, cardHeight }: ServiceCardProps) => 
       {item.name}
     </Text>
     <Text style={styles.cardPrice}>{item.price} ₺</Text>
-    <ThemedText style={styles.cardMeta} numberOfLines={2}>
+    <Text style={styles.cardMeta} numberOfLines={2}>
       {item.description}
-    </ThemedText>
+    </Text>
   </LinearGradient>
 ));
 
@@ -95,25 +93,25 @@ export default function ServiceList({ services, loading = false, autoPlay = true
 
   if (loading) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.sectionTitle}>Servisler</ThemedText>
+      <View style={styles.container}>
+        <Text style={styles.sectionTitle}>Servisler</Text>
         <Spinner size="small" />
-      </ThemedView>
+      </View>
     );
   }
 
   if (!services?.length) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.sectionTitle}>Servisler</ThemedText>
-        <ThemedText style={styles.empty}>Henüz servis bulunamadı.</ThemedText>
-      </ThemedView>
+      <View style={styles.container}>
+        <Text style={styles.sectionTitle}>Servisler</Text>
+        <Text style={styles.empty}>Henüz servis bulunamadı.</Text>
+      </View>
     );
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText style={styles.sectionTitle}>Hizmetlerimiz</ThemedText>
+    <View style={styles.container}>
+      <Text style={styles.sectionTitle}>Hizmetlerimiz</Text>
       <FlatList
         bounces={false}
         ref={listRef}
@@ -135,7 +133,7 @@ export default function ServiceList({ services, loading = false, autoPlay = true
         onMomentumScrollEnd={handleMomentumScrollEnd}
         renderItem={renderItem}
       />
-    </ThemedView>
+    </View>
   );
 }
 
@@ -153,7 +151,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 6 },
     marginBottom: 16,
   },
-  sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 12 },
+  sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 12, color: "#fff" },
   listContent: { gap: 12, paddingBottom: 12 },
   cardImage: {
     width: "100%",

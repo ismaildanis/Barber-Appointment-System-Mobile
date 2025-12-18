@@ -120,6 +120,14 @@ export default function BarberProfile() {
         </TouchableOpacity>
 
         <TouchableOpacity
+          onPress={() => router.replace("/change-password-barber")}
+          style={styles.changeBtn}
+        >
+          <Text style={styles.logoutText}>
+            Şifre Değiştir
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() =>
             logout.mutate(undefined, {
               onSuccess: () => router.replace("/(auth)/login"),
@@ -132,6 +140,7 @@ export default function BarberProfile() {
             {logout.isPending ? "Çıkış yapılıyor..." : "Çıkış Yap"}
           </Text>
         </TouchableOpacity>
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -177,5 +186,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: "transparent",
     overflow: "hidden",
+  },
+  changeBtn: {
+    marginTop: 4,
+    padding: 14,
+    borderRadius: 14,
+    backgroundColor: "#AD8C57",
   },
 });

@@ -1,6 +1,4 @@
-import { StyleSheet, useWindowDimensions, View, Text, Button,TouchableOpacity } from "react-native";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import { StyleSheet, useWindowDimensions, View, Text, TouchableOpacity } from "react-native";
 import { Customer } from "@/src/types/customerAuth";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -18,13 +16,10 @@ export default function ShopHeader({ customer, logout }: ShopHeaderProps) {
   const headerHeight = Math.min(Math.max(width * 0.28, 80), 250);
   const subtitleSize = Math.min(Math.max(width * 0.04, 12), 14);
   const initials = `${customer.firstName?.[0] ?? "B"}${customer.lastName?.[0] ?? ""}`.toUpperCase();
-  const onSubmit = () => {
-    logout();
-    router.replace("/(auth)/login");  
-  }
+
   return (
-    <ThemedView style={[styles.wrapper, { height: headerHeight }]}>
-      <ThemedView
+    <View style={[styles.wrapper, { height: headerHeight }]}>
+      <View
         style={[
           styles.container,
           {
@@ -40,10 +35,10 @@ export default function ShopHeader({ customer, logout }: ShopHeaderProps) {
                 <Text style={styles.avatarText}>{initials}</Text>
               </View>
               <View style={{ gap: 0 }}>
-                <ThemedText style={[styles.name, { fontSize: subtitleSize + 3 }]}>
+                <Text style={[styles.name, { fontSize: subtitleSize + 3 }]}>
                   {customer.firstName ?? "Kullanıcı"} {customer.lastName ?? ""}
-                </ThemedText>
-                <ThemedText style={[styles.email, { fontSize: subtitleSize }]}>{customer.email}</ThemedText>
+                </Text>
+                <Text style={[styles.email, { fontSize: subtitleSize }]}>{customer.email}</Text>
               </View>
             </View>
             
@@ -58,8 +53,8 @@ export default function ShopHeader({ customer, logout }: ShopHeaderProps) {
               </TouchableOpacity>
 
           </View>
-      </ThemedView>
-    </ThemedView>
+      </View>
+    </View>
   );
 }
 

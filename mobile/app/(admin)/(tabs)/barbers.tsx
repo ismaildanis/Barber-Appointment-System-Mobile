@@ -324,16 +324,6 @@ export default function BarbersScreen() {
                 {imageUri ? (
                   <View style={styles.imagePreview}>
                     <Image source={{ uri: imageUri }} style={styles.previewImage} resizeMode="cover" />
-                    <View style={styles.imageActions}>
-                      <TouchableOpacity style={styles.changeImageBtn} onPress={pickAndUpload}>
-                        <Ionicons name="image-outline" size={18} color="#AD8C57" />
-                        <Text style={styles.changeImageText}>Değiştir</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={styles.removeImageBtn} onPress={onRemoveImage}>
-                        <Ionicons name="trash-outline" size={18} color="#F44336" />
-                        <Text style={styles.removeImageText}>Kaldır</Text>
-                      </TouchableOpacity>
-                    </View>
                   </View>
                 ) : (
                   <TouchableOpacity style={styles.uploadButton} onPress={pickAndUpload}>

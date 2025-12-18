@@ -149,7 +149,7 @@ export default function BarberCalendar() {
 
 const styles = StyleSheet.create({
   loader: { flex: 1, padding: 16, justifyContent: "center" },
-  container: { flex: 1, padding: 16, backgroundColor: todayAppointmentsColors.containerBackground },
+  container: { flex: 1, padding: 16, backgroundColor: todayAppointmentsColors.containerBackground, marginBottom: 50 },
   calendarWrap: { borderRadius: 16, overflow: "hidden", marginBottom: 12, backgroundColor: "#1a1a1a" },
   card: {
     padding: 14,
