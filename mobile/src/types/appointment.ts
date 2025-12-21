@@ -115,3 +115,7 @@ export interface GetBreaksForBarber {
     workinHourId: number;
     workingHour: WorkingHour;
 }
+
+export interface BarberCancel {
+    cancelReason?: string | null;
+}

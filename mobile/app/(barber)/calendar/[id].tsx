@@ -1,16 +1,18 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import Spinner from "@/components/ui/Spinner";
 import { useCancelBarberAppointment, useGetBarberOneAppointment } from "@/src/hooks/useAppointmentQuery";
 import { statusLabel, statusColor, AppointmentService } from "@/src/types/appointment";
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 
 export default function CalendarDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const apptId = Number(id);
   const router = useRouter();
-
-  const { data, isLoading, isError } = useGetBarberOneAppointment(apptId);
+  const [reasonOpen, setReasonOpen] = useState(false);
+  const [reason, setReason] = useState("");
+  const { data, isLoading, isError, refetch } = useGetBarberOneAppointment(apptId);
   const cancelMutation = useCancelBarberAppointment(apptId);
 
   if (isLoading) return (
@@ -63,7 +65,7 @@ export default function CalendarDetails() {
           <Text style={styles.value}>{data.notes || "—"}</Text>
           {data.cancelReason ? (
             <>
-              <Text style={styles.label}>İptal Sebebi</Text>
+              <Text style={styles.label}>İptal Sebebi:</Text>
               <Text style={styles.note}>{data.cancelReason}</Text>
             </>
           ) : null}
@@ -71,19 +73,61 @@ export default function CalendarDetails() {
 
         {data.status === "SCHEDULED" && (
           <TouchableOpacity
-            onPress={() =>
-              cancelMutation.mutate(undefined, {
-                onSuccess: () => router.back(),
-              })
-            }
+            onPress={() => setReasonOpen(true)}
             style={[styles.btnDanger, cancelMutation.isPending && { opacity: 0.7 }]}
             disabled={cancelMutation.isPending}
           >
             <Text style={styles.btnText}>
-              {cancelMutation.isPending ? "İptal ediliyor..." : "Randevuyu İptal Et"}
+              Randevuyu İptal Et
             </Text>
           </TouchableOpacity>
         )}
+
+        <Modal transparent visible={reasonOpen} animationType="slide" onRequestClose={() => setReasonOpen(false)}>
+          <KeyboardAvoidingView
+            style={{ flex: 1, justifyContent: "flex-end" }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            
+          >
+          <View style={styles.overlay}>
+            <View style={styles.modal}>
+              <Text style={styles.modalTitle}>İptal Sebebi</Text>
+              <TextInput
+                style={styles.modalInput}
+                placeholder="Sebep yazın (Opsiyonel)..."
+                placeholderTextColor="#6b7280"
+                value={reason}
+                onChangeText={setReason}
+                multiline
+              />
+              <View style={styles.modalActions}>
+                <TouchableOpacity style={styles.cancelBtn} onPress={() => setReasonOpen(false)}>
+                  <Text style={styles.cancelText}>Vazgeç</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.confirmBtn}
+                  onPress={() => {
+                    const payload = reason.trim() ? { cancelReason: reason.trim() } : {};
+
+                    cancelMutation.mutate(payload, {
+                      onSuccess: () => {
+                        setReason("");
+                        setReasonOpen(false);
+                        router.replace("/(barber)/calendar");
+                        refetch();
+                      },
+                    });
+                  }}
+                >
+                  <Text style={styles.confirmText}>
+                    {cancelMutation.isPending ? "İptal ediliyor..." : "İptal Et"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          </KeyboardAvoidingView>
+        </Modal>
       </ScrollView>
     </View>
   );
@@ -129,4 +173,14 @@ const styles = StyleSheet.create({
   btnDanger: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#ef4444" },
   btnText: { color: "#fff", fontWeight: "800", textAlign: "center" },
   empty: { color: "#ccc" },
+  overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)", justifyContent: "flex-end" },
+  modal: { backgroundColor: "#1a1a1a", padding: 16, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
+  modalTitle: { color: "#fff", fontSize: 16, fontWeight: "700", marginBottom: 8 },
+  modalInput: { backgroundColor: "#111", color: "#fff", borderRadius: 10, padding: 12, minHeight: 80 },
+  modalActions: { flexDirection: "row", gap: 10, marginTop: 12 },
+  cancelBtn: { flex: 1, padding: 12, borderRadius: 10, backgroundColor: "rgba(255,255,255,0.08)" },
+  confirmBtn: { flex: 1, padding: 12, borderRadius: 10, backgroundColor: "#ef4444" },
+  cancelText: { color: "#fff", textAlign: "center", fontWeight: "700" },
+  confirmText: { color: "#fff", textAlign: "center", fontWeight: "700" },
+
 });

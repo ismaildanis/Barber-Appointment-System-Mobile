@@ -14,15 +14,7 @@ const getInitials = (firstName?: string, lastName?: string) =>
   `${firstName?.[0] ?? "B"}${lastName?.[0] ?? ""}`.toUpperCase();
 
 const formatDate = (dateStr?: string) =>
-  dateStr
-    ? new Date(dateStr).toLocaleString("tr-TR", {
-        timeZone: "Europe/Istanbul",
-        day: "2-digit",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : "";
+  dateStr ? dateStr.replace("T", " ").slice(0, 16) : "";
 
 export default function ScheduledAppointment({ scheduledAppt, loading }: Props) {
   if (loading) return <Spinner />;

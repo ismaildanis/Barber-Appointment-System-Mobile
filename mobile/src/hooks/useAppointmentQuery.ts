@@ -1,5 +1,5 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, Status } from "../types/appointment";
+import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, Status, BarberCancel } from "../types/appointment";
 import { appointmentApi } from "../api/appointmentApi";
 
 const key = ["appointment"] as const;
@@ -114,7 +114,7 @@ export const useGetBarberTodayAppointments = () =>
 export const useCancelBarberAppointment = (id: number) => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: () => appointmentApi.cancelBarberAppointment(id),
+        mutationFn: (data: BarberCancel) => appointmentApi.cancelBarberAppointment(id, data),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: key })
         },
