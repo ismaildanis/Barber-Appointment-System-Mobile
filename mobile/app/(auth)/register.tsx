@@ -57,11 +57,11 @@ export default function Register() {
           ))}
 
           {([
-            { name: "email", label: "Email", secure: false, keyboard: "email-address" },
-            { name: "firstName", label: "Ad", secure: false, keyboard: "default" },
-            { name: "lastName", label: "Soyad", secure: false, keyboard: "default" },
-            { name: "phone", label: "Telefon", secure: false, keyboard: "phone-pad" },
-            { name: "password", label: "Şifre", secure: true, keyboard: "default" },
+            { name: "email", label: "Email", secure: false, keyboard: "email-address", maxLength: 50 },
+            { name: "firstName", label: "Ad", secure: false, keyboard: "default", maxLength: 50 },
+            { name: "lastName", label: "Soyad", secure: false, keyboard: "default", maxLength: 50 },
+            { name: "phone", label: "Telefon", secure: false, keyboard: "phone-pad", maxLength:10 },
+            { name: "password", label: "Şifre", secure: true, keyboard: "default", maxLength: 50 },
           ] as const).map((field) => (
             <Controller
               key={field.name}
@@ -78,6 +78,7 @@ export default function Register() {
                   secureTextEntry={field.secure}
                   autoCapitalize="none"
                   keyboardType={field.keyboard as any}
+                  maxLength={field.maxLength as any}
                 />
               )}
             />

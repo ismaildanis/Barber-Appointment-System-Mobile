@@ -6,11 +6,26 @@ import { View, Text, TouchableOpacity, StyleSheet, RefreshControl, ScrollView, I
 import { useBarberUploadImage, useBarberDeleteImage } from "@/src/hooks/useBarberQuery";
 import * as ImagePicker from "expo-image-picker";
 import { todayAppointmentsColors } from "@/constants/theme/barber/todayAppt";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 
 export default function BarberProfile() {
   const router = useRouter();
   const { data, isLoading, isError, refetch, isRefetching } = useUnifiedMe();
   const logout = useUnifiedLogout();
+  const navigation = useNavigation();
+
+  const onLogout = () => {
+    logout.mutate(undefined, {
+      onSuccess: () => {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "(auth)/login" }],
+          })
+        );
+      },
+    });
+  };
 
   const uploadImage = useBarberUploadImage();
   const deleteImage = useBarberDeleteImage();
@@ -128,11 +143,7 @@ export default function BarberProfile() {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() =>
-            logout.mutate(undefined, {
-              onSuccess: () => router.replace("/(auth)/login"),
-            })
-          }
+          onPress={() => onLogout()}
           disabled={logout.isPending}
           style={[styles.logoutBtn, logout.isPending && { opacity: 0.7 }]}
         >

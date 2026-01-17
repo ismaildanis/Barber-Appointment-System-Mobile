@@ -10,16 +10,17 @@ import {
 import { Image } from "expo-image";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "expo-router";
+import { useRootNavigation, useRouter } from "expo-router";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { useUnifiedLogin, useRegisterNotification } from "@/src/hooks/useUnifiedAuth";
 import { loginSchema, type LoginSchema } from "@/src/schemas/auth";
-
+import { CommonActions } from "@react-navigation/native";
 export default function LoginScreen() {
   const router = useRouter();
   const notifyRegister = useRegisterNotification();
   const login = useUnifiedLogin();
-
+  const rootNav = useRootNavigation();
+  
   const {
     control,
     handleSubmit,
@@ -28,23 +29,54 @@ export default function LoginScreen() {
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });
+  const resetToCustomer = () => {
+    rootNav?.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          { name: "(customer)", state: { routes: [{ name: "home" }] } },
+        ],
+      })
+    );
+  };
+
+  const resetToBarber = () => {
+    rootNav?.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          { name: "(barber)", state: { routes: [{ name: "todayAppointments" }] } },
+        ],
+      })
+    );
+  };
+
+  const resetToAdmin = () => {
+    rootNav?.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          { name: "(admin)", state: { routes: [{ name: "(tabs)" }, { name: "dashboard" }] } },
+        ],
+      })
+    );
+  };
 
   const onSubmit = handleSubmit((values) => {
     login.mutate(values, {
       onSuccess: (data) => {
-        notifyRegister.mutate(undefined, { onError: (e) => console.log('push register err', e) });
+        notifyRegister.mutate(undefined, { onError: (e) => console.log("push register err", e) });
 
         if (data.role === "customer") {
-          router.replace("/(customer)/home");
+          resetToCustomer();
         } else if (data.role === "barber") {
-          router.replace("/(barber)/todayAppointments");
+          resetToBarber();
         } else {
-          router.replace("/(admin)/(tabs)/dashboard");
+          resetToAdmin();
         }
       },
     });
   });
-
   const handleZodError = errors.email ? errors.email.message : errors.password?.message;
   const apiError = (login.error as any)?.response?.data?.message;
 

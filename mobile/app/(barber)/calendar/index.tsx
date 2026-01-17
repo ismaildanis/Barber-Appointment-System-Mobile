@@ -110,6 +110,7 @@ export default function BarberCalendar() {
     <SafeAreaView style={styles.container}>
       <View style={styles.calendarWrap}>
         <Calendar
+          current={selectedDate || todayTR}
           theme={{
             calendarBackground: "#1a1a1a",
             selectedDayBackgroundColor: "#AD8C57",

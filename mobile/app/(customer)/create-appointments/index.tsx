@@ -45,6 +45,9 @@ export default function CreateAppointments() {
   const [alertMsg, setAlertMsg] = useState("");
   const [notes, setNotes] = useState<string>();
   const loading = sLoading || bLoading  || adLoading || ahLoading; 
+
+  const topOffset = height > 700 ? Math.min(height * 0.18, 180) : 120; // Büyük ekranlarda %18, küçüklerde 120
+  const pillHeight = Math.min(Math.max(height * 0.065, 50), 60); // 50–60 arası, daha küçük
   useEffect(() => {
     barbers?.forEach(b => Image.prefetch(b.image as string));
   }, [barbers]);
@@ -137,8 +140,8 @@ export default function CreateAppointments() {
       <ImageBackground 
         source={heroSource}
         style={{ 
-          height: 290, 
-          width: "100%", 
+          height: Math.min(height * 0.32, 290), // Ekranın %32'si, max 290
+          width: "100%",
           backgroundColor: createAppointmentsIndexColors.imageBackground,
           position: "absolute",
           top: 0,
@@ -154,9 +157,11 @@ export default function CreateAppointments() {
             backgroundColor: "transparent",
             overflow: "hidden",
             borderRadius: 999,
+            top: topOffset,
             position: "absolute",
-            top: height * 0.23,
-            right: 5,
+            right: 8,
+            maxWidth: "88%",
+            height: pillHeight,
           }}
         >
           <LinearGradient
@@ -168,7 +173,7 @@ export default function CreateAppointments() {
               alignItems: "center",
               justifyContent: "center",
               gap: 6,
-              height: "100%",
+              height: pillHeight,
               paddingRight: 16,
               paddingLeft: 6,
               paddingVertical: 5,
@@ -227,7 +232,7 @@ export default function CreateAppointments() {
           style={{
             borderTopLeftRadius: 40,
             borderTopRightRadius: 40,
-            marginTop: 210,
+            marginTop: Math.min(height * 0.23, 210), // Ekranın %23'ü, max 210
             padding: 20,
             paddingTop: 32,
 

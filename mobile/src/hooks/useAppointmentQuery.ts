@@ -163,6 +163,7 @@ export const useGetAdminOneAppointment = (id: number) =>
         queryFn: () => appointmentApi.getAdminOneAppointment(id),
         enabled: !!id
     })
+
 const makeOptimistic = (queryClient: QueryClient, status: Status) => ({
   onMutate: async (id: number) => {
     await queryClient.cancelQueries({ queryKey: key });
@@ -214,5 +215,13 @@ export const useMarkCompletedAppointment = () => {
   return useMutation({
     mutationFn: (id: number) => appointmentApi.markCompletedAppointment(id),
     ...makeOptimistic(queryClient, "COMPLETED"),
+  });
+};
+
+export const useMarkScheduledAppointment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => appointmentApi.markCompletedBarber(id),    
+    ...makeOptimistic(queryClient, "SCHEDULED"),
   });
 };

@@ -3,13 +3,27 @@ import Spinner from "@/components/ui/Spinner";
 import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 
 export default function AdminProfile() {
 
     const router = useRouter();
   const { data, isLoading, isError, refetch, isRefetching } = useUnifiedMe();
   const logout = useUnifiedLogout();
+  const navigation = useNavigation();
 
+  const onLogout = () => {
+    logout.mutate(undefined, {
+      onSuccess: () => {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "(auth)/login" }],
+          })
+        );
+      },
+    });
+  };
   if (isLoading) {
     return (
       <View style={styles.container}>
@@ -56,7 +70,7 @@ export default function AdminProfile() {
         </View>
 
         <TouchableOpacity
-          onPress={() => logout.mutate(undefined)}
+          onPress={() => onLogout()}
           disabled={logout.isPending}
           style={[
             styles.logoutBtn,

@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import Spinner from "@/components/ui/Spinner";
-import { useCancelBarberAppointment, useGetBarberOneAppointment } from "@/src/hooks/useAppointmentQuery";
+import { useCancelBarberAppointment, useGetBarberOneAppointment, useMarkScheduledAppointment } from "@/src/hooks/useAppointmentQuery";
 import { statusLabel, statusColor, AppointmentService } from "@/src/types/appointment";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
@@ -14,6 +14,7 @@ export default function CalendarDetails() {
   const [reason, setReason] = useState("");
   const { data, isLoading, isError, refetch } = useGetBarberOneAppointment(apptId);
   const cancelMutation = useCancelBarberAppointment(apptId);
+  const completedMutation = useMarkScheduledAppointment();
 
   if (isLoading) return (
     <View style={styles.container}>
@@ -24,7 +25,7 @@ export default function CalendarDetails() {
   if (isError || !data) return (
     <View style={styles.container}>
       <Text style={styles.empty}>Randevu yüklenemedi.</Text>
-      <TouchableOpacity style={styles.backBtn} onPress={() => router.replace("/(barber)/calendar")}>
+      <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={22} color="#fff" />
       </TouchableOpacity>
     </View>
@@ -36,6 +37,13 @@ export default function CalendarDetails() {
   const start = data.appointmentStartAt?.slice(0, 16).replace("T", " ");
   const end = data.appointmentEndAt?.slice(11, 16);
   const badgeColor = statusColor[data.status] || "#a3a3a3";
+
+  const handleMarkCompleted = () => {
+    completedMutation.mutate(apptId, { onSuccess: () => {
+      router.replace("/(barber)/calendar");
+      refetch();
+    }});
+  }
 
   return (
     <View style={styles.container}>
@@ -57,6 +65,8 @@ export default function CalendarDetails() {
           <Text style={styles.bigName} numberOfLines={1}>
             {data.customer?.firstName} {data.customer?.lastName}
           </Text>
+          <Text style={styles.meta}>Telefon: {data.customer?.phone}</Text>
+          <Text style={styles.meta}>Email: {data.customer?.email}</Text>
           <Text style={styles.meta}>Hizmetler: {services}</Text>
         </View>
 
@@ -79,6 +89,18 @@ export default function CalendarDetails() {
           >
             <Text style={styles.btnText}>
               Randevuyu İptal Et
+            </Text>
+          </TouchableOpacity>
+        )}
+
+        {data.status === "SCHEDULED" && (
+          <TouchableOpacity
+            onPress={() => handleMarkCompleted()}
+            style={[styles.btnCompleted, completedMutation.isPending && { opacity: 0.7 }]}
+            disabled={completedMutation.isPending}
+          >
+            <Text style={styles.btnText}>
+              Randevuyu Tamamlandı Olarak işaretle
             </Text>
           </TouchableOpacity>
         )}
@@ -171,6 +193,7 @@ const styles = StyleSheet.create({
   meta: { fontSize: 14, color: "rgba(255,255,255,0.9)" },
   note: { fontSize: 13, color: "#fbbf24" },
   btnDanger: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#ef4444" },
+  btnCompleted: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#AD8C57" },
   btnText: { color: "#fff", fontWeight: "800", textAlign: "center" },
   empty: { color: "#ccc" },
   overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)", justifyContent: "flex-end" },

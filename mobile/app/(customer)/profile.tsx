@@ -4,12 +4,28 @@ import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View, Text } 
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { createAppointmentsIndexColors } from "@/constants/theme/createAppt";
+import { useNavigation, CommonActions } from "@react-navigation/native";
+
 
 export default function CustomerProfile() {
 
     const router = useRouter();
   const { data, isLoading, isError, refetch, isRefetching } = useUnifiedMe();
   const logout = useUnifiedLogout();
+  const navigation = useNavigation();
+
+  const onLogout = () => {
+    logout.mutate(undefined, {
+      onSuccess: () => {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "(auth)/login" }],
+          })
+        );
+      },
+    });
+  };
 
   if (isLoading) {
     return (
@@ -55,7 +71,7 @@ export default function CustomerProfile() {
         </View>
 
         <TouchableOpacity
-          onPress={() => logout.mutate(undefined)}
+          onPress={() => onLogout()}
           disabled={logout.isPending}
           style={[
             styles.logoutBtn,

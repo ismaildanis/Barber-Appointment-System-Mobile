@@ -21,6 +21,7 @@ export const appointmentApi = {
     createBreakForBarber: async (data: CreateBreakForBarber) => await api.post(`/appointment/barber-break`, data).then(r => r.data),
     deleteBreakForBarber: async (id: number) => await api.delete(`/appointment/barber-break/${id}`).then(r => r.data),
     getBreaksForBarber: async () => await api.get<GetBreaksForBarber[]>(`/appointment/barber-break`).then(r => r.data),
+    markCompletedBarber: async (id: number) => await api.post(`/appointment/barber-mark-completed/${id}`).then(r => r.data),
     //Admin
     getAdminAppointments: async (status: Status) => await  api.get<AdminAppointment[]>("/appointment/admin", { params: { status } }).then(r => r.data),
     getAdminOneAppointment: async (id: number) => await api.get<AdminAppointment>(`/appointment/admin/${id}`).then(r => r.data),

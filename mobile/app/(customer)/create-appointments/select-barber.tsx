@@ -28,7 +28,7 @@ export default function SelectBarber() {
     if (isLoading || !barbers) return <Spinner size={"large"}/>
 
     return (
-        <SafeAreaView style={{ flex: 1, padding: 16 }}>
+        <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: "#000" }}>
             
             <ScrollView
                 refreshControl={
