@@ -151,44 +151,64 @@ export default function CreateAppointments() {
         resizeMode="contain"
       />
 
+        <LinearGradient
+          colors={["#121212",
+            "#121212",
+            "#121212"]}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
+          style={{
+            borderTopLeftRadius: 40,
+            borderTopRightRadius: 40,
+            marginTop: Math.min(height * 0.23, 210),
+            padding: 20,
+            paddingTop: 32,        
+          }}
+        >
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={() => {
+                refetchServices();
+                refetchBarbers();
+                refetchAvailableDates();
+                refetchAvailableHours();
+              }}
+            />
+          }
+          contentContainerStyle={{ paddingBottom: 32, paddingTop: 8 }}
+          showsVerticalScrollIndicator={false}
+        > 
+
         <TouchableOpacity
           onPress={() => router.push("/(customer)/create-appointments/select-barber")}
           style={{
             backgroundColor: "transparent",
-            overflow: "hidden",
-            borderRadius: 999,
-            top: topOffset,
-            position: "absolute",
-            right: 8,
-            maxWidth: "88%",
-            height: pillHeight,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: "rgba(255, 255, 255, 0.49)",
           }}
         >
-          <LinearGradient
-            colors={createAppointmentsIndexColors.containerGradient}
-            start={{ x: 0.1, y: 0 }}
-            end={{ x: 0, y: 1.3 }}
+          <View
             style={{
+              backgroundColor: "#121212",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
               gap: 6,
-              height: pillHeight,
               paddingRight: 16,
               paddingLeft: 6,
               paddingVertical: 5,
               borderRadius: 16,
-              shadowColor: "#2b2b2b",
-              shadowOpacity: 0.5,
-              shadowRadius: 18,
-              borderColor: "rgba(255, 255, 255, 0.49)",
+              borderColor: "#E4D2AC",
             }}
           >
             <View style={{ paddingVertical: 12, paddingHorizontal: 8, backgroundColor:"#C8AA7A", borderWidth: 2, borderColor:"#E4D2AC", borderRadius: 999}}>
               <FontAwesome5 
                 name="sync"
                 size={18}
-                color="#2b2b2b"
+                color="#1E1E1E"
                 style={{ marginLeft: 4, marginRight: 4 }}
               />
             </View>
@@ -218,47 +238,8 @@ export default function CreateAppointments() {
                 <Text style={{ color: "#2b2b2b", fontWeight: "700" }}>+{remaining}</Text>
               </View>
             )}
-          </LinearGradient>
+          </View>
         </TouchableOpacity>
-
-
-        <LinearGradient
-            colors={[    "#0F1115",
-            "#0F1115",
-            "#0F1115"]}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
-
-          style={{
-            borderTopLeftRadius: 40,
-            borderTopRightRadius: 40,
-            marginTop: Math.min(height * 0.23, 210),
-            padding: 20,
-            paddingTop: 32,
-
-            shadowColor: "#000",
-            shadowOpacity: 3,
-            shadowRadius: 18,
-            shadowOffset: { width: 0, height: 6 },
-        
-            elevation: 0,
-          }}
-        >
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={loading}
-              onRefresh={() => {
-                refetchServices();
-                refetchBarbers();
-                refetchAvailableDates();
-                refetchAvailableHours();
-              }}
-            />
-          }
-          contentContainerStyle={{ paddingBottom: 32, paddingTop: 8 }}
-          showsVerticalScrollIndicator={false}
-        > 
           <View style={{ flexDirection: "row", justifyContent:"space-between", alignItems: "center", gap: 8, paddingHorizontal: 8 }}>
             <Text style={{ fontWeight: "700", fontSize: 28, color: "#fff" }}>Berber:</Text>
             <View style={{ flexDirection: "row", gap: 8 }}>
@@ -271,7 +252,7 @@ export default function CreateAppointments() {
             style={{
               marginTop: 12,
               height: 1,
-              backgroundColor: "#C8AA7A",
+              backgroundColor: "#E4D2AC",
               width: "100%",
               opacity: 0.7,
             }}
@@ -290,18 +271,14 @@ export default function CreateAppointments() {
             style={{ marginTop: 20, borderRadius: 16, overflow: "hidden" }}
           >
             <LinearGradient
-              colors={["#C8AA7A", "#E4D2AC"]}
+              colors={myColors.mainBackgroundGradient2}
               start={{ x: 0, y: 0.5 }}
               end={{ x: 1, y: 0.5 }}
               style={{
                 padding: 14,
                 borderRadius: 16,
-                borderWidth: 3,
-                shadowColor: "#C8AA7A",
-                shadowOpacity: 0.5,
-                shadowRadius: 18,
-                borderColor: "rgba(255, 255, 255, 0.49)",
-                backgroundColor: "rgba(255, 255, 255, 0.32)",
+                borderWidth: 1,
+                borderColor: "#E4D2AC",
               }}
             >
               <Text style={{ color: "#1b1b1b", fontSize: 16, fontWeight: "700" }}>Hizmet Seç</Text>
@@ -335,6 +312,7 @@ export default function CreateAppointments() {
             selectedHour={selectedHour}
             onSelect={toggleHours}
           />
+
           {selectedServices.length > 0 && selectedHour && barberId && (
             <View
               style={{
@@ -375,29 +353,45 @@ export default function CreateAppointments() {
           />
         }
         {selectedServices.length > 0 && selectedHour && barberId &&
-          <TouchableOpacity
-            onPress={onClick}
-            activeOpacity={0.8}
-            disabled={createAppointment.isPending}
+        <TouchableOpacity
+          onPress={onClick}
+          activeOpacity={0.8}
+          disabled={createAppointment.isPending}
+          style={{
+            marginTop: 20,
+            borderRadius: 24,
+            overflow: "hidden",
+            opacity: createAppointment.isPending ? 0.7 : 1
+          }}
+        >
+          <LinearGradient
+            colors={
+              createAppointment.isPending 
+              ? ["rgba(210, 201, 163, 0.7)", "rgba(228, 210, 172, 0.7)"] 
+              : ["#C8AA7A", "#E4D2AC"]
+            }
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
             style={{
-              marginTop: 20,
-              paddingVertical: 24,
-              borderRadius: 24,
-              backgroundColor: createAppointment.isPending ? "rgba(173,140,87,0.6)" : "#AD8C57",
-              opacity: createAppointment.isPending ? 0.8 : 1,
+              paddingVertical: 20,
+              paddingHorizontal: 20,
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <Text
               style={{
-                color: "#fff",
+                color: "#121212",
                 textAlign: "center",
                 fontWeight: "800",
-                letterSpacing: 0.3,
+                fontSize: 16,
+                letterSpacing: 0.5,
               }}
             >
               {createAppointment.isPending ? "Randevu Oluşturuluyor..." : "Randevu Oluştur"}
             </Text>
-          </TouchableOpacity>
+          </LinearGradient>
+        </TouchableOpacity>
         }
           <Space />
       </ScrollView>

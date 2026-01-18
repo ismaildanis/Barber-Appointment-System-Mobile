@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 14,
     borderRadius: 12,
-    backgroundColor: "#AD8C57",
+    backgroundColor: "#E4D2AC",
   },
-  btnPrimaryText: { color: "#fff", fontWeight: "700" },
+  btnPrimaryText: { color: "#000", fontWeight: "700" },
 });

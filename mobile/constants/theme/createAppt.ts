@@ -12,7 +12,7 @@ export const createAppointmentsIndexColors = {
   buttonBorder: "#E4D2AC",                                   // borderColor
   buttonGradient: ["#C8AA7A", "#E4D2AC"] as const,           // LinearGradient colors
   textColor: "#2b2b2b",                                       // Text color
-  containerGradient: ["#2c2c2c", "#2b2b2b", "#2b2b2b"] as const, // LinearGradient colors
+  containerGradient: ["#121212", "#121212", "#121212"] as const, // LinearGradient colors
   titleColor: "#fff",                                         // Text color
   separatorColor: "#C8AA7A",                                  // View backgroundColor
   serviceGradient: ["#C8AA7A", "#E4D2AC"] as const,           // LinearGradient colors

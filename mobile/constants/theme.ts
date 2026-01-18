@@ -32,7 +32,7 @@ export const myColors = {
   mainBackground: "#121212",
   mainBackgroundGradient: [
     "#121212",
-    "#0F1115",
+    "#121212",
   ] as const,
   mainBackgroundGradient2: [
     "#C8AA7A",

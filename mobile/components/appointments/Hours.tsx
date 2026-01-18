@@ -3,6 +3,7 @@ import Spinner from "../ui/Spinner";
 import { LinearGradient } from "expo-linear-gradient";
 import { AlertModal } from "../ui/AlertModal";
 import { useState } from "react";
+import { myColors } from "@/constants/theme";
 
 type HourItem = { time: string; available: boolean };
 
@@ -61,7 +62,7 @@ export default function Hours({ hours, durationMinutes, loading, selectedHour, o
 
   return (
     <LinearGradient
-      colors={["#4A4A4A", "#3A3A3A", "#2b2b2b"]}
+      colors={myColors.mainBackgroundGradient}
       start={{ x: 0, y: 1.3 }}
       end={{ x: 0.3, y: 0 }}
       style={styles.container}
@@ -88,8 +89,8 @@ export default function Hours({ hours, durationMinutes, loading, selectedHour, o
             const gradientColors = disabled
               ? ["#4A4A4A", "#4A4A4A"] as const
               : inRange
-              ? ["#d6b370", "#b88b4e"] as const
-              : ["#2b2b2b", "#4A4A4A"] as const;
+              ? ["#C8AA7A", "#E4D2AC"] as const
+              : ["#1E1E1E", "#1E1E1E"] as const;
 
             return (
               <TouchableOpacity
@@ -109,8 +110,8 @@ export default function Hours({ hours, durationMinutes, loading, selectedHour, o
               >
                 <LinearGradient
                   colors={gradientColors}
-                  start={{ x: 1, y: 1 }}
-                  end={{ x: 1, y: 0 }}
+                  start={{ x: 0, y: 0.5 }}
+                  end={{ x: 1, y: 0.5 }}
                   style={[styles.slot, disabled && styles.slotDisabled]}
                 >
                   <Text style={[styles.slotText, disabled && styles.slotTextDisabled]}>{item.time}</Text>
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     marginBottom: 12,
-    color: "#fff",
+    color: "#F5F5F5",
   },
   empty: { 
     color: "#fff",
