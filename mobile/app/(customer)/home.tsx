@@ -1,4 +1,4 @@
-import { ScrollView, RefreshControl, StyleSheet, View, TouchableOpacity } from "react-native";
+import { FlatList, RefreshControl, StyleSheet, View, TouchableOpacity } from "react-native";
 import ShopHeader from "@/components/customer/ShopHeader";
 import ServiceList from "@/components/customer/ServiceList";
 import BarberList from "@/components/customer/BarberList";
@@ -25,63 +25,53 @@ export default function CustomerHome() {
   const { data: ScheduledAppt, isLoading: ScheduledLoading, refetch: refetchScheduledAppt } = useGetCustomerScheduledAppointment();
 
   const logoutMutation = useUnifiedLogout();
-
   const loading = sLoading || bLoading || meLoading || lastLoading || ScheduledLoading;
 
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-  if (!mounted) {
-    return null
-  }
-
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   if (!me) return <Spinner />;
 
+  const onRefresh = () => {
+    refetchServices();
+    refetchBarbers();
+    refetchMe();
+    refetchLastAppt();
+    refetchScheduledAppt();
+  };
+
   return (
-    <LinearGradient
-      colors={myColors.mainBackgroundGradient}
-      start={{ x: 0, y: 0.5 }}
-      end={{ x: 1, y: 0.5 }}
-      style={{ flex: 1 }}
+    <View
+      style={{ flex: 1, backgroundColor: myColors.mainBackground }}
     >
-      <SafeAreaView style={{ flex: 1 }}> 
-        <>  
-      <ShopHeader customer= {me} logout={() => logoutMutation.mutate()}  />
-    <ScrollView
-      contentContainerStyle={{ paddingBottom: 120 }}
-      refreshControl={
-        <RefreshControl
-          refreshing={loading}
-          onRefresh={() => {
-            refetchServices();
-            refetchBarbers();
-            refetchMe();
-            refetchLastAppt();
-            refetchScheduledAppt();
-          }} 
+      <SafeAreaView style={{ flex: 1 }}>
+        <ShopHeader customer={me} logout={() => logoutMutation.mutate()} />
+
+        <FlatList
+          data={["spacer"]}
+          keyExtractor={(item) => item}
+          renderItem={() => null}
+          contentContainerStyle={{ paddingBottom: 120 }}
+          refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}
+          ListHeaderComponent={
+            loading ? (
+              <Spinner />
+            ) : (
+              <View style={styles.container}>
+                <TouchableOpacity onPress={() => router.push(`/(customer)/appointments/${ScheduledAppt?.id}`)}>
+                  <ScheduledAppointment scheduledAppt={ScheduledAppt} loading={lastLoading} />
+                </TouchableOpacity>
+                <LastAppointmentCard lastAppt={lastAppt} loading={lastLoading} />
+                <ServiceList services={services ?? []} loading={sLoading} />
+                <BarberList barbers={barbers ?? []} loading={bLoading} />
+              </View>
+            )
+          }
         />
-      }
-    >
-      {loading ? ( 
-        <Spinner />
-      ) : (
-        <>
-          <View style={styles.container}>
-            <TouchableOpacity onPress={() => router.push(`/(customer)/appointments/${ScheduledAppt?.id}`)}>
-              <ScheduledAppointment scheduledAppt={ScheduledAppt} loading={lastLoading}/>
-            </TouchableOpacity>
-            <LastAppointmentCard lastAppt={lastAppt} loading={lastLoading} />
-            <ServiceList services={services ?? []} loading={sLoading} />
-            <BarberList barbers={barbers ?? []} loading={bLoading} />
-          </View>
-        </>
-      )}
-    </ScrollView>
-    </>
-    </SafeAreaView>
-    </LinearGradient>
+      </SafeAreaView>
+    </View>
   );
 }
-
 export const styles = StyleSheet.create({
   container: {
     paddingTop: 10,

@@ -4,6 +4,7 @@ import { Text, View, TouchableOpacity } from "react-native";
 import Spinner from "../ui/Spinner";
 import { Ionicons } from "@expo/vector-icons";
 import { DrawerActions } from "@react-navigation/native";
+import { themeColors } from "@/constants/theme";
 
 type HeaderProps = {
   admin?: Admin;
@@ -23,24 +24,42 @@ export default function AdminHeader({ admin, laoding }: HeaderProps) {
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          backgroundColor: "#AD8C57",
+          backgroundColor: "transparent",
           padding: 16,
-          borderRadius: 16,
+          borderBottomWidth: 1,
+          borderBottomColor: themeColors.primary,
         }}
       >
         <View>
-          <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+          <Text style={{ 
+            fontWeight: "bold", 
+            fontSize: 20, 
+            color: themeColors.text 
+          }}>
             {admin?.firstName} {admin?.lastName}
           </Text>
-          <Text style={{ fontSize: 16 }}>{admin?.email}</Text>
+          <Text style={{ 
+            fontSize: 16, 
+            color: themeColors.textMuted 
+          }}>
+            {admin?.email}
+          </Text>
         </View>
         
         <TouchableOpacity
           onPress={() =>
             navigation.getParent()?.dispatch(DrawerActions.openDrawer())
           }
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 8,
+            backgroundColor: themeColors.surface,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <Ionicons name="menu" size={32} color="#000" />
+          <Ionicons name="menu" size={28} color={themeColors.primary} />
         </TouchableOpacity>
       </View>
     </View>

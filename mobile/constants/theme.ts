@@ -19,7 +19,7 @@ export const Colors = {
   },
   dark: {
     text: '#ECEDEE',
-    background: '#151718',
+    background: '#121212',
     tint: tintColorDark,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
@@ -29,11 +29,14 @@ export const Colors = {
 };
 
 export const myColors = {
-  mainBackground: "#2F2F2F",
+  mainBackground: "#121212",
   mainBackgroundGradient: [
-    "#4A4A4A",
-    "#3A3A3A",
-    "#2F2F2F"
+    "#121212",
+    "#0F1115",
+  ] as const,
+  mainBackgroundGradient2: [
+    "#C8AA7A",
+    "#E4D2AC",
   ] as const,
 };
 
@@ -61,3 +64,63 @@ export const Fonts = Platform.select({
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });
+
+
+// constants/theme.ts
+export const themeColors = {
+  // Ana renkler
+  background: "#121212",      // Ana arka plan
+  surface: "#1E1E1E",         // Kart ve yüzey rengi
+  surfaceLight: "#2A2A2A",    // Hafif yüzey varyasyonu
+  
+  // Bej/Altın tonları
+  primary: "#D1C4B2",         // Ana bej renk
+  primaryDark: "#B8A68F",     // Koyu bej
+  primaryLight: "#E8DCC8",    // Açık bej
+  accent: "#C8AA7A",          // Altın vurgu
+  
+  // Border ve ayırıcılar
+  border: "#2C2C2C",          // Standart border
+  borderLight: "#3A3A3A",     // Açık border
+  divider: "#2A2A2A",         // Ayırıcı çizgiler
+  
+  // Metin renkleri
+  text: "#F5F5F5",            // Ana metin (beyaz)
+  textSecondary: "#E8E8E8",   // İkincil metin
+  textMuted: "#B8B8B8",       // Soluk metin
+  textDim: "#A0A0A0",         // Çok soluk metin
+  textOnPrimary: "#121212",   // Bej üzerinde koyu metin
+  
+  // Durum renkleri
+  success: "#4CAF50",         // Başarı (yeşil)
+  warning: "#FFC966",         // Uyarı (turuncu)
+  error: "#E57373",           // Hata (kırmızı)
+  info: "#64B5F6",            // Bilgi (mavi)
+  
+  // Özel renkler
+  highlight: "#4A9EFF",       // Vurgu mavisi
+  overlay: "rgba(0,0,0,0.7)", // Modal overlay
+  
+  // Opacity varyasyonları
+  whiteAlpha: {
+    5: "rgba(255,255,255,0.05)",
+    10: "rgba(255,255,255,0.1)",
+    20: "rgba(255,255,255,0.2)",
+    30: "rgba(255,255,255,0.3)",
+    50: "rgba(255,255,255,0.5)",
+  },
+  
+  blackAlpha: {
+    50: "rgba(0,0,0,0.5)",
+    70: "rgba(0,0,0,0.7)",
+  }
+};
+
+// Durum renkleri için özel mapping
+export const statusColors = {
+  scheduled: "#64B5F6",
+  completed: "#4CAF50",
+  cancelled: "#E57373",
+  noshow: "#FFA726",
+  expired: "#A0A0A0",
+};

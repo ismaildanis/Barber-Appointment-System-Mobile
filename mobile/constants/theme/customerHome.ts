@@ -34,7 +34,7 @@ export const lastAppointmentCardColors = {
 
 // ScheduledAppointment.tsx'deki renkler
 export const scheduledAppointmentColors = {
-  outerGradient: ["#C8AA7A", "#E4D2AC"] as const,   // outer colors (gradient)
+  outerGradient: ["#E8DED3", "#E8DED3"] as const,   // outer colors (gradient)
   avatarGradient: ["#F1D9A5", "#E4C88A"] as const,  // avatar colors (gradient)
   avatarText: "#1A1A1A",                            // avatarText color
   title: "#fff",                                    // title color

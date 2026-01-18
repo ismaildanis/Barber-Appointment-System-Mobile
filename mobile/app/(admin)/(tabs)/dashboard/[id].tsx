@@ -12,6 +12,7 @@ import {
 } from "@/src/hooks/useAppointmentQuery";
 import { statusColor, statusLabel, Status } from "@/src/types/appointment";
 import { AlertModal } from "@/components/ui/AlertModal";
+import { themeColors } from "@/constants/theme";
 
 export default function DashboardAppointmentDetail() {
   const router = useRouter();
@@ -105,8 +106,11 @@ export default function DashboardAppointmentDetail() {
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
     <SafeAreaView style={styles.container}>
       {isWorking && <Spinner />}
-      <TouchableOpacity onPress={() => router.replace("/(admin)/(tabs)/dashboard")} style={styles.backBtn}>
-        <Ionicons name="arrow-back" size={22} color="#fff" />
+      <TouchableOpacity 
+        onPress={() => router.replace("/(admin)/(tabs)/dashboard")} 
+        style={styles.backBtn}
+      >
+        <Ionicons name="arrow-back" size={22} color={themeColors.primary} />
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 48 }}>
@@ -122,7 +126,7 @@ export default function DashboardAppointmentDetail() {
           <Text style={styles.meta}>Tarih: {date}</Text>
           <Text style={styles.meta}>Başlangıç: {start}</Text>
           <Text style={styles.meta}>Bitiş: {end || "—"}</Text>
-          <Text style={[styles.meta, { color: status ? statusColor[status] : "#fff" }]}>
+          <Text style={[styles.meta, { color: status ? statusColor[status] : themeColors.text }]}>
             Durum: {status ? statusLabel[status] : "—"}
           </Text>
           {appointment?.cancelReason ? (
@@ -130,7 +134,9 @@ export default function DashboardAppointmentDetail() {
           ) : null}
           <Text style={styles.meta}>Hizmetler: {services}</Text>
           <Text style={styles.meta}>Toplam Fiyat: {totalPrice}₺</Text>
-          {appointment?.notes ? <Text style={styles.note}>Not: {appointment.notes}</Text> : null}
+          {appointment?.notes ? (
+            <Text style={styles.note}>Not: {appointment.notes}</Text>
+          ) : null}
         </View>
 
         <View style={styles.actions}>
@@ -154,7 +160,7 @@ export default function DashboardAppointmentDetail() {
             value={cancelReason}
             onChangeText={setCancelReason}
             placeholder="Sebep yazın"
-            placeholderTextColor="rgba(255,255,255,0.5)"
+            placeholderTextColor={themeColors.textDim}
             style={styles.input}
           />
           <ActionButton
@@ -206,36 +212,68 @@ function ActionButton({
       disabled={disabled}
       style={[
         styles.actionBtn,
-        danger ? { backgroundColor: "#e35b5b" } : null,
+        danger ? { backgroundColor: themeColors.error } : null,
         disabled ? { opacity: 0.5 } : null,
       ]}
     >
-      <Ionicons name={icon} size={18} color="#121212" />
+      <Ionicons name={icon} size={18} color={themeColors.textOnPrimary} />
       <Text style={styles.actionText}>{label}</Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#000" },
-  backBtn: { marginBottom: 16, width: 32, height: 32, alignItems: "center", justifyContent: "center" },
-  title: { color: "#fff", fontSize: 22, fontWeight: "800", marginBottom: 12 },
+  container: { 
+    flex: 1, 
+    padding: 16, 
+    backgroundColor: themeColors.background 
+  },
+  backBtn: { 
+    marginBottom: 16, 
+    width: 40, 
+    height: 40, 
+    alignItems: "center", 
+    justifyContent: "center",
+    backgroundColor: themeColors.surface,
+    borderRadius: 8,
+  },
+  title: { 
+    color: themeColors.text, 
+    fontSize: 22, 
+    fontWeight: "800", 
+    marginBottom: 12 
+  },
   card: {
-    backgroundColor: "#121212",
+    backgroundColor: themeColors.surface,
     borderRadius: 16,
     padding: 16,
     gap: 6,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
+    borderColor: themeColors.border,
   },
-  name: { color: "#fff", fontSize: 18, fontWeight: "700" },
-  meta: { color: "rgba(255,255,255,0.85)", fontSize: 14 },
-  note: { color: "#f3d9a4", fontSize: 13, marginTop: 4 },
-  actions: { flexDirection: "row", gap: 10, marginBottom: 16 },
+  name: { 
+    color: themeColors.text, 
+    fontSize: 18, 
+    fontWeight: "700" 
+  },
+  meta: { 
+    color: themeColors.textMuted, 
+    fontSize: 14 
+  },
+  note: { 
+    color: themeColors.warning, 
+    fontSize: 13, 
+    marginTop: 4 
+  },
+  actions: { 
+    flexDirection: "row", 
+    gap: 10, 
+    marginBottom: 16 
+  },
   actionBtn: {
     flex: 1,
-    backgroundColor: "#AD8C57",
+    backgroundColor: themeColors.primary,
     paddingVertical: 12,
     borderRadius: 12,
     flexDirection: "row",
@@ -243,21 +281,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
   },
-  actionText: { color: "#121212", fontSize: 15, fontWeight: "700" },
+  actionText: { 
+    color: themeColors.textOnPrimary, 
+    fontSize: 15, 
+    fontWeight: "700" 
+  },
   cancelBox: {
-    backgroundColor: "#121212",
+    backgroundColor: themeColors.surface,
     borderRadius: 16,
     padding: 14,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
+    borderColor: themeColors.border,
     gap: 8,
   },
   input: {
     marginTop: 4,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.2)",
+    borderColor: themeColors.borderLight,
     borderRadius: 10,
     padding: 10,
-    color: "#fff",
+    color: themeColors.text,
+    backgroundColor: themeColors.background,
   },
 });

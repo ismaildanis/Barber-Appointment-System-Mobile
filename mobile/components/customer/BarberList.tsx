@@ -1,8 +1,6 @@
-import { FlatList, Image, StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { Barber } from "@/src/types/barber";
 import Spinner from "@/components/ui/Spinner";
-import { LinearGradient } from "expo-linear-gradient";
-import { myColors } from "@/constants/theme";
 
 type BarberListProps = {
   barbers: Barber[];
@@ -43,20 +41,14 @@ export default function BarberList({ barbers, loading = false, selectedId, onSel
             selectedId === item.id && styles.selectedCard,
           ]}
         >
-          <LinearGradient
-            colors={myColors.mainBackgroundGradient}
-            start={{ x: 1, y: 1 }}
-            end={{ x: 0.1, y: 0.5 }}
-            style={styles.card}
-          >
-              
+          <View style={styles.card}> 
             <Image source={{ uri: item.image }} style={styles.image}></Image>
             <View style={styles.nameContainer}>
               <Text style={styles.name}>
                 {item.firstName} {item.lastName}
               </Text>
             </View>
-          </LinearGradient>
+          </View>
         </TouchableOpacity>
       ))}
     </View>
@@ -68,7 +60,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16, 
     paddingVertical: 8, 
     borderRadius: 25,
-    backgroundColor: "rgba(255,255,255,0.04)",
+    backgroundColor: "#121212",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.08)",
 
@@ -97,12 +89,9 @@ const styles = StyleSheet.create({
   card: {
     padding: 14,
     borderRadius: 16,
-
-    backgroundColor: "rgba(255,255,255,0.02)",   
+    backgroundColor: "#1E1E1E",   
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",     
-
-    shadowColor: "transparent",                   
+    borderColor: "rgba(255,255,255,0.10)",                      
   },
   nameContainer: {flexDirection: "row", justifyContent: "center", backgroundColor: "transparent"},
   name: { padding: 8, flexDirection: "column", justifyContent: "center", fontSize: 16, fontWeight: "700", color: "#fff" },

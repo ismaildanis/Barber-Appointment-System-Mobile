@@ -23,6 +23,7 @@ import { ServiceCard } from "@/components/admin/ServiceCard";
 import { ServiceFormModal } from "@/components/admin/ServiceFormModal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
+import { myColors } from "@/constants/theme";
 
 type FormValues = {
   name: string;
@@ -273,11 +274,11 @@ export default function ServicesScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#000", padding: 16 },
+  container: { flex: 1, backgroundColor: myColors.mainBackground, padding: 16 },
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
   title: { fontSize: 28, fontWeight: "800", color: "#fff", letterSpacing: 0.5 },
   subtitle: { fontSize: 14, color: "rgba(255,255,255,0.6)", marginTop: 4 },
-  addButton: { width: 48, height: 48, borderRadius: 24, backgroundColor: "#AD8C57", alignItems: "center", justifyContent: "center", elevation: 4 },
+  addButton: { width: 48, height: 48, borderRadius: 24, backgroundColor: "#D1C4B2", alignItems: "center", justifyContent: "center", elevation: 4 },
   searchContainer: { flexDirection: "row", alignItems: "center", backgroundColor: "#121212", borderRadius: 12, paddingHorizontal: 12, marginBottom: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.08)" },
   searchInput: { flex: 1, color: "#fff", fontSize: 15, paddingVertical: 12, paddingHorizontal: 8 },
   listContent: { paddingBottom: 60 },

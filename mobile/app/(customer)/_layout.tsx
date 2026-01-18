@@ -13,15 +13,14 @@ export default function CustomerTabLayout () {
         screenOptions={{
             headerShown: false,
             tabBarStyle: {
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-            paddingTop: 20,
-            backgroundColor: Colors[colorScheme ?? "dark"].background,
-            height: "auto",                 
-            position: "absolute",
-            overflow: "hidden",             
-            borderTopWidth: 0,             
-            elevation: 0,                   
+                borderTopWidth: 0.2,
+                borderTopColor: "rgba(209, 196, 178, 0.2)",
+                paddingTop: 0,
+                backgroundColor: Colors[colorScheme ?? "dark"].background,
+                height: "auto",                 
+                position: "absolute",
+                overflow: "hidden",                          
+                elevation: 0,                   
             },
             tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
             tabBarButton: HapticTab,
@@ -31,7 +30,7 @@ export default function CustomerTabLayout () {
                 name="home"
                 options={{
                     title: 'Ana Sayfa',
-                    tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={'#AD8C57'} />,
+                    tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={'#D9C9A3'} />,
                 }}
             />
             <Tabs.Screen
@@ -40,10 +39,10 @@ export default function CustomerTabLayout () {
                     title: "Randevu Oluştur",
                     tabBarIcon: ({ color }) => (
                     <IconSymbol
-                        style={{ transform: [{ rotate: "270deg" }], marginBottom: 28 }}
-                        size={50}
+                        style={{ transform: [{ rotate: "270deg" }], marginBottom: 0 }}
+                        size={32}
                         name="scissors"
-                        color="#AD8C57"
+                        color="#D9C9A3"
                     />
                     ),
                 }}
@@ -62,7 +61,7 @@ export default function CustomerTabLayout () {
                 name="appointments"
                 options={{
                     title: 'Randevularım',
-                    tabBarIcon: ({ color }) => <IconSymbol size={28} name="comb.fill" color={'#AD8C57'} />,
+                    tabBarIcon: ({ color }) => <IconSymbol size={28} name="comb.fill" color={'#D9C9A3'} />,
                 }}
             />
         </Tabs>

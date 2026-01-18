@@ -26,6 +26,7 @@ import {
 } from "@/src/hooks/useBarberQuery";
 import { Barber } from "@/src/types/barber";
 import Spinner from "@/components/ui/Spinner";
+import { myColors } from "@/constants/theme";
 
 export default function BarbersScreen() {
   const { data: barbers, isLoading, isRefetching, refetch } = useGetBarbers();
@@ -219,7 +220,7 @@ export default function BarbersScreen() {
             onPress={() => startEdit(item)}
             activeOpacity={0.7}
           >
-            <Ionicons name="create-outline" size={18} color="#AD8C57" />
+            <Ionicons name="create-outline" size={18} color="rgba(209, 196, 178)" />
             <Text style={styles.editButtonText}>Düzenle</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -457,11 +458,11 @@ export default function BarbersScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#000", padding: 16 },
+  container: { flex: 1, backgroundColor: myColors.mainBackground, padding: 16 },
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
   title: { fontSize: 28, fontWeight: "800", color: "#fff", letterSpacing: 0.5 },
   subtitle: { fontSize: 14, color: "rgba(255,255,255,0.6)", marginTop: 4 },
-  addButton: { width: 48, height: 48, borderRadius: 24, backgroundColor: "#AD8C57", alignItems: "center", justifyContent: "center", shadowColor: "#AD8C57", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
+  addButton: { width: 48, height: 48, borderRadius: 24, backgroundColor: "#D1C4B2", alignItems: "center", justifyContent: "center", shadowColor: "#AD8C57", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
   searchContainer: { flexDirection: "row", alignItems: "center", backgroundColor: "#121212", borderRadius: 12, paddingHorizontal: 12, marginBottom: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.08)" },
   searchInput: { flex: 1, color: "#fff", fontSize: 15, paddingVertical: 12, paddingHorizontal: 8 },
   listContent: { paddingBottom: 20 },
@@ -485,8 +486,8 @@ const styles = StyleSheet.create({
   contactRow: { flexDirection: "row", alignItems: "center", gap: 6 },
   contactText: { fontSize: 13, color: "rgba(255,255,255,0.7)" },
   actionButtons: { flexDirection: "row", gap: 8, paddingTop: 12, borderTopWidth: 1, borderTopColor: "rgba(255,255,255,0.05)" },
-  editButton: { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, paddingVertical: 10, borderRadius: 10, backgroundColor: "rgba(173, 140, 87, 0.2)", borderWidth: 1, borderColor: "rgba(173, 140, 87, 0.3)" },
-  editButtonText: { fontSize: 14, fontWeight: "600", color: "#AD8C57" },
+  editButton: { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, paddingVertical: 10, borderRadius: 10, backgroundColor: "rgba(209, 196, 178, 0.2)", borderWidth: 1, borderColor: "rgba(209, 196, 178, 0.3)" },
+  editButtonText: { fontSize: 14, fontWeight: "600", color: "#rgba(209, 196, 178)" },
   deleteButton: { width: 44, alignItems: "center", justifyContent: "center", borderRadius: 10, backgroundColor: "rgba(244, 67, 54, 0.15)", borderWidth: 1, borderColor: "rgba(244, 67, 54, 0.3)" },
   emptyContainer: { alignItems: "center", justifyContent: "center", paddingVertical: 60 },
   emptyTitle: { fontSize: 18, fontWeight: "700", color: "rgba(255,255,255,0.5)", marginTop: 16 },

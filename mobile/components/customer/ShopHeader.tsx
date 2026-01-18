@@ -2,6 +2,8 @@ import { StyleSheet, useWindowDimensions, View, Text, TouchableOpacity } from "r
 import { Customer } from "@/src/types/customerAuth";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { myColors } from "@/constants/theme";
 
 type ShopHeaderProps = {
   customer: Customer;
@@ -31,9 +33,14 @@ export default function ShopHeader({ customer, logout }: ShopHeaderProps) {
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
 
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10 }}>
-              <View style={styles.avatar}>
+              <LinearGradient 
+                colors={myColors.mainBackgroundGradient2}
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1, y: 0.5 }} 
+                style={styles.avatar}
+              >
                 <Text style={styles.avatarText}>{initials}</Text>
-              </View>
+              </LinearGradient>
               <View style={{ gap: 0 }}>
                 <Text style={[styles.name, { fontSize: subtitleSize + 3 }]}>
                   {customer.firstName ?? "Kullanıcı"} {customer.lastName ?? ""}
@@ -76,7 +83,6 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 28,
-    backgroundColor: "#CFB080",
     alignItems: "center",
     justifyContent: "center",
   },

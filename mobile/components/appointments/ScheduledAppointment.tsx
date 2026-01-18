@@ -4,6 +4,7 @@ import { BlurView } from "expo-blur";
 import { Appointment } from "@/src/types/appointment";
 import Spinner from "../ui/Spinner";
 import { myColors } from "@/constants/theme";
+import { scheduledAppointmentColors } from "@/constants/theme/customerHome";
 
 type Props = { 
     scheduledAppt?: Appointment | null; 
@@ -30,7 +31,7 @@ export default function ScheduledAppointment({ scheduledAppt, loading }: Props) 
     <View style={styles.wrapper}>
       <BlurView intensity={30} tint="dark" style={styles.blur}>
         <LinearGradient
-          colors={["#C8AA7A", "#E4D2AC"]}
+          colors={scheduledAppointmentColors.outerGradient}
           start={{ x: 0, y: 0.5 }}
           end={{ x: 1, y: 0.5 }}
           style={styles.outer}
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 12,
+    paddingHorizontal: 0,
   },
   blur: {
     width: "100%",
@@ -83,8 +84,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   outer: {
-    borderRadius: 24,
-    padding: 16,
+    borderRadius: 20,
+    padding: 3,
   },
   inner: {
     borderRadius: 18,

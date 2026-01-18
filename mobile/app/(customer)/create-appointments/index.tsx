@@ -223,16 +223,16 @@ export default function CreateAppointments() {
 
 
         <LinearGradient
-            colors={[    "#2c2c2c",
-            "#2b2b2b",
-            "#2b2b2b"]}
+            colors={[    "#0F1115",
+            "#0F1115",
+            "#0F1115"]}
             start={{ x: 0, y: 0.5 }}
             end={{ x: 1, y: 0.5 }}
 
           style={{
             borderTopLeftRadius: 40,
             borderTopRightRadius: 40,
-            marginTop: Math.min(height * 0.23, 210), // Ekranın %23'ü, max 210
+            marginTop: Math.min(height * 0.23, 210),
             padding: 20,
             paddingTop: 32,
 

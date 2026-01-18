@@ -8,6 +8,7 @@ import Spinner from "@/components/ui/Spinner";
 import { Status } from "@/src/types/appointment";
 import { useEffect, useState } from "react";
 import AdminAppointments from "@/components/admin/AdminAppointments";
+import { myColors } from "@/constants/theme";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function AdminDashboard() {
   if (laoding) return <Spinner />;
   
   return (
-    <SafeAreaView style={{ flex: 1, padding: 16 }}>
+    <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: myColors.mainBackground }}>
       <View>
         <AdminHeader admin={me} laoding={meloading} />
       </View>
