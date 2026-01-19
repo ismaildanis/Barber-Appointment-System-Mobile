@@ -27,7 +27,14 @@ export function ServiceFormModal({
   onPickImage, onRemoveImage, isSubmitting, title, subtitle
 }: Props) {
   return (
-    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
+    <Modal   
+      visible={visible}
+      animationType={Platform.OS === "android" ? "none" : "slide"}
+      transparent
+      onRequestClose={onClose}
+      statusBarTranslucent
+      hardwareAccelerated
+    >
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
         <View style={styles.overlay}>
           <View style={styles.content}>

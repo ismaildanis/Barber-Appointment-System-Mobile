@@ -248,9 +248,11 @@ export default function Holiday() {
 
       <Modal
         visible={showFormModal}
-        animationType="slide"
+        animationType={Platform.OS === "android" ? "none" : "slide"}
         transparent={true}
         onRequestClose={resetForm}
+        statusBarTranslucent
+        hardwareAccelerated
       >
         <KeyboardAvoidingView 
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -292,7 +294,7 @@ export default function Holiday() {
                   style={styles.datePickerButton}
                   onPress={() => setShowDatePicker(true)}
                 >
-                  <Ionicons name="calendar-outline" size={20} color="#AD8C57" />
+                  <Ionicons name="calendar-outline" size={20} color="#E4D2AC" />
                   <Text style={styles.datePickerText}>
                     {formatDate(selectedDate.toISOString())}
                   </Text>
@@ -348,20 +350,20 @@ export default function Holiday() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#000", padding: 16 },
+  container: { flex: 1, backgroundColor: "#121212", padding: 16 },
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
   title: { fontSize: 28, fontWeight: "800", color: "#fff", letterSpacing: 0.5 },
   subtitle: { fontSize: 14, color: "rgba(255,255,255,0.6)", marginTop: 4 },
-  addButton: { paddingHorizontal: 16, paddingVertical: 16, borderRadius: 24, backgroundColor: "#AD8C57", alignItems: "center", justifyContent: "center", shadowColor: "#AD8C57", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
-  menuButton: { paddingHorizontal: 16, paddingVertical: 16, borderRadius: 24, alignItems: "center", justifyContent: "center", shadowColor: "#AD8C57", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
+  addButton: { paddingHorizontal: 16, paddingVertical: 16, borderRadius: 24, backgroundColor: "#E4D2AC", alignItems: "center", justifyContent: "center", shadowColor: "#E4D2AC", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
+  menuButton: { paddingHorizontal: 16, paddingVertical: 16, borderRadius: 24, alignItems: "center", justifyContent: "center", shadowColor: "#E4D2AC", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
   searchContainer: { flexDirection: "row", alignItems: "center", backgroundColor: "#121212", borderRadius: 12, paddingHorizontal: 12, marginBottom: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.08)" },
   searchInput: { flex: 1, color: "#fff", fontSize: 15, paddingVertical: 12, paddingHorizontal: 8 },
   listContent: { paddingBottom: 20 },
   holidayCard: { backgroundColor: "#121212", borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: "rgba(255,255,255,0.08)", flexDirection: "row", alignItems: "center" },
   pastHolidayCard: { opacity: 0.5 },
-  dateCircle: { width: 60, height: 60, borderRadius: 30, backgroundColor: "rgba(173, 140, 87, 0.2)", borderWidth: 2, borderColor: "#AD8C57", alignItems: "center", justifyContent: "center", marginRight: 16 },
-  dateDay: { fontSize: 22, fontWeight: "800", color: "#AD8C57" },
-  dateMonth: { fontSize: 10, fontWeight: "600", color: "#AD8C57", marginTop: 2 },
+  dateCircle: { width: 60, height: 60, borderRadius: 30, backgroundColor: "rgba(173, 140, 87, 0.2)", borderWidth: 2, borderColor: "#E4D2AC", alignItems: "center", justifyContent: "center", marginRight: 16 },
+  dateDay: { fontSize: 22, fontWeight: "800", color: "#E4D2AC" },
+  dateMonth: { fontSize: 10, fontWeight: "600", color: "#E4D2AC", marginTop: 2 },
   holidayInfo: { flex: 1 },
   holidayReason: { fontSize: 16, fontWeight: "700", color: "#fff", marginBottom: 6 },
   holidayMeta: { gap: 4 },
@@ -386,11 +388,11 @@ const styles = StyleSheet.create({
   datePickerButton: { flexDirection: "row", alignItems: "center", gap: 12, backgroundColor: "rgba(255,255,255,0.05)", borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", borderRadius: 12, padding: 14 },
   datePickerText: { flex: 1, fontSize: 15, fontWeight: "600", color: "#fff" },
   dayName: { fontSize: 13, color: "rgba(255,255,255,0.6)", fontStyle: "italic" },
-  doneButton: { backgroundColor: "#AD8C57", borderRadius: 12, padding: 12, alignItems: "center", marginTop: 12 },
+  doneButton: { backgroundColor: "#E4D2AC", borderRadius: 12, padding: 12, alignItems: "center", marginTop: 12 },
   doneButtonText: { fontSize: 16, fontWeight: "700", color: "#121212" },
   modalFooter: { flexDirection: "row", gap: 12, padding: 20, borderTopWidth: 1, borderTopColor: "rgba(255,255,255,0.08)" },
   cancelButton: { flex: 1, paddingVertical: 14, borderRadius: 12, backgroundColor: "rgba(255,255,255,0.05)", alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "rgba(255,255,255,0.1)" },
   cancelButtonText: { fontSize: 16, fontWeight: "600", color: "rgba(255,255,255,0.8)" },
-  submitButton: { flex: 1, flexDirection: "row", gap: 8, paddingVertical: 14, borderRadius: 12, backgroundColor: "#AD8C57", alignItems: "center", justifyContent: "center" },
+  submitButton: { flex: 1, flexDirection: "row", gap: 8, paddingVertical: 14, borderRadius: 12, backgroundColor: "#E4D2AC", alignItems: "center", justifyContent: "center" },
   submitButtonText: { fontSize: 16, fontWeight: "700", color: "#121212" },
 });

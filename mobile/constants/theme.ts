@@ -74,10 +74,10 @@ export const themeColors = {
   surfaceLight: "#2A2A2A",    // Hafif yüzey varyasyonu
   
   // Bej/Altın tonları
-  primary: "#D1C4B2",         // Ana bej renk
-  primaryDark: "#B8A68F",     // Koyu bej
-  primaryLight: "#E8DCC8",    // Açık bej
-  accent: "#C8AA7A",          // Altın vurgu
+  primary: "#E4D2AC",         // Ana bej renk
+  primaryDark: "#E4D2AC",     // Koyu bej
+  primaryLight: "#E4D2AC",    // Açık bej
+  accent: "#E4D2AC",          // Altın vurgu
   
   // Border ve ayırıcılar
   border: "#2C2C2C",          // Standart border

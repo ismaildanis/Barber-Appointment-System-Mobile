@@ -14,6 +14,7 @@ import { useRouter } from "expo-router";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { useForgotPassword } from "@/src/hooks/useUnifiedAuth";
 import { z } from "zod";
+import { LinearGradient } from "expo-linear-gradient";
 
 const forgotSchema = z.object({ email: z.string().email("Geçerli email girin") });
 type ForgotSchema = z.infer<typeof forgotSchema>;
@@ -44,8 +45,17 @@ export default function Forgot() {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <ParallaxScrollView
-        headerBackgroundColor={{ light: "#AD8C57", dark: "#AD8C57" }}
-        headerImage={<Image source={require("@/assets/logo/a.png")} style={styles.logo} />}
+        headerBackgroundColor={{ light: "#121212", dark: "#121212" }}
+        headerImage={
+          <LinearGradient
+            colors={["#E4D2AC", "#AD8C57"]}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <Image source={require("@/assets/logo/a.png")} style={styles.logo} />
+          </LinearGradient>
+        }
       >
         <View style={styles.container}>
           <Text style={styles.title}>Şifremi Unuttum</Text>
@@ -107,12 +117,12 @@ const styles = StyleSheet.create({
   primaryBtn: {
     paddingVertical: 12,
     paddingHorizontal: 24,
-    backgroundColor: "#AD8C57",
+    backgroundColor: "#E4D2AC",
     borderRadius: 10,
     width: "100%",
     alignItems: "center",
     marginBottom: 16,
   },
   primaryText: { color: "#1e1e1e", fontSize: 16, fontWeight: "bold" },
-  link: { color: "#AD8C57", fontSize: 16, fontWeight: "bold" },
+  link: { color: "#E4D2AC", fontSize: 16, fontWeight: "bold" },
 });

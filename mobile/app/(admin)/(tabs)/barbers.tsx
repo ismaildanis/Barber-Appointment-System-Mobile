@@ -296,9 +296,11 @@ export default function BarbersScreen() {
 
       <Modal
         visible={showFormModal}
-        animationType="slide"
+        animationType={Platform.OS === "android" ? "none" : "slide"}
         transparent={true}
         onRequestClose={resetForm}
+        statusBarTranslucent
+      hardwareAccelerated
       >
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{flex: 1}}

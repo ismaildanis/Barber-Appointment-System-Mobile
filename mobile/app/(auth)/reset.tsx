@@ -15,6 +15,7 @@ import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useResetPassword } from "@/src/hooks/useUnifiedAuth";
+import { LinearGradient } from "expo-linear-gradient";
 
 const resetSchema = z
   .object({
@@ -65,8 +66,17 @@ export default function Reset() {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <ParallaxScrollView
-        headerBackgroundColor={{ light: "#AD8C57", dark: "#AD8C57" }}
-        headerImage={<Image source={require("@/assets/logo/a.png")} style={styles.logo} />}
+        headerBackgroundColor={{ light: "#121212", dark: "#121212" }}
+        headerImage={
+          <LinearGradient
+            colors={["#E4D2AC", "#AD8C57"]}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <Image source={require("@/assets/logo/a.png")} style={styles.logo} />
+          </LinearGradient>
+        }
       >
         <View style={styles.container}>
           <Text style={styles.title}>Yeni Şifre Belirle</Text>
@@ -152,5 +162,5 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   primaryText: { color: "#1e1e1e", fontSize: 16, fontWeight: "bold" },
-  link: { color: "#AD8C57", fontSize: 16, fontWeight: "bold" },
+  link: { color: "#E4D2AC", fontSize: 16, fontWeight: "bold" },
 });

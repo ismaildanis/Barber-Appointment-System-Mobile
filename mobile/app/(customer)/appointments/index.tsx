@@ -4,6 +4,7 @@ import Spinner from "@/components/ui/Spinner";
 import { FlatList, View, Text, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import Space from "@/components/appointments/Space";
 
 export default function CustomerAppointments() {
   const { data, isLoading, isError, isRefetching, refetch, error} = useGetCustomerAppointments();
@@ -80,7 +81,7 @@ export default function CustomerAppointments() {
               {item.notes ? <Text style={styles.note}>Not: {item.notes}</Text> : null}
               </View>
                 <View style={styles.detailBadge}>
-                    <Ionicons name="chevron-forward" size={18} color="#2b2b2b" />
+                    <Ionicons name="chevron-forward" size={18} color="#1E1E1E" />
                 </View>
             </TouchableOpacity>
           );
@@ -91,14 +92,14 @@ export default function CustomerAppointments() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#0f0f0f", paddingBlockEnd: 105 },
+  container: { flex: 1, padding: 16, backgroundColor: "#121212", marginBottom: 70 },
   title: { fontSize: 20, fontWeight: "700", marginBottom: 12, color: "#fff", marginTop: 40 },
   empty: { color: "#ccc", marginTop: 8 },
   card: {
     flexDirection: "row", alignItems: "center",
     padding: 14,
     borderRadius: 14,
-    backgroundColor: "rgba(255,255,255,0.06)",
+    backgroundColor: "#1E1E1E",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.08)",
   },
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
       width: 32,
       height: 32,
       borderRadius: 16,
-      backgroundColor: "#C8AA7A",
+      backgroundColor: "#E4D2AC",
       alignItems: "center",
       justifyContent: "center",
   },
