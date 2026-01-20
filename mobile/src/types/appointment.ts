@@ -3,6 +3,20 @@ import { WorkingHour } from "./workingHour";
 
 export type Status = 'SCHEDULED' | 'COMPLETED' | 'NO_SHOW' | 'EXPIRED' | 'BARBER_CANCELLED' |'CANCELLED';
 
+export type AppointmentRange = 'today' | 'last_7_days' | 'last_1_month' | 'last_3_months' | 'last_1_year' | 'last_3_years' | 'last_5_years' | 'last_10_years';
+
+export const rangeLabels: Record<AppointmentRange, string> = {
+  today: 'Bugün',
+  last_7_days: 'Son 7 Gün',
+  last_1_month: 'Son 1 Ay',
+  last_3_months: 'Son 3 Ay',
+  last_1_year: 'Son 1 Yıl',
+  last_3_years: 'Son 3 Yıl',
+  last_5_years: 'Son 5 Yıl',
+  last_10_years: 'Son 10 Yıl',
+};
+
+
 export const statusLabel: Record<Status, string> = {
   SCHEDULED: "Planlandı",
   COMPLETED: "Tamamlandı",

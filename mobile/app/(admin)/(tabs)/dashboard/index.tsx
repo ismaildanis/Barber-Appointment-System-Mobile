@@ -16,7 +16,6 @@ export default function AdminDashboard() {
   const [status, setStatus] = useState<Status>("SCHEDULED");
   const { data: me, isLoading: meloading, isError: meError, refetch: meRefetch, isRefetching: meRefetching } = useUnifiedMe();
   const { data: allAppointments, isLoading: aLoading, isError: aError, refetch: aRefetch, isRefetching: aRefetching } = useGetAdminAppointments(status);
-  //const { data: appointment, isLoading: oneLoading, isError: oneError, refetch: oneRefetch, isRefetching: oneRefetching } = useGetAdminOneAppointment();
   const laoding = meloading || aLoading;
 
   useEffect(() => {

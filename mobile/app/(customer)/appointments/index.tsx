@@ -1,59 +1,165 @@
 import { useGetCustomerAppointments } from "@/src/hooks/useAppointmentQuery";
-import { AppointmentService, Appointment, statusLabel, statusColor } from "@/src/types/appointment";
+import { AppointmentService, Appointment, statusLabel, statusColor, AppointmentRange, rangeLabels } from "@/src/types/appointment";
 import Spinner from "@/components/ui/Spinner";
 import { FlatList, View, Text, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import Space from "@/components/appointments/Space";
+import { useState, useEffect } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import FilterModal from "@/components/ui/FilterModal";
 
 export default function CustomerAppointments() {
-  const { data, isLoading, isError, isRefetching, refetch, error} = useGetCustomerAppointments();
-    const router = useRouter();
+  const [selectedRange, setSelectedRange] = useState<AppointmentRange>("today");
+  const [from, setFrom] = useState<string | undefined>();
+  const [to, setTo] = useState<string | undefined>();
+  const [isOpen, setIsOpen] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+
+  const { data, isLoading, isError, isRefetching, refetch, error } = useGetCustomerAppointments(selectedRange, from, to);
+  const router = useRouter();
+
+  const filterOptions = Object.entries(rangeLabels).map(([value, label]) => ({
+    value: value as AppointmentRange,
+    label,
+  }));
+
+  useEffect(() => {
+    if (isError && retryCount >= 3 && selectedRange !== 'today') {
+      setSelectedRange('today');
+      setRetryCount(0);
+    }
+  }, [isError, retryCount, selectedRange]);
+
+  const handleRetry = () => {
+    setRetryCount(prev => prev + 1);
+    refetch();
+  };
 
   if (isLoading) {
     return (
-      <View style={styles.container}>
-        <Spinner size="large" />
-      </View>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>Randevularım</Text>
+        <View style={styles.loadingContainer}>
+          <Spinner size="large" />
+        </View>
+      </SafeAreaView>
     );
   }
 
-  if (!data?.length) {
+  if (isError) {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Text style={styles.title}>Randevularım</Text>
         <View style={styles.emptyContainer}>
           <View style={styles.emptyIconContainer}>
-            <Text style={styles.emptyIcon}>📅</Text>
+            <Ionicons name="alert-circle-outline" size={40} color="#ff6b6b" />
           </View>
-          <Text style={styles.emptyTitle}>Henüz Randevunuz Yok</Text>
+          <Text style={styles.emptyTitle}>Bir Hata Oluştu</Text>
           <Text style={styles.emptyDescription}>
-            Yeni bir randevu oluşturarak başlayın
+            Randevularınız yüklenirken bir sorun oluştu. Lütfen tekrar deneyin.
           </Text>
+          <TouchableOpacity
+            style={styles.retryButton}
+            onPress={handleRetry}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="refresh" size={18} color="#1E1E1E" />
+            <Text style={styles.retryButtonText}>
+              Yeniden Dene {retryCount > 0 && `(${retryCount}/3)`}
+            </Text>
+          </TouchableOpacity>
         </View>
-      </View>
-    ); 
+      </SafeAreaView>
+    );
   }
 
-  if(isError) {
+  if (!data || data.length === 0) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Randevularım</Text>
-        <Text style={styles.empty}>Randevu yükleme hatası. Lütfen sayfayı yenileyiniz veya uygulamayı tekrardan başlatınız.</Text>
-      </View>
-    ); 
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Randevularım</Text>
+          <TouchableOpacity
+            onPress={() => setIsOpen(true)}
+            style={styles.filterButton}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.filterButtonText}>
+              {rangeLabels[selectedRange]}
+            </Text>
+            <Ionicons name="chevron-down" size={20} color="#E4D2AC" />
+          </TouchableOpacity>
+        </View>
+
+        <FilterModal
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          title="Tarih Aralığı"
+          options={filterOptions}
+          selectedValue={selectedRange}
+          onSelect={setSelectedRange}
+        />
+
+        <View style={styles.emptyContainer}>
+          <View style={styles.emptyIconContainer}>
+            <Ionicons name="calendar-outline" size={40} color="#E4D2AC" />
+          </View>
+          <Text style={styles.emptyTitle}>Randevu Bulunamadı</Text>
+          <Text style={styles.emptyDescription}>
+            {selectedRange === 'today' 
+              ? 'Bugün için randevunuz bulunmuyor.'
+              : `${rangeLabels[selectedRange]} aralığında randevunuz bulunmuyor.`}
+          </Text>
+          <TouchableOpacity
+            style={styles.retryButton}
+            onPress={() => refetch()}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="refresh" size={18} color="#1E1E1E" />
+            <Text style={styles.retryButtonText}>Yenile</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Randevularım</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Randevularım</Text>
+        <TouchableOpacity
+          onPress={() => setIsOpen(true)}
+          style={styles.filterButton}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.filterButtonText}>
+            {rangeLabels[selectedRange]}
+          </Text>
+          <Ionicons name="chevron-down" size={20} color="#E4D2AC" />
+        </TouchableOpacity>
+      </View>
+
+      <FilterModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Tarih Aralığı"
+        options={filterOptions}
+        selectedValue={selectedRange}
+        onSelect={setSelectedRange}
+      />
+
       <FlatList
         data={data as Appointment[]}
         keyExtractor={(item) => String(item.id)}
-          refreshControl={
-                <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
-            }
-        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        refreshControl={
+          <RefreshControl 
+            refreshing={isRefetching} 
+            onRefresh={refetch}
+            tintColor="#E4D2AC"
+            colors={["#E4D2AC"]}
+          />
+        }
+        contentContainerStyle={{ paddingBottom: 20 }}
+        ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
         renderItem={({ item }) => {
           const start = item.appointmentStartAt?.slice(0, 16).replace("T", " ");
           const end = item.appointmentEndAt?.slice(11, 16);
@@ -63,56 +169,84 @@ export default function CustomerAppointments() {
               .join(", ") || "—";
 
           return (
-            <TouchableOpacity onPress={() => router.push({
-                pathname: "/(customer)/appointments/[id]",
-                params: { id: String(item.id) },
-                })} style={styles.card}
-                >
-              <View style={{ flex: 1, gap: 4 }}>
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: "/(customer)/appointments/[id]",
+                  params: { id: String(item.id) },
+                })
+              }
+              style={styles.card}
+              activeOpacity={0.8}
+            >
+              <View style={{ flex: 1, gap: 6 }}>
                 <Text style={styles.cardTitle}>
                   {item.barber?.firstName} {item.barber?.lastName}
                 </Text>
                 <Text style={styles.meta}>
                   {start} {end ? `- ${end}` : ""}
                 </Text>
-                <Text style={[styles.meta, { color: statusColor[item.status] }]}>Durum: {statusLabel[item.status] || item.status}</Text>
-                {item.status === "CANCELLED" ? <Text style={styles.meta}>İptal sebebi: {item.cancelReason ? item.cancelReason : "Belirtilmedi"} </Text> : null}
+                <Text style={[styles.meta, { color: statusColor[item.status] }]}>
+                  Durum: {statusLabel[item.status] || item.status}
+                </Text>
+                {item.status === "CANCELLED" && (
+                  <Text style={styles.note}>
+                    İptal sebebi: {item.cancelReason || "Belirtilmedi"}
+                  </Text>
+                )}
                 <Text style={styles.meta}>Hizmetler: {services}</Text>
-              {item.notes ? <Text style={styles.note}>Not: {item.notes}</Text> : null}
+                {item.notes && <Text style={styles.note}>Not: {item.notes}</Text>}
               </View>
-                <View style={styles.detailBadge}>
-                    <Ionicons name="chevron-forward" size={18} color="#1E1E1E" />
-                </View>
+              <View style={styles.detailBadge}>
+                <Ionicons name="chevron-forward" size={18} color="#1E1E1E" />
+              </View>
             </TouchableOpacity>
           );
         }}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#121212", marginBottom: 70 },
-  title: { fontSize: 20, fontWeight: "700", marginBottom: 12, color: "#fff", marginTop: 40 },
-  empty: { color: "#ccc", marginTop: 8 },
-  card: {
-    flexDirection: "row", alignItems: "center",
-    padding: 14,
-    borderRadius: 14,
-    backgroundColor: "#1E1E1E",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
+  container: {
+    flex: 1,
+    backgroundColor: "#121212",
+    paddingHorizontal: 16,
+    paddingBottom: 70,
   },
-  cardTitle: { fontSize: 16, fontWeight: "700", color: "#fff" },
-  meta: { fontSize: 13, color: "rgba(255,255,255,0.8)" },
-  note: { marginTop: 3, fontSize: 12, color: "#f3d9a4" },
-  detailBadge: {
-      width: 32,
-      height: 32,
-      borderRadius: 16,
-      backgroundColor: "#E4D2AC",
-      alignItems: "center",
-      justifyContent: "center",
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 16,
+    marginTop: 8,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#fff",
+  },
+  filterButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: "#1E1E1E",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "rgba(228, 210, 172, 0.2)",
+  },
+  filterButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#E4D2AC",
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   emptyContainer: {
     flex: 1,
@@ -128,9 +262,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 20,
-  },
-  emptyIcon: {
-    fontSize: 40,
+    borderWidth: 1,
+    borderColor: "rgba(228, 210, 172, 0.2)",
   },
   emptyTitle: {
     fontSize: 20,
@@ -144,5 +277,50 @@ const styles = StyleSheet.create({
     color: "#888",
     textAlign: "center",
     lineHeight: 20,
-  }
+    marginBottom: 24,
+  },
+  retryButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    backgroundColor: "#E4D2AC",
+    borderRadius: 10,
+  },
+  retryButtonText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#1E1E1E",
+  },
+  card: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    borderRadius: 14,
+    backgroundColor: "#1E1E1E",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.08)",
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#fff",
+  },
+  meta: {
+    fontSize: 13,
+    color: "rgba(255,255,255,0.7)",
+  },
+  note: {
+    fontSize: 12,
+    color: "#f3d9a4",
+  },
+  detailBadge: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "#E4D2AC",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

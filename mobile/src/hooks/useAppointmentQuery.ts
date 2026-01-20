@@ -1,14 +1,14 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, Status, BarberCancel } from "../types/appointment";
+import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, Status, BarberCancel, AppointmentRange } from "../types/appointment";
 import { appointmentApi } from "../api/appointmentApi";
 
 const key = ["appointment"] as const;
 
 //Customer
-export const useGetCustomerAppointments = () => 
+export const useGetCustomerAppointments = (range: AppointmentRange, from?: string, to?: string) => 
     useQuery({
-        queryKey: key,
-        queryFn: () => appointmentApi.getCustomerAppointments(),
+        queryKey: ['appointments', range, from, to],
+        queryFn: () => appointmentApi.getCustomerAppointments(range, from, to),
         staleTime: 5 * 60 * 1000,
         refetchOnMount: false,
         refetchOnReconnect: false,

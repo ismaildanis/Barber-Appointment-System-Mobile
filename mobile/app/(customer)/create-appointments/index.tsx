@@ -46,8 +46,6 @@ export default function CreateAppointments() {
   const [notes, setNotes] = useState<string>();
   const loading = sLoading || bLoading  || adLoading || ahLoading; 
 
-  const topOffset = height > 700 ? Math.min(height * 0.18, 180) : 120; // Büyük ekranlarda %18, küçüklerde 120
-  const pillHeight = Math.min(Math.max(height * 0.065, 50), 60); // 50–60 arası, daha küçük
   useEffect(() => {
     barbers?.forEach(b => Image.prefetch(b.image as string));
   }, [barbers]);

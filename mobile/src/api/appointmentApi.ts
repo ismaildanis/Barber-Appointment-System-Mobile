@@ -1,9 +1,9 @@
 import { authedApi as api } from "../api/unifiedAuthApi";
-import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, BarberAppointment, Status, AdminAppointment, GetBreaksForBarber, BarberCancel } from "../types/appointment";
+import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, CreateBreakForBarber, BarberAppointment, Status, AdminAppointment, GetBreaksForBarber, BarberCancel, AppointmentRange } from "../types/appointment";
 
 export const appointmentApi = {
-    //Customer
-    getCustomerAppointments: async () => await  api.get<Appointment[]>("/appointment").then(r => r.data),
+    //Customer 
+    getCustomerAppointments: async (range: AppointmentRange, from?: string, to?: string) => await  api.get<Appointment[]>("/appointment", {params: {range, ...(from && {from}), ...( to && {to})}}).then(r => r.data),
     getCustomerOneAppointment: async (id: number) => await api.get<Appointment>(`/appointment/${id}`).then(r => r.data),
     getCustomerLastAppointment: async () => await api.get<Appointment | null>(`/appointment/last`).then(r => r.data),
     getCustomerScheduledAppointment: async () => await api.get<Appointment | null>(`/appointment/last-scheduled`).then(r => r.data),
