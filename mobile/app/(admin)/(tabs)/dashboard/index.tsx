@@ -14,13 +14,16 @@ export default function AdminDashboard() {
   const router = useRouter();
   const logout = useUnifiedLogout();
   const [status, setStatus] = useState<Status>("SCHEDULED");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const formattedDate = selectedDate.toISOString().split('T')[0];
   const { data: me, isLoading: meloading, isError: meError, refetch: meRefetch, isRefetching: meRefetching } = useUnifiedMe();
-  const { data: allAppointments, isLoading: aLoading, isError: aError, refetch: aRefetch, isRefetching: aRefetching } = useGetAdminAppointments(status);
+  const { data: allAppointments, isLoading: aLoading, isError: aError, refetch: aRefetch, isRefetching: aRefetching } = useGetAdminAppointments(status, formattedDate);
   const laoding = meloading || aLoading;
+
 
   useEffect(() => {
       aRefetch();
-  }, [status, aRefetch]);
+  }, [status, formattedDate, aRefetch])
   
   if (laoding) return <Spinner />;
   
@@ -30,7 +33,7 @@ export default function AdminDashboard() {
         <AdminHeader admin={me} laoding={meloading} />
       </View>
       <View style={{ flex: 1 }}>
-        <AdminAppointments appointments={allAppointments} loading={aLoading} status={status} setStatus={setStatus} isRefetching={aRefetching} refetch={aRefetch} />
+        <AdminAppointments appointments={allAppointments} loading={aLoading} status={status} setStatus={setStatus} isRefetching={aRefetching} refetch={aRefetch} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
       </View>
     </SafeAreaView>
   );

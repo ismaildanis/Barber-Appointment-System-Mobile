@@ -5,10 +5,10 @@ import { appointmentApi } from "../api/appointmentApi";
 const key = ["appointment"] as const;
 
 //Customer
-export const useGetCustomerAppointments = (range: AppointmentRange, from?: string, to?: string) => 
+export const useGetCustomerAppointments = (range: AppointmentRange) => 
     useQuery({
-        queryKey: ['appointments', range, from, to],
-        queryFn: () => appointmentApi.getCustomerAppointments(range, from, to),
+        queryKey: ['appointments', range],
+        queryFn: () => appointmentApi.getCustomerAppointments(range),
         staleTime: 5 * 60 * 1000,
         refetchOnMount: false,
         refetchOnReconnect: false,
@@ -150,10 +150,10 @@ export const useGetBreaksForBarber = () =>
 
 //Admin
 
-export const useGetAdminAppointments = (status: Status) => 
+export const useGetAdminAppointments = (status: Status, date: string) => 
     useQuery({
-        queryKey: key,
-        queryFn: () => appointmentApi.getAdminAppointments(status),
+        queryKey: ["admin-appointments", status, date],
+        queryFn: () => appointmentApi.getAdminAppointments(status, date),
         staleTime: 5 * 60 * 1000
     })
 

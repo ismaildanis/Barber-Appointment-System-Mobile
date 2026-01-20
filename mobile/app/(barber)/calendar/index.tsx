@@ -121,7 +121,7 @@ export default function BarberCalendar() {
             arrowColor: "#AD8C57",
             todayTextColor: "#AD8C57",
             dotColor: "#AD8C57",
-            textSectionTitleColor: "#9ca3af", // gün isimleri
+            textSectionTitleColor: "#9ca3af",
           }}
           onDayPress={(day) => setSelectedDate(day.dateString)}
           markedDates={{

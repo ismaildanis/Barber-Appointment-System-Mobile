@@ -10,12 +10,10 @@ import FilterModal from "@/components/ui/FilterModal";
 
 export default function CustomerAppointments() {
   const [selectedRange, setSelectedRange] = useState<AppointmentRange>("today");
-  const [from, setFrom] = useState<string | undefined>();
-  const [to, setTo] = useState<string | undefined>();
   const [isOpen, setIsOpen] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
 
-  const { data, isLoading, isError, isRefetching, refetch, error } = useGetCustomerAppointments(selectedRange, from, to);
+  const { data, isLoading, isError, isRefetching, refetch } = useGetCustomerAppointments(selectedRange);
   const router = useRouter();
 
   const filterOptions = Object.entries(rangeLabels).map(([value, label]) => ({

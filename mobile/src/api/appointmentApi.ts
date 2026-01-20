@@ -3,7 +3,7 @@ import { Appointment, CreateAppointmentRequest, UpdateAppointmentRequest, Create
 
 export const appointmentApi = {
     //Customer 
-    getCustomerAppointments: async (range: AppointmentRange, from?: string, to?: string) => await  api.get<Appointment[]>("/appointment", {params: {range, ...(from && {from}), ...( to && {to})}}).then(r => r.data),
+    getCustomerAppointments: async (range: AppointmentRange) => await  api.get<Appointment[]>("/appointment", {params: {range}}).then(r => r.data),
     getCustomerOneAppointment: async (id: number) => await api.get<Appointment>(`/appointment/${id}`).then(r => r.data),
     getCustomerLastAppointment: async () => await api.get<Appointment | null>(`/appointment/last`).then(r => r.data),
     getCustomerScheduledAppointment: async () => await api.get<Appointment | null>(`/appointment/last-scheduled`).then(r => r.data),
@@ -23,7 +23,7 @@ export const appointmentApi = {
     getBreaksForBarber: async () => await api.get<GetBreaksForBarber[]>(`/appointment/barber-break`).then(r => r.data),
     markCompletedBarber: async (id: number) => await api.post(`/appointment/barber-mark-completed/${id}`).then(r => r.data),
     //Admin
-    getAdminAppointments: async (status: Status) => await  api.get<AdminAppointment[]>("/appointment/admin", { params: { status } }).then(r => r.data),
+    getAdminAppointments: async (status: Status, date: string) => await  api.get<AdminAppointment[]>("/appointment/admin", { params: { status,  ...(date && { date }) } }).then(r => r.data),
     getAdminOneAppointment: async (id: number) => await api.get<AdminAppointment>(`/appointment/admin/${id}`).then(r => r.data),
     markCanceledAppointment: async (id: number) => await api.post(`/appointment/mark-cancel/${id}`).then(r => r.data),
     markNoShowAppointment: async (id: number) => await api.post(`/appointment/mark-no-show/${id}`).then(r => r.data),

@@ -152,24 +152,6 @@ export default function BarbersScreen() {
     setShowFormModal(true);
   };
 
-  const pickAndUpload = async () => {
-    Alert.alert("Bilgi", "Image picker entegrasyonunu burada ekleyin.");
-  };
-
-  const onRemoveImage = () => {
-    if (!editingId) return;
-    Alert.alert("Resmi Kaldır", "Berber resmini kaldırmak istediğinizden emin misiniz?", [
-      { text: "Vazgeç", style: "cancel" },
-      {
-        text: "Kaldır",
-        style: "destructive",
-        onPress: () => {
-          deleteImage.mutate(undefined, { onSuccess: () => refetch() });
-        },
-      },
-    ]);
-  };
-
   const filteredBarbers = (barbers || []).filter((item) =>
     `${item.firstName} ${item.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -322,20 +304,7 @@ export default function BarbersScreen() {
             </View>
 
             <ScrollView style={styles.modalScroll} showsVerticalScrollIndicator={false}>
-              <View style={styles.formGroup}>
-                <Text style={styles.label}>Profil Fotoğrafı</Text>
-                {imageUri ? (
-                  <View style={styles.imagePreview}>
-                    <Image source={{ uri: imageUri }} style={styles.previewImage} resizeMode="cover" />
-                  </View>
-                ) : (
-                  <TouchableOpacity style={styles.uploadButton} onPress={pickAndUpload}>
-                    <Ionicons name="person-circle-outline" size={48} color="rgba(255,255,255,0.4)" />
-                    <Text style={styles.uploadText}>Fotoğraf Yükle</Text>
-                    <Text style={styles.uploadSubtext}>PNG, JPG veya WEBP</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
+              
 
               <View style={styles.formGroup}>
                 <Text style={styles.label}>
@@ -393,6 +362,7 @@ export default function BarbersScreen() {
                   style={styles.input}
                   keyboardType="phone-pad"
                   editable={!editingId}
+                  maxLength={10}
                 />
               </View>
 

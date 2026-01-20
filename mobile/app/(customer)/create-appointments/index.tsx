@@ -139,7 +139,7 @@ export default function CreateAppointments() {
         <ImageBackground 
           source={heroSource}
           style={{ flex: 1, marginHorizontal: 20 }}
-          resizeMode="cover"
+          resizeMode="contain"
         >
           <TouchableOpacity
             onPress={() => router.push("/(customer)/create-appointments/select-barber")}

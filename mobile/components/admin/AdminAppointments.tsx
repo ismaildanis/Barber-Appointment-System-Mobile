@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { themeColors } from "@/constants/theme";
 import FilterModal from "../ui/FilterModal";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 type AdminAppointmentProps = {
   appointments: Appointment[] | undefined;
@@ -15,6 +16,8 @@ type AdminAppointmentProps = {
   refetch: () => void;
   status: Status;
   setStatus: (status: Status) => void;
+  selectedDate: Date;
+  setSelectedDate: (date: Date) => void;
 };
 
 export default function AdminAppointments({
@@ -24,49 +27,97 @@ export default function AdminAppointments({
   setStatus,
   isRefetching,
   refetch,
+  selectedDate,
+  setSelectedDate,
 }: AdminAppointmentProps) {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisible] = useState(false);
 
   const statusOptions = Object.entries(statusLabel).map(([value, label]) => ({
     value: value as Status,
     label,
   }));
 
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('tr-TR', { 
+      day: '2-digit', 
+      month: 'long',
+      year: 'numeric' 
+    });
+  };
+
+  const handleDateConfirm = (date: Date) => {
+    setSelectedDate(date);
+    setDatePickerVisible(false);
+    refetch();
+  };
+
+  const handleToday = () => {
+    setSelectedDate(new Date());
+    refetch();
+  };
+
   if (loading) return <Spinner />;
 
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 16,
-        }}
-      >
-        <Text style={{ fontSize: 20, fontWeight: "700", color: themeColors.text }}>
-          Randevu
-        </Text>
-        <TouchableOpacity
-          onPress={() => setIsOpen(true)}
-          style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
-          activeOpacity={0.7}
-        >
-          <Text style={{ fontSize: 14, fontWeight: "600", color: themeColors.primary }}>
-            {statusLabel[status]}
-          </Text>
-          <Ionicons name="chevron-down" size={20} color={themeColors.primary} />
-        </TouchableOpacity>
+      <View style={styles.header}>
+        <Text style={styles.title}>Randevu</Text>
+        
+        <View style={styles.filterRow}>
+          <TouchableOpacity
+            onPress={() => setDatePickerVisible(true)}
+            style={styles.filterButton}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="calendar-outline" size={18} color={themeColors.primary} />
+            <Text style={styles.filterText}>
+              {formatDate(selectedDate)}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleToday}
+            style={styles.filterButton}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.filterText}>
+              Bugün
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => setIsStatusModalOpen(true)}
+            style={styles.filterButton}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.filterText}>
+              {statusLabel[status]}
+            </Text>
+            <Ionicons name="chevron-down" size={20} color={themeColors.primary} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <FilterModal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        isOpen={isStatusModalOpen}
+        onClose={() => setIsStatusModalOpen(false)}
         title="Durum Seçin"
         options={statusOptions}
         selectedValue={status}
         onSelect={setStatus}
+      />
+
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleDateConfirm}
+        onCancel={() => setDatePickerVisible(false)}
+        date={new Date(selectedDate)}
+        locale="tr_TR"
+        confirmTextIOS="Onayla"
+        cancelTextIOS="İptal"
       />
 
       <FlatList
@@ -93,20 +144,11 @@ export default function AdminAppointments({
             <TouchableOpacity
               onPress={() => {
                 router.replace({
-                  pathname: "/(admin)/(tabs)/dashboard/[id]",
+                pathname: "/(admin)/(tabs)/dashboard/[id]",
                   params: { id: String(item.id) },
                 });
               }}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                padding: 16,
-                backgroundColor: themeColors.surface,
-                borderRadius: 16,
-                marginBottom: 12,
-                borderWidth: 1,
-                borderColor: themeColors.border,
-              }}
+              style={styles.card}
             >
               <View style={{ flex: 1, gap: 6 }}>
                 <Text style={styles.cardTitle}>
@@ -147,14 +189,46 @@ const styles = StyleSheet.create({
     backgroundColor: "#12121245",
     paddingBlockEnd: 105,
   },
+  header: {
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: themeColors.text,
+    marginBottom: 12,
+  },
+  filterRow: {
+    flexDirection: "row",
+    gap: 8,
+    flexWrap: "wrap",
+  },
+  filterButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: themeColors.surface,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: themeColors.border,
+    flexShrink: 1,
+  },
+  filterText: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: themeColors.primary,
+  },
   card: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 14,
-    borderRadius: 14,
-    backgroundColor: "rgba(255,255,255,0.06)",
+    padding: 16,
+    backgroundColor: themeColors.surface,
+    borderRadius: 16,
+    marginBottom: 12,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
+    borderColor: themeColors.border,
   },
   cardTitle: {
     fontSize: 16,
