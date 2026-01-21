@@ -57,8 +57,8 @@ export default function CreateBreak() {
             </View>
             <View style={{flex:1, marginBottom: 20, justifyContent: "space-between" }}>
                 <View style={{flexDirection: "row", justifyContent: "center"}}>
-                    <TouchableOpacity onPress={() => router.replace("/(barber)/breaks")} style={{marginTop: 20, paddingVertical: 20, width: "90%", borderRadius: 24, backgroundColor: "#AD8C57"}}>
-                        <Text style={{color: "#fff", fontSize: 16, alignSelf: "center", fontWeight: "800", letterSpacing: 0.3}}>Molalarım</Text>
+                    <TouchableOpacity onPress={() => router.replace("/(barber)/breaks")} style={{marginTop: 20, paddingVertical: 20, width: "90%", borderRadius: 24, backgroundColor: "#E4D2AC"}}>
+                        <Text style={{color: "#121212", fontSize: 16, alignSelf: "center", fontWeight: "800", letterSpacing: 0.3}}>Molalarım</Text>
                     </TouchableOpacity>
                 </View>
                 <CreateBreakForm selectedStartMin={startMin} selectedEndMin={endMin} onSelectStartMin={setStartMin} onSelectEndMin={setEndMin}  />
@@ -72,7 +72,7 @@ export default function CreateBreak() {
                         paddingVertical: 20,
                         paddingHorizontal: 20,
                         borderRadius: 24,
-                        backgroundColor: createBreak.isPending ? "rgba(173,140,87,0.6)" : "#AD8C57",
+                        backgroundColor: createBreak.isPending ? "rgba(173,140,87,0.6)" : "#E4D2AC",
                         opacity: createBreak.isPending ? 0.8 : 1,
                     }}
                 >

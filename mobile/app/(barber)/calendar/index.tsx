@@ -113,19 +113,19 @@ export default function BarberCalendar() {
           current={selectedDate || todayTR}
           theme={{
             calendarBackground: "#1a1a1a",
-            selectedDayBackgroundColor: "#AD8C57",
+            selectedDayBackgroundColor: "#E4D2AC",
             selectedDayTextColor: "#1a1a1a",
             dayTextColor: "#e5e7eb",
             textDisabledColor: "rgba(255,255,255,0.4)",
             monthTextColor: "#f3f3f3",
-            arrowColor: "#AD8C57",
-            todayTextColor: "#AD8C57",
-            dotColor: "#AD8C57",
+            arrowColor: "#E4D2AC",
+            todayTextColor: "#E4D2AC",
+            dotColor: "#E4D2AC",
             textSectionTitleColor: "#9ca3af",
           }}
           onDayPress={(day) => setSelectedDate(day.dateString)}
           markedDates={{
-            [selectedDate]: { selected: true, selectedColor: "#AD8C57" },
+            [selectedDate]: { selected: true, selectedColor: "#E4D2AC" },
           }}
         />
       </View>

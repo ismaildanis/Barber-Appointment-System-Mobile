@@ -23,7 +23,7 @@ export default function SelectService() {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: "#000" }} >
+        <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: "#121212" }} >
             <ScrollView
                 refreshControl={
                     <RefreshControl refreshing={isLoading} onRefresh={() => refetch()} />
@@ -36,25 +36,26 @@ export default function SelectService() {
                 onSelect={toggleService}  
             />
             </ScrollView>
-
+            <View style={{ flexDirection: "row", gap: 12, paddingHorizontal: 2, marginTop: 12 }}>
             <TouchableOpacity
                 onPress={onSave}
-                style={{ marginTop: 12, padding: 14, borderRadius: 14, backgroundColor: "#AD8C57" }}
+                style={{ flex: 1, padding: 14, borderRadius: 14, backgroundColor: "#E4D2AC" }}
             >
-                <Text style={{ color: "#fff", textAlign: "center", fontWeight: "700" }}>
-                    Kaydet
+                <Text style={{ color: "#121212", textAlign: "center", fontWeight: "700" }}>
+                Kaydet
                 </Text>
-
             </TouchableOpacity>
+
             <TouchableOpacity
                 onPress={onCancel}
-                style={{ marginTop: 10, padding: 14, borderRadius: 14, backgroundColor: "rgba(255,255,255,0.12)" }}
+                style={{ flex: 1, padding: 14, borderRadius: 14, backgroundColor: "rgba(255,255,255,0.12)" }}
             >
                 <Text style={{ color: "#fff", textAlign: "center", fontWeight: "700" }}>
                 İptal
                 </Text>
             </TouchableOpacity>
-
+            </View>
+  
             <View style={{ padding: 30 }}>
 
             </View>

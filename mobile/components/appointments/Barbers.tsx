@@ -34,7 +34,7 @@ useEffect(() => {
           return (
             <TouchableOpacity key={barber.id} activeOpacity={0.85} onPress={() => onSelect?.(barber.id)}>
               <LinearGradient
-                colors={isSelected ? ["#f4e1b4", "#d9ba7a"] : ["#3f3d3b", "#302e2d"]}
+                colors={isSelected ? ["#E4D2AC", "#E4D2AC"] : ["#3f3d3b", "#302e2d"]}
                 start={{ x: 0, y: 0.5 }}
                 end={{ x: 1, y: 0.5 }}
                 style={[styles.pill, isSelected && styles.pillSelected]}

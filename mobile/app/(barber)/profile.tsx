@@ -2,17 +2,25 @@ import { useUnifiedMe, useUnifiedLogout } from "@/src/hooks/useUnifiedAuth";
 import Spinner from "@/components/ui/Spinner";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, TouchableOpacity, StyleSheet, RefreshControl, ScrollView, Image, Alert } from "react-native";
-import { useBarberUploadImage, useBarberDeleteImage } from "@/src/hooks/useBarberQuery";
+import { View, Text, TouchableOpacity, StyleSheet, RefreshControl, ScrollView, Image, Alert, TextInput } from "react-native";
+import { useBarberUploadImage, useBarberDeleteImage, useUpdateBarber } from "@/src/hooks/useBarberQuery";
 import * as ImagePicker from "expo-image-picker";
 import { todayAppointmentsColors } from "@/constants/theme/barber/todayAppt";
 import { useNavigation, CommonActions } from "@react-navigation/native";
+import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function BarberProfile() {
   const router = useRouter();
   const { data, isLoading, isError, refetch, isRefetching } = useUnifiedMe();
   const logout = useUnifiedLogout();
   const navigation = useNavigation();
+  const updateBarber = useUpdateBarber();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
 
   const onLogout = () => {
     logout.mutate(undefined, {
@@ -72,15 +80,18 @@ export default function BarberProfile() {
     } as any);
 
     uploadImage.mutate(formData, {
-      onSuccess: () => Alert.alert("Başarılı", "Resim Yüklendi"),
+      onSuccess: () => {
+        Alert.alert("Başarılı", "Resim Yüklendi");
+        refetch();
+      },
       onError: (err: any) => {
-        console.log(err)
+        console.log(err);
         Alert.alert("Hata", err?.response?.data?.message || "Yüklenemedi");
       },
-    })
-  }
+    });
+  };
 
-    const onRemoveImage = () => {
+  const onRemoveImage = () => {
     Alert.alert("Resmi Kaldır", "Servis resmini kaldırmak istediğinizden emin misiniz?", [
       { text: "Vazgeç", style: "cancel" },
       {
@@ -91,6 +102,41 @@ export default function BarberProfile() {
         },
       },
     ]);
+  };
+
+  const startEditing = () => {
+    setFirstName(data?.firstName ?? "");
+    setLastName(data?.lastName ?? "");
+    setPhone(data?.phone ?? "");
+    setIsEditing(true);
+  };
+
+  const cancelEditing = () => {
+    setIsEditing(false);
+    setFirstName("");
+    setLastName("");
+    setPhone("");
+  };
+
+  const saveChanges = () => {
+    if (!firstName.trim() || !lastName.trim() || !phone.trim()) {
+      Alert.alert("Uyarı", "Lütfen tüm alanları doldurun");
+      return;
+    }
+
+    updateBarber.mutate(
+      { firstName: firstName.trim(), lastName: lastName.trim(), phone: phone.trim() },
+      {
+        onSuccess: () => {
+          Alert.alert("Başarılı", "Bilgileriniz güncellendi");
+          setIsEditing(false);
+          refetch();
+        },
+        onError: (err: any) => {
+          Alert.alert("Hata", err?.response?.data?.message || "Güncelleme başarısız");
+        },
+      }
+    );
   };
 
   return (
@@ -106,25 +152,98 @@ export default function BarberProfile() {
           style={styles.cardImage}
         /> 
         <View style={{ flexDirection: "row", justifyContent: "center", gap: 8, alignItems: "center" }}>
-          <TouchableOpacity onPress={pickImage} style={{ backgroundColor: "#AD8C57", padding: 8, borderRadius: 10, width: "45%" }}>
+          <TouchableOpacity onPress={pickImage} style={{ backgroundColor: "#E4D2AC", padding: 8, borderRadius: 10, width: "45%" }}>
             <Text style={{ color: "#000", fontSize: 16, alignSelf: "center", fontWeight: "700" }}>Resim Yükle</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={onRemoveImage} style={{ backgroundColor: "#631919ff", padding: 8, borderRadius: 10, width: "45%", marginRight: 0 }}>
+          <TouchableOpacity onPress={onRemoveImage} style={{ backgroundColor: "#E57373", padding: 8, borderRadius: 10, width: "45%", marginRight: 0 }}>
             <Text style={{ color: "#fff", fontSize: 16, alignSelf: "center", fontWeight: "700" }}>Resim Sil</Text>
           </TouchableOpacity>
         </View>
+
         <View style={styles.card}>
-          <Text style={styles.label}>Ad Soyad</Text>
-          <Text style={styles.value}>{`${data.firstName ?? ""} ${data.lastName ?? ""}`.trim()}</Text>
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Bilgilerim</Text>
+            {!isEditing && (
+              <TouchableOpacity onPress={startEditing} style={styles.editIconBtn}>
+                <Ionicons
+                  name="create-outline"
+                  size={18}
+                  color="#E4D2AC"
+                />
+              </TouchableOpacity>
+            )}
+          </View>
 
-          <Text style={styles.label}>E-posta</Text>
-          <Text style={styles.value}>{data.email ?? "—"}</Text>
+          {isEditing ? (
+            <>
+              <Text style={styles.label}>Ad</Text>
+              <TextInput
+                style={styles.input}
+                value={firstName}
+                onChangeText={setFirstName}
+                placeholder="Ad"
+                placeholderTextColor="rgba(255,255,255,0.4)"
+              />
 
-          <Text style={styles.label}>Telefon</Text>
-          <Text style={styles.value}>{data.phone ?? "—"}</Text>
+              <Text style={styles.label}>Soyad</Text>
+              <TextInput
+                style={styles.input}
+                value={lastName}
+                onChangeText={setLastName}
+                placeholder="Soyad"
+                placeholderTextColor="rgba(255,255,255,0.4)"
+              />
 
-          <Text style={styles.label}>Durum</Text>
-          <Text style={styles.value}>{data.active ? "Aktif" : "Aktif Değil"}</Text>
+              <Text style={styles.label}>Telefon</Text>
+              <TextInput
+                style={styles.input}
+                value={phone}
+                onChangeText={setPhone}
+                placeholder="Telefon"
+                placeholderTextColor="rgba(255,255,255,0.4)"
+                keyboardType="phone-pad"
+              />
+
+              <Text style={styles.label}>E-posta</Text>
+              <Text style={styles.value}>{data.email ?? "—"}</Text>
+
+              <Text style={styles.label}>Durum</Text>
+              <Text style={styles.value}>{data.active ? "Aktif" : "Aktif Değil"}</Text>
+
+              <View style={{ flexDirection: "row", gap: 8, marginTop: 8 }}>
+                <TouchableOpacity
+                  onPress={saveChanges}
+                  disabled={updateBarber.isPending}
+                  style={[styles.saveBtn, { flex: 1 }, updateBarber.isPending && { opacity: 0.7 }]}
+                >
+                  <Text style={styles.saveBtnText}>
+                    {updateBarber.isPending ? "Kaydediliyor..." : "Kaydet"}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={cancelEditing}
+                  disabled={updateBarber.isPending}
+                  style={[styles.cancelBtn, { flex: 1 }]}
+                >
+                  <Text style={styles.cancelBtnText}>İptal</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          ) : (
+            <>
+              <Text style={styles.label}>Ad Soyad</Text>
+              <Text style={styles.value}>{`${data.firstName ?? ""} ${data.lastName ?? ""}`.trim()}</Text>
+
+              <Text style={styles.label}>E-posta</Text>
+              <Text style={styles.value}>{data.email ?? "—"}</Text>
+
+              <Text style={styles.label}>Telefon</Text>
+              <Text style={styles.value}>{data.phone ?? "—"}</Text>
+
+              <Text style={styles.label}>Durum</Text>
+              <Text style={styles.value}>{data.active ? "Aktif" : "Aktif Değil"}</Text>
+            </>
+          )}
         </View>
 
         <TouchableOpacity
@@ -138,10 +257,11 @@ export default function BarberProfile() {
           onPress={() => router.replace("/change-password-barber")}
           style={styles.changeBtn}
         >
-          <Text style={styles.logoutText}>
+          <Text style={styles.changeText}>
             Şifre Değiştir
           </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => onLogout()}
           disabled={logout.isPending}
@@ -171,19 +291,78 @@ const styles = StyleSheet.create({
     gap: 8,
   },
 
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: "#fff",
+  },
+  editIconBtn: {
+    padding: 6,
+    backgroundColor: "rgba(228,210,172,0.2)",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#E4D2AC",
+  },
+  editIcon: {
+    fontSize: 16,
+  },
+
   label: { fontSize: 13, color: "rgba(255,255,255,0.7)" },
   value: { fontSize: 16, fontWeight: "700", color: "#fff" },
+
+  input: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#fff",
+    backgroundColor: "rgba(255,255,255,0.08)",
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.12)",
+  },
+
+  saveBtn: {
+    padding: 14,
+    borderRadius: 14,
+    backgroundColor: "#E4D2AC",
+    alignItems: "center",
+  },
+  saveBtnText: {
+    color: "#121212",
+    fontWeight: "800",
+  },
+
+  cancelBtn: {
+    padding: 14,
+    borderRadius: 14,
+    backgroundColor: "rgba(255,255,255,0.1)",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.2)",
+  },
+  cancelBtnText: {
+    color: "#fff",
+    fontWeight: "800",
+  },
+
   workingHourBtn: {
     padding: 14,
     borderRadius: 14,
-    backgroundColor: "#AD8C57",
+    backgroundColor: "#E4D2AC",
     alignItems: "center",
   },
   workingHourText: { color: "#121212", fontWeight: "800" },
+  
   logoutBtn: {
     padding: 14,
     borderRadius: 14,
-    backgroundColor: "#631919ff",
+    backgroundColor: "#E57373",
     alignItems: "center",
   },
   logoutText: { color: "#fff", fontWeight: "800", textAlign: "center" },
@@ -202,6 +381,11 @@ const styles = StyleSheet.create({
     marginTop: 4,
     padding: 14,
     borderRadius: 14,
-    backgroundColor: "#AD8C57",
+    backgroundColor: "#E4D2AC",
+    alignItems: "center",
+  },
+  changeText: {
+    color: "#121212",
+    fontWeight: "800",
   },
 });

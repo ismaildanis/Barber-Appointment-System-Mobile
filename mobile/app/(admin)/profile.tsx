@@ -139,6 +139,15 @@ export default function AdminProfile() {
           </View>
         </View>
 
+        <TouchableOpacity
+          onPress={() => router.replace("/change-password-admin")}
+          style={styles.changeBtn}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="key-outline" size={20} color="#fff" style={{ marginRight: 8 }} />
+          <Text style={styles.changeText}>Şifre Değiştir</Text>
+        </TouchableOpacity>
+
         {/* Logout Button */}
         <TouchableOpacity
           onPress={() => onLogout()}
@@ -279,6 +288,21 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: themeColors.border,
     marginVertical: 4,
+  },
+
+  changeBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 16,
+    borderRadius: 14,
+    backgroundColor: themeColors.primary,
+    marginBottom: 12,
+  },
+  changeText: {
+    color: themeColors.textOnPrimary,
+    fontWeight: "700",
+    fontSize: 16,
   },
 
   // Logout Button

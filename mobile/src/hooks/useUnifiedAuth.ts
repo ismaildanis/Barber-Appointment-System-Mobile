@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChangePassword, unifiedAuthApi } from "../api/unifiedAuthApi";
 import { useEffect } from "react";
-import { RegisterRequest } from "../types/customerAuth";
+import { RegisterRequest, UpdateCustomer } from "../types/customerAuth";
 import * as Notifications from "expo-notifications";
 
 const keyMe = ["unified", "me"] as const;
@@ -98,3 +98,15 @@ export const useRegisterNotification = () =>
       return unifiedAuthApi.registerNotification(token);
     }
   });
+
+export const useUpdateCustomer = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (data: UpdateCustomer) => unifiedAuthApi.updateCustomer(data),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: keyMe })
+        }
+    })
+}
+
+

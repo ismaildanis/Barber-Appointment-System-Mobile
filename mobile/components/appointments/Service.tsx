@@ -70,16 +70,15 @@ export default function Services({ services, loading, selectedService, onSelect 
 const styles = StyleSheet.create({
   container: {
     marginTop: 24,
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderRadius: 16,
-    backgroundColor: "rgba(255,255,255,0.04)",
+    paddingHorizontal: 2,
+    paddingVertical: 2,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
     marginBottom: 12,
     color: "#fff",
+    alignSelf: "center",
   },
   empty: { color: "#fff" },
   card: {
@@ -87,14 +86,14 @@ const styles = StyleSheet.create({
     gap: 12,
     padding: 12,
     borderRadius: 14,
-    backgroundColor: "#2f2f2f",
+    backgroundColor: "#1e1e1e",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.08)",
     alignItems: "center",
   },
   cardSelected: {
-    backgroundColor: "#AD8C57",
-    borderColor: "#AD8C57",
+    backgroundColor: "#E4D2AC",
+    borderColor: "#E4D2AC",
   },
   image: {
     width: 64,

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { barberApi } from '../api/barberApi'
-import { ActivityBarber, CreateBarber } from '../types/barber';
+import { ActivityBarber, CreateBarber, UpdateBarber } from '../types/barber';
 
 const key = ['barber'] as const
 
@@ -39,6 +39,16 @@ export const useUpdateActivityBarberr = (id: number) => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: key })
         },
+    })
+}
+
+export const useUpdateBarber = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (data: UpdateBarber) => barberApi.updateBarber(data),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: key })
+        }
     })
 }
 

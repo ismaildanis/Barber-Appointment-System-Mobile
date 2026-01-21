@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "../../config";
-import { RegisterRequest } from "../types/customerAuth";
+import { RegisterRequest, UpdateCustomer } from "../types/customerAuth";
 
 export type VerifyResponse = { resetSessionId: string; role: 'customer'|'barber'|'admin' };
 export type ChangePassword = { oldPassword: string; newPassword: string; };
@@ -98,8 +98,9 @@ export const unifiedAuthApi = {
   verifyReset: async (data: { email: string; code: string; }) => await api.post<VerifyResponse>("/unified-auth/verify-reset", data).then(r => r.data),
   resetPassword: async (data: { resetSessionId: string; newPassword: string; }) => await api.post("/unified-auth/reset-password", data).then(r => r.data),
   changePassword: async (data: ChangePassword) => await api.post("/unified-auth/change-password", data).then(r => r.data),
-
   registerNotification: async (token: string) => await api.post("/unified-auth/push/register", { token }).then(r => r.data),
+
+  updateCustomer: async (data: UpdateCustomer) => await api.put("/customer/update", data).then(r => r.data),
 };
 
 export { api as authedApi };

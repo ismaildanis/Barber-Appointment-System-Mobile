@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   meta: { fontSize: 14, color: "rgba(255,255,255,0.9)" },
   note: { fontSize: 13, color: "#fbbf24" },
   btnDanger: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#ef4444" },
-  btnCompleted: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#AD8C57" },
+  btnCompleted: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#E4D2AC" },
   btnText: { color: "#fff", fontWeight: "800", textAlign: "center" },
   empty: { color: "#ccc" },
   overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)", justifyContent: "flex-end" },

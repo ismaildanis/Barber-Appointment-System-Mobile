@@ -14,7 +14,7 @@ export default function BarberTabLayout() {
     iosName,
     androidName,
     size = 28,
-    color = "#AD8C57",
+    color = "#E4D2AC",
   }: {
     iosName: any;
     androidName: any;

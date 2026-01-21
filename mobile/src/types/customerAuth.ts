@@ -28,3 +28,9 @@ export type RegisterRequest = {
   password: string;
   phone?: string;
 }
+
+export interface UpdateCustomer {
+    firstName: string;
+    lastName: string;
+    phone: string
+}

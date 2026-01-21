@@ -1,4 +1,4 @@
-import { useUnifiedMe, useUnifiedLogout } from "@/src/hooks/useUnifiedAuth";
+import { useUnifiedMe, useUnifiedLogout, useUpdateCustomer } from "@/src/hooks/useUnifiedAuth";
 import Spinner from "@/components/ui/Spinner";
 import {
   RefreshControl,
@@ -7,18 +7,26 @@ import {
   TouchableOpacity,
   View,
   Text,
+  Alert,
+  TextInput 
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { themeColors } from "@/constants/theme";
-
+import { useState } from "react";
 export default function CustomerProfile() {
   const router = useRouter();
   const navigation = useNavigation();
   const { data, isLoading, isError, refetch, isRefetching } = useUnifiedMe();
   const logout = useUnifiedLogout();
+  const updateCustomer = useUpdateCustomer();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
 
   const onLogout = () => {
     logout.mutate(undefined, {
@@ -32,6 +40,49 @@ export default function CustomerProfile() {
       },
     });
   };
+
+  const startEditing = () => {
+    setFirstName(data.firstName ?? "");
+    setLastName(data.lastName ?? "");
+    setPhone(data.phone ?? "");
+    setIsEditing(true);
+  };
+
+  const cancelEditing = () => {
+    setIsEditing(false);
+    setFirstName("");
+    setLastName("");
+    setPhone("");
+  };
+
+  const saveChanges = () => {
+    if (!firstName.trim() || !lastName.trim() || !phone.trim()) {
+      Alert.alert("Uyarı", "Lütfen tüm alanları doldurun");
+      return;
+    }
+
+    updateCustomer.mutate(
+      {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        phone: phone.trim(),
+      },
+      {
+        onSuccess: () => {
+          Alert.alert("Başarılı", "Bilgileriniz güncellendi");
+          setIsEditing(false);
+          refetch();
+        },
+        onError: (err: any) => {
+          Alert.alert(
+            "Hata",
+            err?.response?.data?.message || "Güncelleme başarısız"
+          );
+        },
+      }
+    );
+  };
+
 
   if (isLoading) {
     return (
@@ -110,53 +161,122 @@ export default function CustomerProfile() {
 
         {/* Info Card */}
         <View style={styles.card}>
-          <View style={styles.infoRow}>
-            <View style={styles.iconContainer}>
-              <Ionicons
-                name="person-outline"
-                size={20}
-                color={themeColors.primary}
-              />
-            </View>
-            <View style={styles.infoContent}>
-              <Text style={styles.label}>Ad Soyad</Text>
-              <Text style={styles.value}>
-                {`${data.firstName ?? ""} ${data.lastName ?? ""}`.trim() || "—"}
-              </Text>
-            </View>
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Bilgilerim</Text>
+
+            {!isEditing && (
+              <TouchableOpacity onPress={startEditing} style={styles.editIconBtn}>
+                <Ionicons
+                  name="create-outline"
+                  size={18}
+                  color={themeColors.primary}
+                />
+              </TouchableOpacity>
+            )}
           </View>
 
-          <View style={styles.divider} />
-
-          <View style={styles.infoRow}>
-            <View style={styles.iconContainer}>
-              <Ionicons
-                name="mail-outline"
-                size={20}
-                color={themeColors.primary}
+          {isEditing ? (
+            <>
+              <Text style={styles.label}>Ad</Text>
+              <TextInput
+                style={styles.input}
+                value={firstName}
+                onChangeText={setFirstName}
+                placeholder="Ad"
+                placeholderTextColor={themeColors.textMuted}
               />
-            </View>
-            <View style={styles.infoContent}>
-              <Text style={styles.label}>E-posta</Text>
-              <Text style={styles.value}>{data.email ?? "—"}</Text>
-            </View>
-          </View>
 
-          <View style={styles.divider} />
-
-          <View style={styles.infoRow}>
-            <View style={styles.iconContainer}>
-              <Ionicons
-                name="call-outline"
-                size={20}
-                color={themeColors.primary}
+              <Text style={styles.label}>Soyad</Text>
+              <TextInput
+                style={styles.input}
+                value={lastName}
+                onChangeText={setLastName}
+                placeholder="Soyad"
+                placeholderTextColor={themeColors.textMuted}
               />
-            </View>
-            <View style={styles.infoContent}>
+
               <Text style={styles.label}>Telefon</Text>
-              <Text style={styles.value}>{data.phone ?? "—"}</Text>
-            </View>
-          </View>
+              <TextInput
+                style={styles.input}
+                value={phone}
+                onChangeText={setPhone}
+                placeholder="Telefon"
+                placeholderTextColor={themeColors.textMuted}
+                keyboardType="phone-pad"
+                maxLength={10}
+              />
+
+              <View style={{ flexDirection: "row", gap: 8, marginTop: 12 }}>
+                <TouchableOpacity
+                  onPress={saveChanges}
+                  disabled={updateCustomer.isPending}
+                  style={[styles.saveBtn, { flex: 1 }]}
+                >
+                  <Text style={styles.saveBtnText}>
+                    {updateCustomer.isPending ? "Kaydediliyor..." : "Kaydet"}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={cancelEditing}
+                  disabled={updateCustomer.isPending}
+                  style={[styles.cancelBtn, { flex: 1 }]}
+                >
+                  <Text style={styles.cancelBtnText}>İptal</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          ) : (
+            <>
+              <View style={styles.infoRow}>
+                <View style={styles.iconContainer}>
+                  <Ionicons
+                    name="person-outline"
+                    size={20}
+                    color={themeColors.primary}
+                  />
+                </View>
+                <View style={styles.infoContent}>
+                  <Text style={styles.label}>Ad Soyad</Text>
+                  <Text style={styles.value}>
+                    {`${data.firstName ?? ""} ${data.lastName ?? ""}`.trim() || "—"}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.divider} />
+
+              <View style={styles.infoRow}>
+                <View style={styles.iconContainer}>
+                  <Ionicons
+                    name="mail-outline"
+                    size={20}
+                    color={themeColors.primary}
+                  />
+                </View>
+                <View style={styles.infoContent}>
+                  <Text style={styles.label}>E-posta</Text>
+                  <Text style={styles.value}>{data.email ?? "—"}</Text>
+                </View>
+              </View>
+
+              <View style={styles.divider} />
+
+              <View style={styles.infoRow}>
+                <View style={styles.iconContainer}>
+                  <Ionicons
+                    name="call-outline"
+                    size={20}
+                    color={themeColors.primary}
+                  />
+                </View>
+                <View style={styles.infoContent}>
+                  <Text style={styles.label}>Telefon</Text>
+                  <Text style={styles.value}>{data.phone ?? "—"}</Text>
+                </View>
+              </View>
+            </>
+          )}
         </View>
 
         {/* Change Password */}
@@ -369,5 +489,63 @@ const styles = StyleSheet.create({
     color: themeColors.textOnPrimary,
     fontWeight: "700",
     fontSize: 15,
+  },
+
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: themeColors.text,
+  },
+
+  editIconBtn: {
+    padding: 6,
+    borderRadius: 8,
+    backgroundColor: themeColors.surfaceLight,
+    borderWidth: 1,
+    borderColor: themeColors.primary,
+  },
+
+  input: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: themeColors.text,
+    backgroundColor: themeColors.surfaceLight,
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: themeColors.border,
+  },
+
+  saveBtn: {
+    padding: 14,
+    borderRadius: 14,
+    backgroundColor: themeColors.primary,
+    alignItems: "center",
+  },
+
+  saveBtnText: {
+    color: themeColors.textOnPrimary,
+    fontWeight: "800",
+  },
+
+  cancelBtn: {
+    padding: 14,
+    borderRadius: 14,
+    backgroundColor: themeColors.surfaceLight,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: themeColors.border,
+  },
+
+  cancelBtnText: {
+    color: themeColors.text,
+    fontWeight: "800",
   },
 });

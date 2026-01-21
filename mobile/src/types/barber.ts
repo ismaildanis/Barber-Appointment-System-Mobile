@@ -18,3 +18,9 @@ export interface CreateBarber {
 export interface ActivityBarber {
     active: boolean
 }
+
+export interface UpdateBarber {
+    firstName: string;
+    lastName: string;
+    phone: string
+}

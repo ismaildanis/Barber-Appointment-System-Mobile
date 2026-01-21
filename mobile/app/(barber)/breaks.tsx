@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 14,
     borderRadius: 12,
-    backgroundColor: "#AD8C57",
+    backgroundColor: "#E4D2AC",
     alignItems: "center",
   },
   addBtnText: { color: "#0f0f0f", fontWeight: "700" },
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  day: { color: "#AD8C57", fontWeight: "700", marginBottom: 4 },
+  day: { color: "#E4D2AC", fontWeight: "700", marginBottom: 4 },
   time: { color: "#fff", fontSize: 16, fontWeight: "700" },
   deleteBtn: {
     flexDirection: "row",
