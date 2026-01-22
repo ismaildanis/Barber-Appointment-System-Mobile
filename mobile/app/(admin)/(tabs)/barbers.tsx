@@ -394,7 +394,7 @@ export default function BarbersScreen() {
                     <Switch
                       value={active}
                       onValueChange={setActive}
-                      trackColor={{ false: "#3e3e3e", true: "#AD8C57" }}
+                      trackColor={{ false: "#3e3e3e", true: "#E4D2AC" }}
                       thumbColor={active ? "#fff" : "#f4f3f4"}
                     />
                   </View>

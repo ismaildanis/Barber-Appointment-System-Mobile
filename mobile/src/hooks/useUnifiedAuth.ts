@@ -6,6 +6,7 @@ import { ChangePassword, unifiedAuthApi } from "../api/unifiedAuthApi";
 import { useEffect } from "react";
 import { RegisterRequest, UpdateCustomer } from "../types/customerAuth";
 import * as Notifications from "expo-notifications";
+import Constants from 'expo-constants';
 
 const keyMe = ["unified", "me"] as const;
 
@@ -94,7 +95,11 @@ export const useRegisterNotification = () =>
     mutationFn: async () => {
       const { status } = await Notifications.requestPermissionsAsync();
       if (status !== "granted") throw new Error("Bildirim izni verilmedi");
-      const token = (await Notifications.getExpoPushTokenAsync()).data;
+      const token = (
+        await Notifications.getExpoPushTokenAsync({
+          projectId: Constants.expoConfig?.extra?.eas?.projectId,
+        })
+      ).data;      
       return unifiedAuthApi.registerNotification(token);
     }
   });

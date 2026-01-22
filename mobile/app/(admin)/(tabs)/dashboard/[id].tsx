@@ -56,12 +56,18 @@ export default function DashboardAppointmentDetail() {
 
     if (pendingAction === "complete") {
       markCompleted.mutate(numericId, {
-        onSuccess: refetch,
+        onSuccess: () => {
+          Alert.alert("Başarılı", "Randevu tamamlandı olarak işaretlendi.");
+          refetch();
+        },
         onSettled: () => setAlertVisible(false),
       });
     } else if (pendingAction === "noshow") {
       markNoShow.mutate(numericId, {
-        onSuccess: refetch,
+        onSuccess: () => {
+          Alert.alert("Başarılı", "Randevu gelinmedi olarak işaretlendi.");
+          refetch();
+        },
         onSettled: () => setAlertVisible(false),
       });
     } else if (pendingAction === "cancel") {
@@ -71,6 +77,7 @@ export default function DashboardAppointmentDetail() {
       }
       markCanceled.mutate(numericId, {
         onSuccess: () => {
+          Alert.alert("Başarılı", "Randevu iptal edildi.");
           refetch();
           setCancelReason("");
         },

@@ -38,20 +38,20 @@ export default function SelectService() {
             </ScrollView>
             <View style={{ flexDirection: "row", gap: 12, paddingHorizontal: 2, marginTop: 12 }}>
             <TouchableOpacity
-                onPress={onSave}
-                style={{ flex: 1, padding: 14, borderRadius: 14, backgroundColor: "#E4D2AC" }}
-            >
-                <Text style={{ color: "#121212", textAlign: "center", fontWeight: "700" }}>
-                Kaydet
-                </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
                 onPress={onCancel}
                 style={{ flex: 1, padding: 14, borderRadius: 14, backgroundColor: "rgba(255,255,255,0.12)" }}
             >
                 <Text style={{ color: "#fff", textAlign: "center", fontWeight: "700" }}>
                 İptal
+                </Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+                onPress={onSave}
+                style={{ flex: 1, padding: 14, borderRadius: 14, backgroundColor: "#E4D2AC" }}
+            >
+                <Text style={{ color: "#121212", textAlign: "center", fontWeight: "700" }}>
+                Kaydet
                 </Text>
             </TouchableOpacity>
             </View>

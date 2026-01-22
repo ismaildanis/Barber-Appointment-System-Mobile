@@ -99,7 +99,7 @@ export function ServiceFormModal({
                   <Image source={{ uri: values.imageUri }} style={styles.preview} />
                   <View style={{ flexDirection: "row", gap: 12 }}>
                     <TouchableOpacity style={styles.changeBtn} onPress={onPickImage}>
-                      <Ionicons name="image-outline" size={18} color="#AD8C57" />
+                      <Ionicons name="image-outline" size={18} color="#E4D2AC" />
                       <Text style={styles.changeText}>Değiştir</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.removeBtn} onPress={onRemoveImage}>
@@ -148,12 +148,12 @@ const styles = StyleSheet.create({
   uploadSubtext: { fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 4 },
   preview: { width: "100%", height: 200, borderRadius: 12, backgroundColor: "rgba(255,255,255,0.05)" },
   changeBtn: { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, backgroundColor: "rgba(173,140,87,0.15)", paddingVertical: 12, borderRadius: 10, borderWidth: 1, borderColor: "rgba(173,140,87,0.3)" },
-  changeText: { fontSize: 14, fontWeight: "600", color: "#AD8C57" },
+  changeText: { fontSize: 14, fontWeight: "600", color: "#E4D2AC" },
   removeBtn: { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, backgroundColor: "rgba(244,67,54,0.15)", paddingVertical: 12, borderRadius: 10, borderWidth: 1, borderColor: "rgba(244,67,54,0.3)" },
   removeText: { fontSize: 14, fontWeight: "600", color: "#F44336" },
   footer: { flexDirection: "row", gap: 12, padding: 20, borderTopWidth: 1, borderTopColor: "rgba(255,255,255,0.08)" },
   cancelBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, backgroundColor: "rgba(255,255,255,0.05)", alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "rgba(255,255,255,0.1)" },
   cancelText: { fontSize: 16, fontWeight: "600", color: "rgba(255,255,255,0.8)" },
-  submitBtn: { flex: 1, flexDirection: "row", gap: 8, paddingVertical: 14, borderRadius: 12, backgroundColor: "#AD8C57", alignItems: "center", justifyContent: "center" },
+  submitBtn: { flex: 1, flexDirection: "row", gap: 8, paddingVertical: 14, borderRadius: 12, backgroundColor: "#E4D2AC", alignItems: "center", justifyContent: "center" },
   submitText: { fontSize: 16, fontWeight: "700", color: "#121212" },
 });

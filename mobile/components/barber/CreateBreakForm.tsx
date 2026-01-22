@@ -185,11 +185,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: '#AD8C57',
+        borderColor: '#E4D2AC',
     },
     durationText: {
         fontSize: 16,
-        color: '#AD8C57',
+        color: '#E4D2AC',
         fontWeight: '600',
         textAlign: 'center',
     },
