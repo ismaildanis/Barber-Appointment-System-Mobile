@@ -8,9 +8,19 @@
     "scheme": "mobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/logo/splash-minimal.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#E4D2AC"
+    },
     "ios": {
       "bundleIdentifier": "com.berberrandevum.mobile",
       "supportsTablet": true,
+      "splash": {
+        "image": "./assets/logo/splash-minimal.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#E4D2AC"
+      },
       "infoPlist": {
         "NSUserNotificationUsageDescription": "Randevu bildirimlerini iletmek için bildirim iznine ihtiyaç var.",
         "ITSAppUsesNonExemptEncryption": false
@@ -19,9 +29,18 @@
     "android": {
       "package": "com.berberrandevum.mobile",
       "adaptiveIcon": {
-        "backgroundColor": "#E4D2AC",
+        "backgroundImage": "./assets/logo/linearBackground.png",
         "foregroundImage": "./assets/logo/adaptive-foreground.png",
         "monochromeImage": "./assets/logo/adaptive-foreground.png"
+      },
+      "splash": {
+        "image": "./assets/logo/splash-minimal.png",
+        "resizeMode": "contain",
+        "mdpi": "./assets/logo/splash-minimal.png",
+        "hdpi": "./assets/logo/splash-minimal.png",
+        "xhdpi": "./assets/logo/splash-minimal.png",
+        "xxhdpi": "./assets/logo/splash-minimal.png",
+        "xxxhdpi": "./assets/logo/splash-minimal.png"
       },
       "notification": {
         "icon": "./assets/logo/notification-icon.png",
@@ -40,18 +59,7 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/logo/adaptive-foreground.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#E4D2AC",
-          "dark": {
-            "backgroundColor": "#E4D2AC"
-          }
-        }
-      ],
+      "expo-splash-screen",
       [
         "expo-image-picker",
         {

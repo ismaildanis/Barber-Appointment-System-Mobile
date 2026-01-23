@@ -53,6 +53,7 @@ export default function CreateBreak() {
         <SafeAreaView style={{ flex: 1, backgroundColor: todayAppointmentsColors.containerBackground, marginBottom: 60, padding: 16 }}>
             <View style={{ flexDirection: "column", gap: 12, alignItems: "center", justifyContent: "center", marginTop: 16 }}>
                 <Text style={{ fontSize: 32,color:"#fff" }}>Mola Oluştur</Text>
+                <Text style={{ fontSize: 16,color:"rgba(255,255,255,0.6)" }}>Mola Bugüne oluşturulur ve seçilen belli bir saat aralığında randevu alınamaz, o saat aralığına dahil olan tüm randevular iptal edilir.</Text>
                 
             </View>
             <View style={{flex:1, marginBottom: 20, justifyContent: "space-between" }}>

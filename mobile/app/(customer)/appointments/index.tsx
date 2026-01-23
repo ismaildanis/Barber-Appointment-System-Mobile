@@ -187,7 +187,7 @@ export default function CustomerAppointments() {
                 <Text style={[styles.meta, { color: statusColor[item.status] }]}>
                   Durum: {statusLabel[item.status] || item.status}
                 </Text>
-                {item.status === "CANCELLED" && (
+                {item.status === "CANCELLED" || item.status === "BARBER_CANCELLED" &&  (
                   <Text style={styles.note}>
                     İptal sebebi: {item.cancelReason || "Belirtilmedi"}
                   </Text>

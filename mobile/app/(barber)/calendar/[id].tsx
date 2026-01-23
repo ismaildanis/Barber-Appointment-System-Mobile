@@ -87,7 +87,7 @@ export default function CalendarDetails() {
             style={[styles.btnDanger, cancelMutation.isPending && { opacity: 0.7 }]}
             disabled={cancelMutation.isPending}
           >
-            <Text style={styles.btnText}>
+            <Text style={styles.btnTextCancel}>
               Randevuyu İptal Et
             </Text>
           </TouchableOpacity>
@@ -194,7 +194,8 @@ const styles = StyleSheet.create({
   note: { fontSize: 13, color: "#fbbf24" },
   btnDanger: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#ef4444" },
   btnCompleted: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#E4D2AC" },
-  btnText: { color: "#fff", fontWeight: "800", textAlign: "center" },
+  btnText: { color: "#121212", fontWeight: "800", textAlign: "center" },
+  btnTextCancel: { color: "#fff", fontWeight: "800", textAlign: "center" },
   empty: { color: "#ccc" },
   overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)", justifyContent: "flex-end" },
   modal: { backgroundColor: "#1a1a1a", padding: 16, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
