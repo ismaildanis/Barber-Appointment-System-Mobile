@@ -51,18 +51,54 @@ export default function CreateBreak() {
     }
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: todayAppointmentsColors.containerBackground, marginBottom: 60, padding: 16 }}>
-            <View style={{ flexDirection: "column", gap: 12, alignItems: "center", justifyContent: "center", marginTop: 16 }}>
-                <Text style={{ fontSize: 32,color:"#fff" }}>Mola Oluştur</Text>
-                <Text style={{ fontSize: 16,color:"rgba(255,255,255,0.6)" }}>Mola Bugüne oluşturulur ve seçilen belli bir saat aralığında randevu alınamaz, o saat aralığına dahil olan tüm randevular iptal edilir.</Text>
+            <View style={{ 
+                flexDirection: "row", 
+                alignItems: "center", 
+                justifyContent: "space-between", 
+                marginTop: 16,
+                marginBottom: 20
+            }}>
+                <Text style={{ fontSize: 28, color: "#fff", fontWeight: "700" }}>Mola Oluştur</Text> 
                 
+                <TouchableOpacity 
+                    onPress={() => router.replace("/(barber)/breaks")} 
+                    style={{ 
+                        paddingHorizontal: 16, 
+                        paddingVertical: 10, 
+                        borderRadius: 12, 
+                        backgroundColor: "#E4D2AC",
+                        elevation: 2, 
+                        shadowColor: "#000",
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowOpacity: 0.1,
+                        shadowRadius: 4
+                    }}
+                >
+                    <Text style={{ color: "#121212", fontSize: 14, fontWeight: "700" }}>Molalarım</Text>
+                </TouchableOpacity>
             </View>
             <View style={{flex:1, marginBottom: 20, justifyContent: "space-between" }}>
-                <View style={{flexDirection: "row", justifyContent: "center"}}>
-                    <TouchableOpacity onPress={() => router.replace("/(barber)/breaks")} style={{marginTop: 20, paddingVertical: 20, width: "90%", borderRadius: 24, backgroundColor: "#E4D2AC"}}>
-                        <Text style={{color: "#121212", fontSize: 16, alignSelf: "center", fontWeight: "800", letterSpacing: 0.3}}>Molalarım</Text>
-                    </TouchableOpacity>
-                </View>
                 <CreateBreakForm selectedStartMin={startMin} selectedEndMin={endMin} onSelectStartMin={setStartMin} onSelectEndMin={setEndMin}  />
+
+            <View style={{
+                backgroundColor: '#121212',
+                borderLeftWidth: 4,
+                borderLeftColor: '#E4D2AC',
+                paddingHorizontal: 16,
+                paddingVertical: 12,
+                alignSelf: 'center',
+                borderRadius: 8,
+                marginTop: 10,
+                marginBottom: 20,
+                width: '90%'
+            }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
+                    <Text style={{ color: '#E4D2AC', fontWeight: 'bold', fontSize: 14 }}>ÖNEMLİ BİLGİ</Text>
+                </View>
+                <Text style={{ fontSize: 14, color: "rgba(255,255,255,0.8)", lineHeight: 20 }}>
+                    Mola oluşturduğunuzda bu saat aralığında bulunan <Text style={{ fontWeight: 'bold', color: '#fff' }}>tüm randevular iptal edilir</Text> ve yeni randevu alınamaz.
+                </Text>
+            </View>
             {startMin && endMin && (
                 <TouchableOpacity
                     onPress={onClick}
@@ -70,7 +106,7 @@ export default function CreateBreak() {
                     disabled={createBreak.isPending}
                     style={{
                         marginBottom: 20,
-                        paddingVertical: 20,
+                        paddingVertical: 16,
                         paddingHorizontal: 20,
                         borderRadius: 24,
                         backgroundColor: createBreak.isPending ? "rgba(173,140,87,0.6)" : "#E4D2AC",
@@ -79,7 +115,7 @@ export default function CreateBreak() {
                 >
                     <Text
                         style={{
-                            color: "#fff",
+                            color: "#121212",
                             textAlign: "center",
                             fontWeight: "800",
                             letterSpacing: 0.3,
@@ -114,6 +150,7 @@ export default function CreateBreak() {
                 }          
                 cancelText="Kapat"
             />
+            
         </SafeAreaView>
     );
 }

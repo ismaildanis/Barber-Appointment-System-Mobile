@@ -17,6 +17,8 @@ import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { useUnifiedLogin, useRegisterNotification } from "@/src/hooks/useUnifiedAuth";
 import { loginSchema, type LoginSchema } from "@/src/schemas/auth";
 import { CommonActions } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 
 const isIOS = Platform.OS === "ios";
 
@@ -25,6 +27,7 @@ export default function LoginScreen() {
   const notifyRegister = useRegisterNotification();
   const login = useUnifiedLogin();
   const rootNav = useRootNavigation();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     control,
@@ -105,7 +108,7 @@ export default function LoginScreen() {
                 <TextInput
                   style={styles.input}
                   placeholder="Email"
-                  placeholderTextColor={"#4e4e4e"}
+                  placeholderTextColor={"#888"}
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
@@ -120,18 +123,28 @@ export default function LoginScreen() {
               control={control}
               name="password"
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={styles.input}
-                  placeholder="Sifre"
-                  placeholderTextColor={"#4e4e4e"}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  secureTextEntry
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  textContentType="password"
-                />
+                <View style={styles.passwordContainer}>
+                  <TextInput
+                    style={styles.passwordInput}
+                    placeholder="Şifre"
+                    placeholderTextColor="#888"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    secureTextEntry={!showPassword}
+                    autoCapitalize="none"
+                  />
+                  <TouchableOpacity
+                    style={styles.eyeButton}
+                    onPress={() => setShowPassword(!showPassword)}
+                  >
+                    <Ionicons
+                      name={showPassword ? "eye-off-outline" : "eye-outline"}
+                      size={22}
+                      color="#888"
+                    />
+                  </TouchableOpacity>
+                </View>
               )}
             />
 
@@ -268,5 +281,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#1f1f1f",
     fontSize: 16,
     color: "#fff",
+  },
+  passwordContainer: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.1)",
+    borderRadius: 12,
+    backgroundColor: "#1f1f1f",
+    paddingLeft: 14,
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 14,
+    paddingLeft: 0,
+    fontSize: 16,
+    color: "#fff",
+  },
+  eyeButton: {
+    padding: 14,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

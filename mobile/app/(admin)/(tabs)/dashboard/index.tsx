@@ -1,6 +1,5 @@
-import { useRouter } from "expo-router";
 import { Button as RNButton, View } from "react-native";
-import { useUnifiedLogout, useUnifiedMe } from "@/src/hooks/useUnifiedAuth";
+import { useUnifiedMe } from "@/src/hooks/useUnifiedAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { useGetAdminAppointments, useGetAdminOneAppointment } from "@/src/hooks/useAppointmentQuery";
@@ -11,11 +10,16 @@ import AdminAppointments from "@/components/admin/AdminAppointments";
 import { myColors } from "@/constants/theme";
 
 export default function AdminDashboard() {
-  const router = useRouter();
-  const logout = useUnifiedLogout();
   const [status, setStatus] = useState<Status>("SCHEDULED");
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const formattedDate = selectedDate.toISOString().split('T')[0];
+  const formatDateLocal = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  const formattedDate = formatDateLocal(selectedDate);
+
   const { data: me, isLoading: meloading, isError: meError, refetch: meRefetch, isRefetching: meRefetching } = useUnifiedMe();
   const { data: allAppointments, isLoading: aLoading, isError: aError, refetch: aRefetch, isRefetching: aRefetching } = useGetAdminAppointments(status, formattedDate);
   const laoding = meloading || aLoading;
@@ -26,7 +30,6 @@ export default function AdminDashboard() {
   }, [status, formattedDate, aRefetch])
   
   if (laoding) return <Spinner />;
-  
   return (
     <SafeAreaView style={{ flex: 1, padding: 16, backgroundColor: myColors.mainBackground }}>
       <View>

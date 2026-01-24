@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { View, Animated, Easing, StyleSheet } from "react-native";
+import { Animated, Easing, StyleSheet } from "react-native";
 import { useRootNavigationState, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useUnifiedMe } from "@/src/hooks/useUnifiedAuth";
@@ -35,7 +35,7 @@ export default function Index() {
       try {
         await Asset.fromModule(logoAsset).downloadAsync();
       } catch (e) {
-        console.warn("Logo preload failed", e);
+        if (__DEV__) console.error("Logo preload failed:", e);
       } finally {
         await SplashScreen.hideAsync();
         setSplashHidden(true);
@@ -45,10 +45,11 @@ export default function Index() {
     prepare();
   }, []);
 
+  // Animasyon başlatma
   useEffect(() => {
     if (!splashHidden) return;
 
-    Animated.sequence([
+    const animation = Animated.sequence([
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
@@ -79,31 +80,39 @@ export default function Index() {
           }),
         ])
       ),
-    ]).start();
+    ]);
+
+    animation.start();
 
     const minTimer = setTimeout(
       () => setCanNavigate(true),
       ANIMATION_CONFIG.MIN_DISPLAY_TIME
     );
 
-    return () => clearTimeout(minTimer);
-  }, [splashHidden]);
+    return () => {
+      clearTimeout(minTimer);
+      animation.stop();
+    };
+  }, [splashHidden, fadeAnim, scaleAnim, pulseAnim]);
 
+  // Navigasyon yönlendirme
   useEffect(() => {
     if (!nav?.key || isLoading || !canNavigate) return;
 
     if (isError || !data) {
       router.replace("/(auth)/login");
-    } else if (data.role === "customer") {
-      router.replace("/(customer)/home");
-    } else if (data.role === "admin") {
-      router.replace("/(admin)/dashboard");
-    } else if (data.role === "barber") {
-      router.replace("/(barber)/todayAppointments");
-    } else {
-      router.replace("/(auth)/login");
+      return;
     }
-  }, [nav?.key, isLoading, isError, data, canNavigate]);
+
+    const roleRoutes = {
+      customer: "/(customer)/home",
+      barber: "/(barber)/todayAppointments",
+      admin: "/(admin)/dashboard",
+    };
+
+    const route = roleRoutes[data.role] || "/(auth)/login";
+    router.replace(route);
+  }, [nav?.key, isLoading, isError, data?.role, canNavigate, router]);
 
   return (
     <LinearGradient

@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { View, ScrollView, RefreshControl, TouchableOpacity, Text, StyleSheet, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useEffect } from "react";
 
 const formatTime = (m: number) => {
   const h = Math.floor(m / 60);
@@ -18,6 +19,7 @@ export default function Breaks() {
   const router = useRouter();
   const { data, isLoading, isRefetching, refetch } = useGetBreaksForBarber();
   const deleteBreak = useDeleteBreakForBarber();
+
 
     const onDelete = (id: number) => {
         Alert.alert(
