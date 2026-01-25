@@ -50,7 +50,7 @@ export default function Holiday() {
       return;
     }
 
-    const formattedDate = selectedDate.toISOString().split('T')[0]; // YYYY-MM-DD
+    const formattedDate = selectedDate.toLocaleDateString('en-CA');
 
     createHoliday.mutate(
       {
