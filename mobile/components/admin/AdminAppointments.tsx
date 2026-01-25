@@ -1,7 +1,7 @@
 import { Appointment, AppointmentService, Status, statusColor, statusLabel } from "@/src/types/appointment";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { View, Text, TouchableOpacity, RefreshControl, FlatList, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, RefreshControl, FlatList, StyleSheet, Platform, TextInput, Modal } from "react-native";
 import Spinner from "../ui/Spinner";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -108,18 +108,38 @@ export default function AdminAppointments({
         selectedValue={status}
         onSelect={setStatus}
       />
-
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleDateConfirm}
-        onCancel={() => setDatePickerVisible(false)}
-        date={new Date(selectedDate)}
-        locale="tr_TR"
-        confirmTextIOS="Onayla"
-        cancelTextIOS="İptal"
-      />
-
+      {Platform.OS === "web" ? (
+        <Modal visible={isDatePickerVisible} transparent onRequestClose={() => setDatePickerVisible(false)}>
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "transparent" }}>
+            <View style={{ backgroundColor: "#1e1e1e", padding: 60, borderRadius: 12, borderWidth: 1, borderColor: "#444" }}>
+              <Text style={{ color: "#fff", marginBottom: 8}}>Tarih seç</Text>
+              <input
+                type="date"
+                value={selectedDate.toISOString().slice(0, 10)}
+                onChange={(e) => {
+                  const v = (e.target as HTMLInputElement).value;
+                  if (v) handleDateConfirm(new Date(v + "T00:00:00"));
+                }}
+                style={{ backgroundColor: "#E4D2AC", borderWidth: 1, borderColor: "#fff", padding: 8, borderRadius: 6 }}
+              />
+              <TouchableOpacity onPress={() => setDatePickerVisible(false)} style={{ marginTop: 20, backgroundColor: "#444", padding: 8, borderRadius: 6 }}>
+                  <Text style={{ color: "#fff", alignSelf: "center" }}>Kapat</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      ) : (
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleDateConfirm}
+          onCancel={() => setDatePickerVisible(false)}
+          date={new Date(selectedDate)}
+          locale="tr_TR"
+          confirmTextIOS="Onayla"
+          cancelTextIOS="İptal"
+        />
+      )}
       <FlatList
         data={appointments}
         keyExtractor={(item) => String(item.id)}
