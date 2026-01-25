@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_URL } from "../../config";
+import { API_URL } from "@/src/config";
 import { RegisterRequest, UpdateCustomer } from "../types/customerAuth";
 
 export type VerifyResponse = { resetSessionId: string; role: 'customer'|'barber'|'admin' };
