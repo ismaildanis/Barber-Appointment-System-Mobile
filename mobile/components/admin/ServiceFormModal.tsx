@@ -20,11 +20,12 @@ type Props = {
   isSubmitting?: boolean;
   title?: string;
   subtitle?: string;
+  isEditing?: boolean;
 };
 
 export function ServiceFormModal({
   visible, values, setValues, onClose, onSubmit,
-  onPickImage, onRemoveImage, isSubmitting, title, subtitle
+  onPickImage, onRemoveImage, isSubmitting, title, subtitle, isEditing,
 }: Props) {
   return (
     <Modal   
@@ -93,27 +94,31 @@ export function ServiceFormModal({
                 </View>
               </View>
 
-              <Text style={styles.label}>Servis Görseli</Text>
-              {values.imageUri ? (
-                <View style={{ gap: 12 }}>
-                  <Image source={{ uri: values.imageUri }} style={styles.preview} />
-                  <View style={{ flexDirection: "row", gap: 12 }}>
-                    <TouchableOpacity style={styles.changeBtn} onPress={onPickImage}>
-                      <Ionicons name="image-outline" size={18} color="#E4D2AC" />
-                      <Text style={styles.changeText}>Değiştir</Text>
+              {isEditing && (
+                <>
+                  <Text style={styles.label}>Servis Görseli</Text>
+                  {values.imageUri ? (
+                    <View style={{ gap: 12 }}>
+                      <Image source={{ uri: values.imageUri }} style={styles.preview} />
+                      <View style={{ flexDirection: "row", gap: 12 }}>
+                        <TouchableOpacity style={styles.changeBtn} onPress={onPickImage}>
+                          <Ionicons name="image-outline" size={18} color="#E4D2AC" />
+                          <Text style={styles.changeText}>Değiştir</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.removeBtn} onPress={onRemoveImage}>
+                          <Ionicons name="trash-outline" size={18} color="#F44336" />
+                          <Text style={styles.removeText}>Kaldır</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ) : (
+                    <TouchableOpacity style={styles.upload} onPress={onPickImage}>
+                      <Ionicons name="cloud-upload-outline" size={32} color="rgba(255,255,255,0.4)" />
+                      <Text style={styles.uploadText}>Görsel Yükle</Text>
+                      <Text style={styles.uploadSubtext}>PNG, JPG veya WEBP (Maks. 5MB)</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.removeBtn} onPress={onRemoveImage}>
-                      <Ionicons name="trash-outline" size={18} color="#F44336" />
-                      <Text style={styles.removeText}>Kaldır</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ) : (
-                <TouchableOpacity style={styles.upload} onPress={onPickImage}>
-                  <Ionicons name="cloud-upload-outline" size={32} color="rgba(255,255,255,0.4)" />
-                  <Text style={styles.uploadText}>Görsel Yükle</Text>
-                  <Text style={styles.uploadSubtext}>PNG, JPG veya WEBP (Maks. 5MB)</Text>
-                </TouchableOpacity>
+                  )}
+                </>
               )}
             </ScrollView>
 

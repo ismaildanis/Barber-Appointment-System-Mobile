@@ -266,6 +266,7 @@ export default function ServicesScreen() {
         onPickImage={pickAndUpload}
         onRemoveImage={onRemoveImage}
         isSubmitting={isWorking}
+        isEditing={!!editingId}
         title={editingId ? "Servisi Düzenle" : "Yeni Servis Ekle"}
         subtitle={editingId ? "Servis bilgilerini güncelleyin" : "Servis detaylarını girin"}
       />
