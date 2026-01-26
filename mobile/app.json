@@ -28,10 +28,11 @@
     },
     "android": {
       "package": "com.berberrandevum.mobile",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "backgroundImage": "./assets/logo/linearBackground.png",
-        "foregroundImage": "./assets/logo/adaptive-foreground.png",
-        "monochromeImage": "./assets/logo/adaptive-foreground.png"
+        "backgroundImage": "./assets/logo/AndroidArkaplan.png",
+        "foregroundImage": "./assets/logo/AndLogo.png",
+        "monochromeImage": "./assets/logo/AndLogo.png"
       },
       "splash": {
         "image": "./assets/logo/splash-minimal.png",
