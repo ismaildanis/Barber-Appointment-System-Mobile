@@ -76,8 +76,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "d3416c52-6cc6-467d-82bd-a448883099dd"
+        "projectId": "2ed19cd6-a2e0-420f-bdad-579bc56b274b"
       }
-    }
+    },
+    "owner": "hecksoft93"
   }
 }
