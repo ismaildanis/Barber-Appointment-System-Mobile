@@ -54,7 +54,7 @@ export default function Register() {
             end={{ x: 1, y: 0.5 }}
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
-            <Image source={require("@/assets/logo/a.png")} style={styles.logo} />
+            <Image source={require("@/assets/logo/logoForeground.png")} style={styles.logo} />
           </LinearGradient>
         }
       >

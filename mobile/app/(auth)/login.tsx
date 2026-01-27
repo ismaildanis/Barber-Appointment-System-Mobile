@@ -19,8 +19,6 @@ import { loginSchema, type LoginSchema } from "@/src/schemas/auth";
 import { CommonActions } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { KvkkModal } from "@/components/ui/KvkkModal";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const isIOS = Platform.OS === "ios";
@@ -95,7 +93,7 @@ export default function LoginScreen() {
               end={{ x: 1, y: 0.5 }}
               style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
             >
-              <Image source={require("@/assets/logo/a.png")} style={styles.logo} />
+              <Image source={require("@/assets/logo/logoForeground.png")} style={styles.logo} />
             </LinearGradient>
           }
         >
@@ -175,6 +173,7 @@ export default function LoginScreen() {
             </View>
           </View>
         </ParallaxScrollView>
+          
       ) : (
         <ScrollView style={{ flex: 1, backgroundColor: "#121212" }}>
           <SafeAreaView>
@@ -184,7 +183,7 @@ export default function LoginScreen() {
               end={{ x: 1, y: 0.5 }}
               style={{ height: 220, alignItems: "center", justifyContent: "center" }}
             >
-              <Image source={require("@/assets/logo/a.png")} style={styles.logo} />
+              <Image source={require("@/assets/logo/logoForeground.png")} style={styles.logo} />
             </LinearGradient>
 
             <View style={[styles.container, { flexGrow: 1, backgroundColor: "#121212" }]}>
