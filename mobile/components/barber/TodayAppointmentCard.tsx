@@ -29,7 +29,7 @@ export default function TodayAppointmentCard({ todayAppointments, loading }: Tod
         );
     }
     return (
-        <View style={{ flex: 1, gap: 16 }}>
+        <View style={{ flex: 1, gap: 16, marginBottom: 40 }}>
 
         {todayAppointments!.map((item) => {
             const timeRange = `${item.appointmentStartAt?.slice(11, 16)} - ${item.appointmentEndAt?.slice(11, 16)}`;
@@ -55,7 +55,7 @@ export default function TodayAppointmentCard({ todayAppointments, loading }: Tod
                   </View>
                 </View>
                 <Text style={styles.name} numberOfLines={1}>
-                  {item.customer?.firstName} {item.customer?.lastName}
+                  {`${item.customer?.firstName || "Silinmiş"} ${item.customer?.lastName || "Hesap"}`}
                 </Text>
                 <Text style={styles.meta} numberOfLines={2}>
                   {services}

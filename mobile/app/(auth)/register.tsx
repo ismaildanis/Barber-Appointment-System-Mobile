@@ -23,7 +23,7 @@ export default function Register() {
   const register = useRegister();
   const { control, handleSubmit, formState: { errors }, reset: controlReset } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { email: "", firstName: "", lastName: "", phone: "", password: "" }
+    defaultValues: { email: "", firstName: "", lastName: "", phone: "", password: "", passwordConfirm: "" },
   });
 
   const [alertVisible, setAlertVisible] = useState(false);
@@ -66,52 +66,63 @@ export default function Register() {
         }
       >
         <View style={styles.container}>
-          <Text style={styles.title}>Kayıt Ol</Text>
-
-          {apiError && <Text style={styles.error}>{apiError}</Text>}
-          {zodErrors.map((m, i) => (
-            <Text key={i} style={styles.error}>{m}</Text>
-          ))}
           <View style={styles.formWrapper}>
+            <Text style={styles.title}>Kayıt Ol</Text>
+
+            {apiError && <Text style={styles.error}>{apiError}</Text>}
+            {zodErrors.map((m, i) => (
+              <Text key={i} style={styles.error}>{m}</Text>
+            ))}
+    
             {([
               { name: "firstName", label: "Ad", secure: false, keyboard: "default", maxLength: 50 },
               { name: "lastName", label: "Soyad", secure: false, keyboard: "default", maxLength: 50 },
               { name: "email", label: "Email", secure: false, keyboard: "email-address", maxLength: 50 },
-              { name: "phone", label: "Telefon", secure: false, keyboard: "phone-pad", maxLength:10 },
+              { name: "phone", label: "Telefon (İsteğe bağlı)", secure: false, keyboard: "phone-pad", maxLength:10 },
               { name: "password", label: "Şifre", secure: true, keyboard: "default", maxLength: 50 },
+              { name: "passwordConfirm", label: "Şifre (Tekrar)", secure: true, keyboard: "default", maxLength: 50 },
             ] as const).map((field) => (
               <Controller
                 key={field.name}
                 control={control}
                 name={field.name}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    style={styles.input}
-                    placeholder={field.label}
-                    placeholderTextColor="#4e4e4e"
-                    value={value}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    secureTextEntry={field.secure}
-                    autoCapitalize="none"
-                    keyboardType={field.keyboard as any}
-                    maxLength={field.maxLength as any}
-                  />
+                  <>
+                    <TextInput
+                      style={styles.input}
+                      placeholder={field.label}
+                      placeholderTextColor="#4e4e4e"
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      secureTextEntry={field.secure}
+                      autoCapitalize="none"
+                      keyboardType={field.keyboard as any}
+                      maxLength={field.maxLength as any}
+                    />
+
+                    {field.name === "phone" && (
+                      <Text style={styles.helperText}>
+                        Gerektiğinde sizinle iletişim kurmak için (isteğe bağlı)
+                      </Text>
+                    )}
+                  </>
                 )}
               />
+              
             ))}
-          </View>
+          
+            <View style={styles.actions}>
+              <TouchableOpacity onPress={onSubmit} style={styles.primaryBtn} disabled={register.isPending}>
+                <Text style={styles.primaryText}>
+                  {register.isPending ? "Kaydediliyor..." : "Kayıt Ol"}
+                </Text>
+              </TouchableOpacity>
 
-          <View style={styles.actions}>
-            <TouchableOpacity onPress={onSubmit} style={styles.primaryBtn} disabled={register.isPending}>
-              <Text style={styles.primaryText}>
-                {register.isPending ? "Kaydediliyor..." : "Kayıt Ol"}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => router.replace("/login")} activeOpacity={0.7}>
-              <Text style={styles.link}>Zaten hesabın var mı? Giriş yap</Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => router.replace("/login")} activeOpacity={0.7}>
+                <Text style={styles.link}>Zaten hesabın var mı? Giriş yap</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ParallaxScrollView>
@@ -164,6 +175,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     maxWidth: 420,
     gap: 12,
+  },
+  helperText: {
+    fontSize: 12,
+    color: "#9ca3af",
+    marginTop: -6,
+    marginBottom: 4,
+    lineHeight: 16,
   },
 
 });

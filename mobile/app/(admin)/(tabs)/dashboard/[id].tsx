@@ -103,9 +103,9 @@ export default function DashboardAppointmentDetail() {
       .join(", ") || "—";
   const customer = appointment?.customer
     ? `${appointment.customer.firstName} ${appointment.customer.lastName}`
-    : "—";
+    : "Silinmiş Hesap";
   const customerContact = appointment?.customer?.phone || "—";
-  const customerContact2 = appointment?.customer?.email || "—";
+  const customerContact2 = appointment?.customer?.email || "Silinmiş Hesap";
 
   const canAct = status === "SCHEDULED" || status === "EXPIRED";
 

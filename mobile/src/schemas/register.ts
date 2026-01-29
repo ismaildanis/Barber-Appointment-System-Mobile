@@ -12,6 +12,10 @@ export const registerSchema = z.object({
       "Telefon numarası en az 10 haneli olmalı."
     ),
   password: z.string().min(8, "Şifre en az 8 karakter olmalı."),
+  passwordConfirm: z.string().min(8, "Şifre en az 8 karakter olmalı."),
+}).refine((data) => data.password === data.passwordConfirm, {
+  message: "Şifreler eşleşmiyor.",
+  path: ["passwordConfirm"],
 });
 
 export type RegisterSchema = z.infer<typeof registerSchema>;

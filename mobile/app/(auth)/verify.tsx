@@ -82,38 +82,40 @@ export default function Verify() {
         }
       >
         <View style={styles.container}>
-          <Text style={styles.title}>Gönderilen 6 Haneli Kodu Girin</Text>
-          {email && <Text style={styles.subtitle}>Email: {email}</Text>}
-          {apiError && <Text style={styles.error}>{apiError}</Text>}
-          {zodCodeError && <Text style={styles.error}>{zodCodeError}</Text>}
+          <View style={styles.formWrapper}>
+            <Text style={styles.title}>Gönderilen 6 Haneli Kodu Girin</Text>
+            {email && <Text style={styles.subtitle}>Email: {email}</Text>}
+            {apiError && <Text style={styles.error}>{apiError}</Text>}
+            {zodCodeError && <Text style={styles.error}>{zodCodeError}</Text>}
 
-          <Controller
-            control={control}
-            name="code"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="6 haneli kod"
-                placeholderTextColor="#4e4e4e"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                keyboardType="number-pad"
-                maxLength={6}
-              />
-            )}
-          />
+            <Controller
+              control={control}
+              name="code"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="6 haneli kod"
+                  placeholderTextColor="#4e4e4e"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  keyboardType="number-pad"
+                  maxLength={6}
+                />
+              )}
+            />
 
-          <View style={styles.actions}>
-            <TouchableOpacity onPress={onSubmit} style={styles.primaryBtn} disabled={verifyReset.isPending}>
-              <Text style={styles.primaryText}>
-                {verifyReset.isPending ? "Doğrulanıyor..." : "Doğrula"}
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.actions}>
+              <TouchableOpacity onPress={onSubmit} style={styles.primaryBtn} disabled={verifyReset.isPending}>
+                <Text style={styles.primaryText}>
+                  {verifyReset.isPending ? "Doğrulanıyor..." : "Doğrula"}
+                </Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => router.replace("/login")} activeOpacity={0.7}>
-              <Text style={styles.link}>Giriş ekranına dön</Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => router.replace("/login")} activeOpacity={0.7}>
+                <Text style={styles.link}>Giriş ekranına dön</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ParallaxScrollView>
@@ -149,5 +151,10 @@ const styles = StyleSheet.create({
   primaryText: { color: "#1e1e1e", fontSize: 16, fontWeight: "bold" },
   link: { color: "#E4D2AC", fontSize: 16, fontWeight: "bold" },
   subtitle: { color: "#ccc", fontSize: 14, textAlign: "center", marginBottom: 8 },
-
+  formWrapper: {
+    width: "100%",
+    alignSelf: "center",
+    maxWidth: 420,
+    gap: 12,
+  },
 });

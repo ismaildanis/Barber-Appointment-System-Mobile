@@ -1,4 +1,4 @@
-import { useUnifiedMe, useUnifiedLogout, useUpdateCustomer } from "@/src/hooks/useUnifiedAuth";
+import { useUnifiedMe, useUnifiedLogout, useUpdateCustomer, useDeleteCustomer } from "@/src/hooks/useUnifiedAuth";
 import Spinner from "@/components/ui/Spinner";
 import {
   RefreshControl,
@@ -8,7 +8,8 @@ import {
   View,
   Text,
   Alert,
-  TextInput 
+  TextInput, 
+  Modal
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -22,12 +23,15 @@ export default function CustomerProfile() {
   const { data, isLoading, isError, refetch, isRefetching } = useUnifiedMe();
   const logout = useUnifiedLogout();
   const updateCustomer = useUpdateCustomer();
+  const deleteCustomer = useDeleteCustomer();
 
   const [isEditing, setIsEditing] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
 
+  const [open, setOpen] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
   const onLogout = () => {
     logout.mutate(undefined, {
       onSuccess: () => {
@@ -55,6 +59,34 @@ export default function CustomerProfile() {
     setPhone("");
   };
 
+  const onDeleteAccount = () => {
+    Alert.alert(
+      "Hesabı Sil",
+      "Hesabınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+      [
+        { text: "İptal", style: "cancel", onPress: () => {
+          setOpen(false);
+          setConfirmText("");
+        }},
+        { text: "Sil", style: "destructive", onPress: deleteConfirmed }
+      ]
+    );
+  }
+
+  const deleteConfirmed = () => {
+    deleteCustomer.mutate(undefined, {
+
+      onSuccess: () => {
+        setOpen(false);
+        setConfirmText("");
+        Alert.alert("Hesabınız silindi");
+        router.replace("/(auth)/login")
+      },
+      onError: (err: any) => {
+        Alert.alert("Hata", "Hesabınız silinemedi");
+      }
+    });
+  };
   const saveChanges = () => {
     if (!firstName.trim() || !lastName.trim()) {
       Alert.alert("Uyarı", "Lütfen tüm alanları doldurun");
@@ -289,6 +321,7 @@ export default function CustomerProfile() {
           <Text style={styles.changeText}>Şifre Değiştir</Text>
         </TouchableOpacity>
 
+        
         {/* Logout */}
         <TouchableOpacity
           onPress={onLogout}
@@ -306,6 +339,84 @@ export default function CustomerProfile() {
             {logout.isPending ? "Çıkış yapılıyor..." : "Çıkış Yap"}
           </Text>
         </TouchableOpacity>
+
+        <View style={styles.dividerDanger} />
+
+        <TouchableOpacity
+          onPress={() => setOpen(true)}
+          disabled={logout.isPending}
+          style={[styles.logoutBtn, logout.isPending && { opacity: 0.6 }]}
+          activeOpacity={0.8}
+        >
+          
+          <Ionicons
+            name="trash-outline"
+            size={20}
+            color="#fff"
+            style={{ marginRight: 8 }}
+          />
+          <Text style={styles.logoutText}>
+            {deleteCustomer.isPending ? "Hesap siliniyor..." : "Hesabımı Sil"}
+          </Text>
+        </TouchableOpacity>
+
+        {open && (
+          <Modal
+            animationType="fade"
+            transparent
+            visible={open}
+            onRequestClose={() => setOpen(false)}
+          >
+            <View style={styles.overlay}>
+              <View style={styles.modal}>
+
+                <Text style={styles.title1}>Hesabı Sil</Text>
+
+                <Text style={styles.desc}>
+                  Bu işlem geri alınamaz. Devam etmek için aşağıya{" "}
+                  <Text style={{ fontWeight: "700" }}>sil</Text> yazın.
+                </Text>
+
+                <TextInput
+                  value={confirmText}
+                  onChangeText={setConfirmText}
+                  placeholder="sil"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  style={styles.input1}
+                />
+
+                <View style={styles.actions}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setOpen(false);
+                      setConfirmText("");
+                    }}
+                    style={styles.cancelBtn1}
+                  >
+                    <Text style={styles.cancelText}>Vazgeç</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    disabled={confirmText !== "sil"}
+                    onPress={() => {
+                      onDeleteAccount();
+                    }}
+                    style={[
+                      styles.deleteBtn,
+                      confirmText !== "sil" && { opacity: 0.5 },
+                    ]}
+                  >
+                    <Text style={styles.deleteText}>Hesabı Sil</Text>
+                  </TouchableOpacity>
+                </View>
+
+              </View>
+            </View>
+          </Modal>
+        )}
+
+      
       </ScrollView>
     </SafeAreaView>
   );
@@ -432,6 +543,12 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
 
+  dividerDanger: {
+    height: 3,
+    backgroundColor: "#1e1e1e",
+    marginVertical: 32,
+  },
+
   changeBtn: {
     flexDirection: "row",
     alignItems: "center",
@@ -547,5 +664,64 @@ const styles = StyleSheet.create({
   cancelBtnText: {
     color: themeColors.text,
     fontWeight: "800",
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modal: {
+    width: "85%",
+    maxWidth: 360,
+    backgroundColor: "#121212",
+    borderRadius: 16,
+    padding: 20,
+  },
+  title1: {
+    fontSize: 18,
+    fontWeight: "800",
+    marginBottom: 8,
+    color: "#fff",
+  },
+  desc: {
+    fontSize: 14,
+    color: "#555",
+    marginBottom: 12,
+  },
+  input1: {
+    borderWidth: 1,
+    borderColor: "#1f1f1f",
+    borderRadius: 10,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 16,
+    color: "#fff",
+  },
+  actions: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  cancelBtn1: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 10,
+    backgroundColor: "#e5e7eb",
+    alignItems: "center",
+  },
+  cancelText: {
+    fontWeight: "700",
+    color: "#111",
+  },
+  deleteBtn: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 10,
+    backgroundColor: "#ef4444",
+    alignItems: "center",
+  },
+  deleteText: {
+    fontWeight: "800",
+    color: "#fff",
   },
 });

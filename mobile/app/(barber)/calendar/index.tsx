@@ -51,7 +51,7 @@ const BarberAppointmentCard = ({ item }: CardProps) => {
       <View style={styles.infoRow}>
         <Ionicons name="person-circle" size={18} color="#d1d5db" />
         <Text style={styles.text} numberOfLines={1}>
-          {item.customer?.firstName} {item.customer?.lastName}
+          {`${item.customer?.firstName || "Silinmiş"} ${item.customer?.lastName || "Hesap"}`}
         </Text>
       </View>
       <View style={styles.infoRow}>

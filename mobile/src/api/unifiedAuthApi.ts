@@ -101,6 +101,7 @@ export const unifiedAuthApi = {
   registerNotification: async (token: string) => await api.post("/unified-auth/push/register", { token }).then(r => r.data),
 
   updateCustomer: async (data: UpdateCustomer) => await api.put("/customer/update", data).then(r => r.data),
+  deleteCustomer: async () => await api.delete("/customer/delete").then(r => r.data),
 };
 
 export { api as authedApi };

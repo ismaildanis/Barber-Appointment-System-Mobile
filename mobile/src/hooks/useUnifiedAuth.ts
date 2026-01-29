@@ -114,4 +114,14 @@ export const useUpdateCustomer = () => {
     })
 }
 
+export const useDeleteCustomer = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: () => unifiedAuthApi.deleteCustomer(),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: keyMe })
+        }
+    })
+}
+
 

@@ -23,7 +23,7 @@ export default function TodayAppointments() {
   const total = hasData ? todayAppointments!.length : 0;
   const planned = hasData ? todayAppointments!.filter((a) => a.status === "SCHEDULED").length : 0;
   const done = hasData ? todayAppointments!.filter((a) => a.status === "COMPLETED").length : 0;
-  const cancelled = hasData ? todayAppointments!.filter((a) => a.status === "CANCELLED").length : 0;
+  const cancelled = hasData ? todayAppointments!.filter((a) => a.status === "CANCELLED" || a.status === "BARBER_CANCELLED").length : 0;
   const weekday = new Date(today)
     .toLocaleDateString("tr-TR", { weekday: "long" })
     .replace(".", "");

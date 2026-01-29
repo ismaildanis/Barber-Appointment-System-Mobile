@@ -37,7 +37,7 @@ export const statusColor: Record<Status, string> = {
 };
 export interface Appointment {
     id: number;
-    customerId: number;
+    customerId?: number | null;
     barberId: number;
     appointmentStartAt: string;
     appointmentEndAt: string;
@@ -53,7 +53,7 @@ export interface Appointment {
 
 export interface AdminAppointment {
     id: number;
-    customerId: number;
+    customerId?: number | null;
     barberId: number;
     appointmentStartAt: string;
     appointmentEndAt: string;
@@ -70,7 +70,7 @@ export interface AdminAppointment {
 
 export interface BarberAppointment {
     id: number;
-    customerId: number;
+    customerId?: number | null;
     barberId: number;
     appointmentStartAt: string;
     appointmentEndAt: string;

@@ -79,56 +79,58 @@ export default function Reset() {
         }
       >
         <View style={styles.container}>
-          <Text style={styles.title}>Yeni Şifre Belirle</Text>
+          <View style={styles.formWrapper}>
+            <Text style={styles.title}>Yeni Şifre Belirle</Text>
 
-          {apiError && <Text style={styles.error}>{apiError}</Text>}
-          {zodPassError && <Text style={styles.error}>{zodPassError}</Text>}
-          {zodConfirmError && <Text style={styles.error}>{zodConfirmError}</Text>}
+            {apiError && <Text style={styles.error}>{apiError}</Text>}
+            {zodPassError && <Text style={styles.error}>{zodPassError}</Text>}
+            {zodConfirmError && <Text style={styles.error}>{zodConfirmError}</Text>}
 
-          <Controller
-            control={control}
-            name="newPassword"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Yeni şifre"
-                placeholderTextColor="#4e4e4e"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                secureTextEntry
-                autoCapitalize="none"
-              />
-            )}
-          />
+            <Controller
+              control={control}
+              name="newPassword"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Yeni şifre"
+                  placeholderTextColor="#4e4e4e"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  secureTextEntry
+                  autoCapitalize="none"
+                />
+              )}
+            />
 
-          <Controller
-            control={control}
-            name="confirm"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Yeni şifre (tekrar)"
-                placeholderTextColor="#4e4e4e"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                secureTextEntry
-                autoCapitalize="none"
-              />
-            )}
-          />
+            <Controller
+              control={control}
+              name="confirm"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Yeni şifre (tekrar)"
+                  placeholderTextColor="#4e4e4e"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  secureTextEntry
+                  autoCapitalize="none"
+                />
+              )}
+            />
 
-          <View style={styles.actions}>
-            <TouchableOpacity onPress={onSubmit} style={styles.primaryBtn} disabled={resetPassword.isPending}>
-              <Text style={styles.primaryText}>
-                {resetPassword.isPending ? "Kaydediliyor..." : "Şifreyi Güncelle"}
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.actions}>
+              <TouchableOpacity onPress={onSubmit} style={styles.primaryBtn} disabled={resetPassword.isPending}>
+                <Text style={styles.primaryText}>
+                  {resetPassword.isPending ? "Kaydediliyor..." : "Şifreyi Güncelle"}
+                </Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => router.replace("/login")} activeOpacity={0.7}>
-              <Text style={styles.link}>Giriş ekranına dön</Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => router.replace("/login")} activeOpacity={0.7}>
+                <Text style={styles.link}>Giriş ekranına dön</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ParallaxScrollView>
@@ -163,4 +165,10 @@ const styles = StyleSheet.create({
   },
   primaryText: { color: "#1e1e1e", fontSize: 16, fontWeight: "bold" },
   link: { color: "#E4D2AC", fontSize: 16, fontWeight: "bold" },
+  formWrapper: {
+    width: "100%",
+    alignSelf: "center",
+    maxWidth: 420,
+    gap: 12,
+  },
 });

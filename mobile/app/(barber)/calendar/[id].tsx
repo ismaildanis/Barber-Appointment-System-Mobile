@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, TextInput, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, TextInput, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import Spinner from "@/components/ui/Spinner";
-import { useCancelBarberAppointment, useGetBarberOneAppointment, useMarkScheduledAppointment } from "@/src/hooks/useAppointmentQuery";
+import { useCancelBarberAppointment, useGetBarberOneAppointment, useMarkCompletedBarber, useMarkNoShowBarber } from "@/src/hooks/useAppointmentQuery";
 import { statusLabel, statusColor, AppointmentService } from "@/src/types/appointment";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
@@ -14,7 +14,8 @@ export default function CalendarDetails() {
   const [reason, setReason] = useState("");
   const { data, isLoading, isError, refetch } = useGetBarberOneAppointment(apptId);
   const cancelMutation = useCancelBarberAppointment(apptId);
-  const completedMutation = useMarkScheduledAppointment();
+  const completedMutation = useMarkCompletedBarber();
+  const noShowMutation = useMarkNoShowBarber();
 
   if (isLoading) return (
     <View style={styles.container}>
@@ -25,7 +26,7 @@ export default function CalendarDetails() {
   if (isError || !data) return (
     <View style={styles.container}>
       <Text style={styles.empty}>Randevu yüklenemedi.</Text>
-      <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+      <TouchableOpacity style={styles.backBtn} onPress={() => router.replace("/(barber)/calendar")}>
         <Ionicons name="arrow-back" size={22} color="#fff" />
       </TouchableOpacity>
     </View>
@@ -39,17 +40,49 @@ export default function CalendarDetails() {
   const badgeColor = statusColor[data.status] || "#a3a3a3";
 
   const handleMarkCompleted = () => {
+    Alert.alert(
+      "Randevuyu Tamamlandı Olarak İşaretle",
+      "Bu işlemi yapmak istediğinize emin misiniz?",
+      [
+        { text: "İptal", style: "cancel" },
+        { text: "Evet", onPress: markCompletedConfirmed },
+      ]
+    );
+  }
+
+  const markCompletedConfirmed = () => {
     completedMutation.mutate(apptId, { onSuccess: () => {
+      router.replace("/(barber)/calendar");
+      refetch();
+    }});
+  };
+      
+
+  const handleMarkNoShow = () => {
+    Alert.alert(
+      "Randevuyu Gelinmedi Olarak İşaretle",
+      "Bu işlemi yapmak istediğinize emin misiniz?",
+      [
+        { text: "İptal", style: "cancel" },
+        { text: "Evet", onPress: markNoShowConfirmed },
+      ]
+    );
+  };
+      
+  const markNoShowConfirmed = () => {
+    noShowMutation.mutate(apptId, { onSuccess: () => {
       router.replace("/(barber)/calendar");
       refetch();
     }});
   }
 
+
   return (
     <View style={styles.container}>
-     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10, marginTop: 24 }}>
+     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10, marginTop: 24 }}>       
         <TouchableOpacity style={styles.backBtn} onPress={() => router.replace("/(barber)/calendar")}>
           <Ionicons name="arrow-back" size={20} color="#fff" />
+          <Text style={{ color: "#fff", fontSize: 16 }}>Randevular</Text>
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={{ gap: 16, paddingTop: 6 }}>
@@ -63,10 +96,10 @@ export default function CalendarDetails() {
             </View>
           </View>
           <Text style={styles.bigName} numberOfLines={1}>
-            {data.customer?.firstName} {data.customer?.lastName}
+            {`${data?.customer?.firstName ?? "Silinmiş"} ${data?.customer?.lastName ?? "Hesap"}`}
           </Text>
-          <Text style={styles.meta}>Telefon: {data.customer?.phone || "—"}</Text>
-          <Text style={styles.meta}>Email: {data.customer?.email}</Text>
+          <Text style={styles.meta}>Telefon: {data?.customer?.phone ?? "—"}</Text>
+          <Text style={styles.meta}>Email: {data?.customer?.email ?? "—"}</Text>
           <Text style={styles.meta}>Hizmetler: {services}</Text>
         </View>
 
@@ -81,30 +114,41 @@ export default function CalendarDetails() {
           ) : null}
         </View>
 
-        {data.status === "SCHEDULED" && (
-          <TouchableOpacity
-            onPress={() => setReasonOpen(true)}
-            style={[styles.btnDanger, cancelMutation.isPending && { opacity: 0.7 }]}
-            disabled={cancelMutation.isPending}
-          >
-            <Text style={styles.btnTextCancel}>
-              Randevuyu İptal Et
-            </Text>
-          </TouchableOpacity>
-        )}
+          {data.status === "SCHEDULED" && (
+            <TouchableOpacity
+              onPress={() => setReasonOpen(true)}
+              style={[styles.btnDanger, cancelMutation.isPending && { opacity: 0.7 }]}
+              disabled={cancelMutation.isPending}
+            >
+              <Text style={styles.btnTextCancel}>
+                Randevuyu İptal Et
+              </Text>
+            </TouchableOpacity>
+          )}
 
-        {data.status === "SCHEDULED" && (
-          <TouchableOpacity
-            onPress={() => handleMarkCompleted()}
-            style={[styles.btnCompleted, completedMutation.isPending && { opacity: 0.7 }]}
-            disabled={completedMutation.isPending}
-          >
-            <Text style={styles.btnText}>
-              Randevuyu Tamamlandı Olarak işaretle
-            </Text>
-          </TouchableOpacity>
-        )}
+          {data.status === "SCHEDULED" && (
+            <TouchableOpacity
+              onPress={() => handleMarkCompleted()}
+              style={[styles.btnCompleted, completedMutation.isPending && { opacity: 0.7 }]}
+              disabled={completedMutation.isPending}
+            >
+              <Text style={styles.btnTextCompleted}>
+                Randevuyu Tamamlandı Olarak işaretle
+              </Text>
+            </TouchableOpacity>
+          )}
 
+          {data.status === "SCHEDULED" && (
+            <TouchableOpacity
+              onPress={() => handleMarkNoShow()}
+              style={[styles.btnNoShow, noShowMutation.isPending && { opacity: 0.7 }]}
+              disabled={noShowMutation.isPending}
+            >
+              <Text style={styles.btnTextNoShow}>
+                Randevuya gelinmedi olarak işaretle
+              </Text>
+            </TouchableOpacity>
+          )}
         <Modal transparent visible={reasonOpen} animationType="slide" onRequestClose={() => setReasonOpen(false)}>
           <KeyboardAvoidingView
             style={{ flex: 1, justifyContent: "flex-end" }}
@@ -158,6 +202,7 @@ export default function CalendarDetails() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 18, backgroundColor: "#0f0f0f", paddingBottom: 100 },
   backBtn: {
+      flexDirection: "row",
       padding: 12,
       borderRadius: 18,
       backgroundColor: "rgba(255,255,255,0.08)",
@@ -165,6 +210,7 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       marginBottom: 12,
       marginTop: 12,
+      gap: 12
   },
   title: { fontSize: 24, fontWeight: "800", color: "#fff", marginBottom: 4 },
   heroCard: {
@@ -192,10 +238,12 @@ const styles = StyleSheet.create({
   value: { fontSize: 15, fontWeight: "700", color: "#e5e7eb" },
   meta: { fontSize: 14, color: "rgba(255,255,255,0.9)" },
   note: { fontSize: 13, color: "#fbbf24" },
-  btnDanger: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#ef4444" },
-  btnCompleted: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#E4D2AC" },
-  btnText: { color: "#121212", fontWeight: "800", textAlign: "center" },
-  btnTextCancel: { color: "#fff", fontWeight: "800", textAlign: "center" },
+  btnDanger: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#1e1e1e", borderColor: "#ef4444", borderWidth: 1 },
+  btnCompleted: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#1e1e1e", borderColor: "#E4D2AC", borderWidth: 1 },
+  btnNoShow: { marginTop: 6, padding: 16, borderRadius: 16, backgroundColor: "#1e1e1e", borderColor: "#a855f7", borderWidth: 1 },
+  btnTextNoShow: { color: "#a855f7", fontWeight: "800", textAlign: "center" },
+  btnTextCancel: { color: "#ef4444", fontWeight: "800", textAlign: "center" },
+  btnTextCompleted: { color: "#E4D2AC", fontWeight: "800", textAlign: "center" },
   empty: { color: "#ccc" },
   overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)", justifyContent: "flex-end" },
   modal: { backgroundColor: "#1a1a1a", padding: 16, borderTopLeftRadius: 16, borderTopRightRadius: 16 },

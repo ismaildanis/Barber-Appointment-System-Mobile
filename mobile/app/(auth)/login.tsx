@@ -98,95 +98,8 @@ export default function LoginScreen() {
           }
         >
           <View style={styles.container}>
-            <Text style={styles.title}>Giriş Yap</Text>
-            {handleZodError && <Text style={{ color: "red" }}>{handleZodError}</Text>}
-            {apiError && <Text style={{ color: "red" }}>{apiError}</Text>}
-
-            <Controller
-              control={control}
-              name="email"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={styles.input}
-                  placeholder="Email"
-                  placeholderTextColor={"#888"}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  keyboardType="email-address"
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="password"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <View style={styles.passwordContainer}>
-                  <TextInput
-                    style={styles.passwordInput}
-                    placeholder="Şifre"
-                    placeholderTextColor="#888"
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                    secureTextEntry={!showPassword}
-                    autoCapitalize="none"
-                  />
-                  <TouchableOpacity
-                    style={styles.eyeButton}
-                    onPress={() => setShowPassword(!showPassword)}
-                  >
-                    <Ionicons
-                      name={showPassword ? "eye-off-outline" : "eye-outline"}
-                      size={22}
-                      color="#888"
-                    />
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
-
-            <View style={{ flexDirection: "column", alignItems: "flex-end", justifyContent: "center" }}>
-              <TouchableOpacity onPress={() => router.replace("/forgot")}>
-                <Text style={{ color: "#fff", fontSize: 16 }}>Şifremi Unuttum</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={{ flexDirection: "column", alignItems: "center", gap: 30, marginTop: 20 }}>
-              <TouchableOpacity
-                onPress={onSubmit}
-                style={{ paddingVertical: 12, alignItems: "center", paddingHorizontal: 24, backgroundColor: "#E4D2AC", borderRadius: 5 }}
-              >
-                <Text style={{ color: "#1e1e1e", fontSize: 16, fontWeight: "bold" }}>
-                  {login.isPending ? "Giriş yapılıyor..." : "Giriş Yap"}
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => router.replace("/register")} activeOpacity={0.7}>
-                <Text style={{ color: "#E4D2AC", fontSize: 16, fontWeight: "bold" }}>
-                  Hesabınız yok mu? Kayıt Ol
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </ParallaxScrollView>
-          
-      ) : (
-        <ScrollView style={{ flex: 1, backgroundColor: "#121212" }}>
-          <SafeAreaView>
-            <LinearGradient
-              colors={["#E4D2AC", "#AD8C57"]}
-              start={{ x: 0, y: 0.5 }}
-              end={{ x: 1, y: 0.5 }}
-              style={{ height: 220, alignItems: "center", justifyContent: "center" }}
-            >
-              <Image source={require("@/assets/logo/logoForeground.png")} style={styles.logo} />
-            </LinearGradient>
-
-            <View style={[styles.container, { flexGrow: 1, backgroundColor: "#121212" }]}>
+            <View style={styles.formWrapper}>
+    
               <Text style={styles.title}>Giriş Yap</Text>
               {handleZodError && <Text style={{ color: "red" }}>{handleZodError}</Text>}
               {apiError && <Text style={{ color: "red" }}>{apiError}</Text>}
@@ -198,7 +111,7 @@ export default function LoginScreen() {
                   <TextInput
                     style={styles.input}
                     placeholder="Email"
-                    placeholderTextColor={"#4e4e4e"}
+                    placeholderTextColor={"#888"}
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -213,18 +126,28 @@ export default function LoginScreen() {
                 control={control}
                 name="password"
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Sifre"
-                    placeholderTextColor={"#4e4e4e"}
-                    value={value}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    secureTextEntry
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    textContentType="password"
-                  />
+                  <View style={styles.passwordContainer}>
+                    <TextInput
+                      style={styles.passwordInput}
+                      placeholder="Şifre"
+                      placeholderTextColor="#888"
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                      secureTextEntry={!showPassword}
+                      autoCapitalize="none"
+                    />
+                    <TouchableOpacity
+                      style={styles.eyeButton}
+                      onPress={() => setShowPassword(!showPassword)}
+                    >
+                      <Ionicons
+                        name={showPassword ? "eye-off-outline" : "eye-outline"}
+                        size={22}
+                        color="#888"
+                      />
+                    </TouchableOpacity>
+                  </View>
                 )}
               />
 
@@ -249,7 +172,89 @@ export default function LoginScreen() {
                     Hesabınız yok mu? Kayıt Ol
                   </Text>
                 </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </ParallaxScrollView>
+          
+      ) : (
+        <ScrollView style={{ flex: 1, backgroundColor: "#121212"}}>
+          <SafeAreaView>
+            <LinearGradient
+              colors={["#E4D2AC", "#AD8C57"]}
+              start={{ x: 0, y: 0.5 }}
+              end={{ x: 1, y: 0.5 }}
+              style={{ height: 220, alignItems: "center", justifyContent: "center" }}
+            >
+              <Image source={require("@/assets/logo/logoForeground.png")} style={styles.logo} />
+            </LinearGradient>
 
+            <View style={[styles.container, { flexGrow: 1, backgroundColor: "#121212" }]}>
+              <View style={styles.formWrapper}>
+                <Text style={styles.title}>Giriş Yap</Text>
+                {handleZodError && <Text style={{ color: "red" }}>{handleZodError}</Text>}
+                {apiError && <Text style={{ color: "red" }}>{apiError}</Text>}
+
+                <Controller
+                  control={control}
+                  name="email"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Email"
+                      placeholderTextColor={"#4e4e4e"}
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      keyboardType="email-address"
+                    />
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Sifre"
+                      placeholderTextColor={"#4e4e4e"}
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      secureTextEntry
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      textContentType="password"
+                    />
+                  )}
+                />
+
+                <View style={{ flexDirection: "column", alignItems: "flex-end", justifyContent: "center" }}>
+                  <TouchableOpacity onPress={() => router.replace("/forgot")}>
+                    <Text style={{ color: "#fff", fontSize: 16 }}>Şifremi Unuttum</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={{ flexDirection: "column", alignItems: "center", gap: 30, marginTop: 20 }}>
+                  <TouchableOpacity
+                    onPress={onSubmit}
+                    style={{ paddingVertical: 12, alignItems: "center", paddingHorizontal: 24, backgroundColor: "#E4D2AC", borderRadius: 5 }}
+                  >
+                    <Text style={{ color: "#1e1e1e", fontSize: 16, fontWeight: "bold" }}>
+                      {login.isPending ? "Giriş yapılıyor..." : "Giriş Yap"}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => router.replace("/register")} activeOpacity={0.7}>
+                    <Text style={{ color: "#E4D2AC", fontSize: 16, fontWeight: "bold" }}>
+                      Hesabınız yok mu? Kayıt Ol
+                    </Text>
+                  </TouchableOpacity>
+
+                </View>
               </View>
             </View>
           </SafeAreaView>
@@ -309,5 +314,11 @@ const styles = StyleSheet.create({
     padding: 14,
     justifyContent: "center",
     alignItems: "center",
+  },
+  formWrapper: {
+    width: "100%",
+    alignSelf: "center",
+    maxWidth: 420,
+    gap: 12,
   },
 });

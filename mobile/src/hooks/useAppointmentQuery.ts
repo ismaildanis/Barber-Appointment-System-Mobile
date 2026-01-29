@@ -148,6 +148,22 @@ export const useGetBreaksForBarber = () =>
         staleTime: 5 * 60 * 1000
     })
 
+export const useMarkCompletedBarber = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => appointmentApi.markCompletedBarber(id),    
+    ...makeOptimistic(queryClient, "SCHEDULED"),
+  });
+};
+
+export const useMarkNoShowBarber = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => appointmentApi.markNoShowBarber(id),    
+    ...makeOptimistic(queryClient, "SCHEDULED"),
+  });
+};
+
 //Admin
 
 export const useGetAdminAppointments = (status: Status, date: string) => 
@@ -215,13 +231,5 @@ export const useMarkCompletedAppointment = () => {
   return useMutation({
     mutationFn: (id: number) => appointmentApi.markCompletedAppointment(id),
     ...makeOptimistic(queryClient, "COMPLETED"),
-  });
-};
-
-export const useMarkScheduledAppointment = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (id: number) => appointmentApi.markCompletedBarber(id),    
-    ...makeOptimistic(queryClient, "SCHEDULED"),
   });
 };

@@ -58,39 +58,41 @@ export default function Forgot() {
         }
       >
         <View style={styles.container}>
-          <Text style={styles.title}>Şifremi Unuttum</Text>
+          <View style={styles.formWrapper}>
+            <Text style={styles.title}>Şifremi Unuttum</Text>
 
-          {apiError && <Text style={styles.error}>{apiError}</Text>}
-          {handleZodError && <Text style={styles.error}>{handleZodError}</Text>}
+            {apiError && <Text style={styles.error}>{apiError}</Text>}
+            {handleZodError && <Text style={styles.error}>{handleZodError}</Text>}
 
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#4e4e4e"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType="email-address"
-              />
-            )}
-          />
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  placeholderTextColor="#4e4e4e"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                />
+              )}
+            />
 
-          <View style={styles.actions}>
-            <TouchableOpacity onPress={onSubmit} style={styles.primaryBtn} disabled={forgot.isPending}>
-              <Text style={styles.primaryText}>
-                {forgot.isPending ? "Gönderiliyor..." : "Kod Gönder"}
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.actions}>
+              <TouchableOpacity onPress={onSubmit} style={styles.primaryBtn} disabled={forgot.isPending}>
+                <Text style={styles.primaryText}>
+                  {forgot.isPending ? "Gönderiliyor..." : "Kod Gönder"}
+                </Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => router.replace("/login")} activeOpacity={0.7}>
-              <Text style={styles.link}>Giriş ekranına dön</Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => router.replace("/login")} activeOpacity={0.7}>
+                <Text style={styles.link}>Giriş ekranına dön</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ParallaxScrollView>
@@ -125,4 +127,10 @@ const styles = StyleSheet.create({
   },
   primaryText: { color: "#1e1e1e", fontSize: 16, fontWeight: "bold" },
   link: { color: "#E4D2AC", fontSize: 16, fontWeight: "bold" },
+  formWrapper: {
+    width: "100%",
+    alignSelf: "center",
+    maxWidth: 420,
+    gap: 12,
+  },
 });
