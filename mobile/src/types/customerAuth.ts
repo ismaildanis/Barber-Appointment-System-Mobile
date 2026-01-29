@@ -5,7 +5,7 @@ export interface Customer {
   firstName: string;
   lastName: string;
   email: string;
-  phone?: string;
+  phone?: string | null
   role: Role;
 }
 
@@ -26,11 +26,11 @@ export type RegisterRequest = {
   lastName: string;
   email: string;
   password: string;
-  phone?: string;
+  phone?: string | null
 }
 
 export interface UpdateCustomer {
-    firstName: string;
-    lastName: string;
-    phone: string
+    firstName?: string;
+    lastName?: string;
+    phone?: string | null
 }

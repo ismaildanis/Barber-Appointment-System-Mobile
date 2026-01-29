@@ -119,13 +119,13 @@ export default function BarberProfile() {
   };
 
   const saveChanges = () => {
-    if (!firstName.trim() || !lastName.trim() || !phone.trim()) {
+    if (!firstName.trim() || !lastName.trim()) {
       Alert.alert("Uyarı", "Lütfen tüm alanları doldurun");
       return;
     }
 
     updateBarber.mutate(
-      { firstName: firstName.trim(), lastName: lastName.trim(), phone: phone.trim() },
+      { firstName: firstName.trim(), lastName: lastName.trim(), phone: phone.trim() ? phone.trim() : null },
       {
         onSuccess: () => {
           Alert.alert("Başarılı", "Bilgileriniz güncellendi");
@@ -194,14 +194,15 @@ export default function BarberProfile() {
                 placeholderTextColor="rgba(255,255,255,0.4)"
               />
 
-              <Text style={styles.label}>Telefon</Text>
+              <Text style={styles.label}>Telefon (Telefon numarasını boş bırakarak silebilirsiniz!)</Text>
               <TextInput
                 style={styles.input}
                 value={phone}
                 onChangeText={setPhone}
-                placeholder="Telefon"
+                placeholder="5XX XXX XX XX"
                 placeholderTextColor="rgba(255,255,255,0.4)"
                 keyboardType="phone-pad"
+                maxLength={10}
               />
 
               <Text style={styles.label}>E-posta</Text>

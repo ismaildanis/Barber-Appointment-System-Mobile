@@ -5,7 +5,7 @@ export interface Barber {
   firstName: string;
   lastName: string;
   email: string;
-  phone?: string;
+  phone?: string | null
   role: Role;
 }
 
@@ -25,7 +25,7 @@ export interface RegisterRequest {
   name: string;
   email: string;
   password: string;
-  phone?: string;
+  phone?: string | null
 }
 
 export interface RegisterResponse {

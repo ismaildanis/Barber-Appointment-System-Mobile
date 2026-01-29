@@ -120,7 +120,7 @@ export default function AdminProfile() {
             </View>
             <View style={styles.infoContent}>
               <Text style={styles.label}>Telefon</Text>
-              <Text style={styles.value}>{data.phone ?? "—"}</Text>
+              {data.phone ? <Text style={styles.value}>{data.phone}</Text> : null}
             </View>
           </View>
 

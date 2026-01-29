@@ -61,7 +61,7 @@ export default function BarberList({
               </Text>
 
               <Text style={styles.phone}>
-                {formatTRPhone(item.phone)}
+                {formatTRPhone(item.phone ?? "")}
               </Text>
             </View>
           </View>

@@ -21,9 +21,9 @@ import { LinearGradient } from "expo-linear-gradient";
 export default function Register() {
   const router = useRouter();
   const register = useRegister();
-  const { control, handleSubmit, formState: { errors } } = useForm<RegisterSchema>({
+  const { control, handleSubmit, formState: { errors }, reset: controlReset } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { email: "", firstName: "", lastName: "", phone: "", password: "" },
+    defaultValues: { email: "", firstName: "", lastName: "", phone: "", password: "" }
   });
 
   const [alertVisible, setAlertVisible] = useState(false);
@@ -31,14 +31,21 @@ export default function Register() {
   const [alertMsg, setAlertMsg] = useState("");
 
   const onSubmit = handleSubmit((values) => {
-    register.mutate(values, {
+    register.mutate(
+    {
+      ...values,
+      phone: values.phone?.trim() ? values.phone.trim() : null,
+    },
+    {
       onSuccess: () => {
         setAlertTitle("Kayıt Başarılı");
         setAlertMsg("Giriş ekranına dönebilirsiniz.");
         setAlertVisible(true);
+        controlReset()
       },
     });
   });
+
 
   const apiError = (register.error as any)?.response?.data?.message;
   const zodErrors = Object.values(errors).map((e) => e?.message).filter(Boolean);
@@ -65,34 +72,35 @@ export default function Register() {
           {zodErrors.map((m, i) => (
             <Text key={i} style={styles.error}>{m}</Text>
           ))}
-
-          {([
-            { name: "email", label: "Email", secure: false, keyboard: "email-address", maxLength: 50 },
-            { name: "firstName", label: "Ad", secure: false, keyboard: "default", maxLength: 50 },
-            { name: "lastName", label: "Soyad", secure: false, keyboard: "default", maxLength: 50 },
-            { name: "phone", label: "Telefon", secure: false, keyboard: "phone-pad", maxLength:10 },
-            { name: "password", label: "Şifre", secure: true, keyboard: "default", maxLength: 50 },
-          ] as const).map((field) => (
-            <Controller
-              key={field.name}
-              control={control}
-              name={field.name}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={styles.input}
-                  placeholder={field.label}
-                  placeholderTextColor="#4e4e4e"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  secureTextEntry={field.secure}
-                  autoCapitalize="none"
-                  keyboardType={field.keyboard as any}
-                  maxLength={field.maxLength as any}
-                />
-              )}
-            />
-          ))}
+          <View style={styles.formWrapper}>
+            {([
+              { name: "firstName", label: "Ad", secure: false, keyboard: "default", maxLength: 50 },
+              { name: "lastName", label: "Soyad", secure: false, keyboard: "default", maxLength: 50 },
+              { name: "email", label: "Email", secure: false, keyboard: "email-address", maxLength: 50 },
+              { name: "phone", label: "Telefon", secure: false, keyboard: "phone-pad", maxLength:10 },
+              { name: "password", label: "Şifre", secure: true, keyboard: "default", maxLength: 50 },
+            ] as const).map((field) => (
+              <Controller
+                key={field.name}
+                control={control}
+                name={field.name}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={styles.input}
+                    placeholder={field.label}
+                    placeholderTextColor="#4e4e4e"
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    secureTextEntry={field.secure}
+                    autoCapitalize="none"
+                    keyboardType={field.keyboard as any}
+                    maxLength={field.maxLength as any}
+                  />
+                )}
+              />
+            ))}
+          </View>
 
           <View style={styles.actions}>
             <TouchableOpacity onPress={onSubmit} style={styles.primaryBtn} disabled={register.isPending}>
@@ -151,4 +159,11 @@ const styles = StyleSheet.create({
   },
   primaryText: { color: "#1e1e1e", fontSize: 16, fontWeight: "bold" },
   link: { color: "#E4D2AC", fontSize: 16, fontWeight: "bold" },
+  formWrapper: {
+    width: "100%",
+    alignSelf: "center",
+    maxWidth: 420,
+    gap: 12,
+  },
+
 });

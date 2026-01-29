@@ -65,7 +65,7 @@ export default function CalendarDetails() {
           <Text style={styles.bigName} numberOfLines={1}>
             {data.customer?.firstName} {data.customer?.lastName}
           </Text>
-          <Text style={styles.meta}>Telefon: {data.customer?.phone}</Text>
+          <Text style={styles.meta}>Telefon: {data.customer?.phone || "—"}</Text>
           <Text style={styles.meta}>Email: {data.customer?.email}</Text>
           <Text style={styles.meta}>Hizmetler: {services}</Text>
         </View>

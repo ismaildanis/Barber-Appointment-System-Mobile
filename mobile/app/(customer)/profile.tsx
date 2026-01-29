@@ -44,7 +44,7 @@ export default function CustomerProfile() {
   const startEditing = () => {
     setFirstName(data.firstName ?? "");
     setLastName(data.lastName ?? "");
-    setPhone(data.phone ?? "");
+    setPhone(data?.phone ?? "");
     setIsEditing(true);
   };
 
@@ -56,7 +56,7 @@ export default function CustomerProfile() {
   };
 
   const saveChanges = () => {
-    if (!firstName.trim() || !lastName.trim() || !phone.trim()) {
+    if (!firstName.trim() || !lastName.trim()) {
       Alert.alert("Uyarı", "Lütfen tüm alanları doldurun");
       return;
     }
@@ -65,7 +65,7 @@ export default function CustomerProfile() {
       {
         firstName: firstName.trim(),
         lastName: lastName.trim(),
-        phone: phone.trim(),
+        phone: phone.trim() ? phone.trim() : null,
       },
       {
         onSuccess: () => {
@@ -76,7 +76,7 @@ export default function CustomerProfile() {
         onError: (err: any) => {
           Alert.alert(
             "Hata",
-            err?.response?.data?.message || "Güncelleme başarısız"
+            err?.response?.data?.message 
           );
         },
       }
@@ -195,12 +195,12 @@ export default function CustomerProfile() {
                 placeholderTextColor={themeColors.textMuted}
               />
 
-              <Text style={styles.label}>Telefon</Text>
+              <Text style={styles.label}>Telefon (Telefon numarasını boş bırakarak silebilirsiniz!)</Text>
               <TextInput
                 style={styles.input}
                 value={phone}
                 onChangeText={setPhone}
-                placeholder="Telefon"
+                placeholder="5XX XXX XX XX"
                 placeholderTextColor={themeColors.textMuted}
                 keyboardType="phone-pad"
                 maxLength={10}
@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     color: themeColors.textDim,
-    marginBottom: 4,
+    margin: 4,
   },
   value: {
     fontSize: 16,

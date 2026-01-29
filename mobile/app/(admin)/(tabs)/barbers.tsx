@@ -70,8 +70,8 @@ export default function BarbersScreen() {
   };
 
   const onSubmit = () => {
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !phone.trim()) {
-      Alert.alert("Eksik Bilgi", "Ad, soyad, email ve telefon zorunludur.");
+    if (!firstName.trim() || !lastName.trim() || !email.trim()) {
+      Alert.alert("Eksik Bilgi", "Ad, soyad ve email zorunludur.");
       return;
     }
 
@@ -97,7 +97,7 @@ export default function BarbersScreen() {
           firstName: firstName.trim(),
           lastName: lastName.trim(),
           email: email.trim(),
-          phone: phone.trim(),
+          phone: phone.trim() ? phone.trim() : null,
           password: password.trim(),
         },
         {
@@ -141,7 +141,7 @@ export default function BarbersScreen() {
     setFirstName(item.firstName);
     setLastName(item.lastName);
     setEmail(item.email);
-    setPhone(item.phone);
+    setPhone(item.phone ?? "");
     setActive(item.active);
     setImageUri(item.image);
     setShowFormModal(true);
@@ -154,8 +154,7 @@ export default function BarbersScreen() {
 
   const filteredBarbers = (barbers || []).filter((item) =>
     `${item.firstName} ${item.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.phone.includes(searchQuery)
+    item.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const renderItem = ({ item }: { item: Barber }) => {
@@ -190,7 +189,7 @@ export default function BarbersScreen() {
               </View>
               <View style={styles.contactRow}>
                 <Ionicons name="call-outline" size={14} color="rgba(255,255,255,0.6)" />
-                <Text style={styles.contactText}>{item.phone}</Text>
+                {item.phone ? <Text style={styles.contactText}>{item.phone}</Text> : null}
               </View>
             </View>
           </View>
@@ -352,7 +351,7 @@ export default function BarbersScreen() {
 
               <View style={styles.formGroup}>
                 <Text style={styles.label}>
-                  Telefon <Text style={styles.required}>*</Text>
+                  Telefon <Text style={[styles.required, { fontSize: 12, color: "rgba(255,255,255,0.6)" }]}>(Opsiyonel)</Text>
                 </Text>
                 <TextInput
                   value={phone}

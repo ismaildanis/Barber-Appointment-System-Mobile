@@ -3,7 +3,7 @@ export interface Barber {
     firstName: string;
     lastName: string;
     email: string;
-    phone: string
+    phone?: string | null
     active: boolean
     image?: string
 }
@@ -12,7 +12,7 @@ export interface CreateBarber {
     lastName: string;
     email: string;
     password: string;
-    phone: string
+    phone?: string | null
 }
 
 export interface ActivityBarber {
@@ -22,5 +22,5 @@ export interface ActivityBarber {
 export interface UpdateBarber {
     firstName: string;
     lastName: string;
-    phone: string
+    phone?: string | null
 }
