@@ -1,53 +1,74 @@
+
 # Gizlilik Politikası
 
-Son güncelleme: Ocak 2026
+Son güncelleme: **Ocak 2026**
 
-Bu Gizlilik Politikası, Barber Appointment System mobil uygulamasının ("Uygulama")
-kişisel verilerinizi nasıl topladığını, kullandığını ve koruduğunu açıklar.
+Bu Gizlilik Politikası, **Berber Randevum** mobil uygulamasının (“Uygulama”) kişisel verileri nasıl topladığını, kullandığını ve koruduğunu açıklar.
 
 ## 1. Toplanan Veriler
 
 Uygulama kapsamında aşağıdaki kişisel veriler işlenebilir:
 
-- Ad ve soyad
-- Telefon numarası
-- E-posta adresi
-- Profil fotoğrafı (isteğe bağlı)
-- Randevu bilgileri ve randevu geçmişi
+* Ad ve soyad
+* E-posta adresi
+* **Telefon numarası (isteğe bağlı)**
+* Profil fotoğrafı (isteğe bağlı)
+* Randevu bilgileri ve randevu geçmişi
+
+ Telefon numarası **zorunlu değildir** ve yalnızca kullanıcı tarafından sağlanması halinde işlenir.
 
 ## 2. Kişisel Verilerin İşlenme Amacı
 
-Kişisel verileriniz yalnızca aşağıdaki amaçlarla işlenmektedir:
+Kişisel verileriniz yalnızca aşağıdaki amaçlarla işlenir:
 
-- Kullanıcı hesabının oluşturulması ve yönetilmesi
-- Randevu oluşturma ve yönetme hizmetlerinin sunulması
-- Randevu geçmişinin görüntülenmesi
-- Randevulara ilişkin bildirimlerin gönderilmesi (izin verilmesi halinde)
+* Kullanıcı hesabının oluşturulması ve yönetilmesi
+* Randevu oluşturma, görüntüleme ve yönetme
+* Randevu geçmişinin görüntülenmesi
+* Randevularla ilgili bildirimlerin gönderilmesi (kullanıcı izin verirse)
 
-## 3. Uygulama İzinleri
+## 3. Uygulama Kullanımı ve Hesap Sistemi
 
-- Bildirim izni, yalnızca randevu ile ilgili bilgilendirmeler için kullanılır.
-- Fotoğraf erişim izni, yalnızca profil fotoğrafı yüklemek istemeniz halinde talep edilir.
-- İzin verilmemesi durumunda uygulamanın temel işlevleri kullanılmaya devam edilebilir.
+* Uygulama **hesap bazlı** çalışmaktadır.
+* Uygulama, misafir (guest) erişim sunmaz.
+* Tüm özellikler yalnızca kayıtlı kullanıcılar içindir.
 
-## 4. Veri Paylaşımı
+## 4. Uygulama İzinleri
 
-Kişisel verileriniz **üçüncü kişilerle paylaşılmaz**.
-Verileriniz, yetkisiz erişime karşı gerekli teknik ve idari tedbirler alınarak
-yalnızca hizmetin sunulması amacıyla kullanılmaktadır.
+* **Bildirim izni**: Sadece randevu durumları ve bilgilendirmeler için kullanılır.
+* **Fotoğraf izni**: Yalnızca profil fotoğrafı eklemek istenirse kullanılır.
 
-## 5. Veri Güvenliği
+İzin verilmemesi durumunda uygulamanın temel işlevleri kullanılmaya devam edilebilir.
 
-Kişisel verilerin kaybolması, kötüye kullanılması veya yetkisiz erişime uğramasını
-önlemek amacıyla uygun teknik ve organizasyonel güvenlik önlemleri uygulanmaktadır.
+## 5. Hesap Silme
 
-## 6. Kullanıcı Hakları
+Kullanıcılar, uygulama içerisinden **hesaplarını kalıcı olarak silebilir**.
 
-Kullanıcılar, kişisel verilerine erişme, güncelleme veya silinmesini talep etme
+* Hesap silindiğinde kullanıcıya ait kişisel veriler silinir.
+* İleri tarihli (planlanmış) randevular iptal edilir.
+* Geçmiş randevu kayıtları yalnızca sistem bütünlüğü ve raporlama amacıyla anonim şekilde tutulabilir.
+
+## 6. Veri Paylaşımı
+
+Kişisel verileriniz **üçüncü taraflarla paylaşılmaz**.
+
+Veriler yalnızca uygulamanın işlevlerini yerine getirmek amacıyla ve gerekli teknik/idari güvenlik önlemleri alınarak işlenir.
+
+## 7. Veri Güvenliği
+
+Kişisel verilerin yetkisiz erişim, kayıp veya kötüye kullanıma karşı korunması için uygun teknik ve organizasyonel güvenlik önlemleri uygulanmaktadır.
+
+## 8. Kullanıcı Hakları
+
+Kullanıcılar:
+
+* Kişisel verilerine erişme
+* Verilerini güncelleme
+* Hesaplarını ve verilerini silme
+
 haklarına sahiptir.
 
-## 7. İletişim
+## 9. İletişim
 
-Gizlilik Politikası ile ilgili sorularınız için bizimle iletişime geçebilirsiniz:
+Gizlilik Politikası ile ilgili sorular için bizimle iletişime geçebilirsiniz:
 
-E-posta: danisismail001@gmail.com
+ **E-posta:** [danisismail001@gmail.com](mailto:danisismail001@gmail.com)

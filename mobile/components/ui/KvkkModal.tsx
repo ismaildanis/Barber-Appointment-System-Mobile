@@ -27,12 +27,12 @@ export function KvkkModal({ visible, onAccept, isAccepting }: Props) {
 
   return (
     <Modal
-        visible={visible}
-        animationType="slide"
-        transparent={false}
-        statusBarTranslucent
-        presentationStyle="fullScreen"
-        onRequestClose={() => {}}
+      visible={visible}
+      animationType="slide"
+      transparent={false}
+      statusBarTranslucent
+      presentationStyle="fullScreen"
+      onRequestClose={() => {}}
     >
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.content}>
@@ -42,29 +42,34 @@ export function KvkkModal({ visible, onAccept, isAccepting }: Props) {
           </View>
 
           <Text style={styles.text}>
-            Bu uygulama, randevu hizmetlerinin sunulabilmesi ve kullanıcı hesabının
-            oluşturulup yönetilebilmesi amacıyla kişisel verilerinizi işlemektedir.
+            Bu uygulama, tek bir berber/kuaför işletmesine özel olarak randevu
+            hizmetlerinin sunulabilmesi ve kullanıcı hesabının oluşturulup
+            yönetilebilmesi amacıyla kişisel verilerinizi işlemektedir.
           </Text>
 
           <Text style={styles.text}>
-            Bu kapsamda; ad, soyad, telefon numarası, e-posta adresi, profil
-            fotoğrafı (isteğe bağlı), randevu bilgileri ve randevu geçmişi
-            verileriniz işlenmektedir.
+            Bu kapsamda; ad, soyad ve e-posta adresiniz zorunlu olarak, telefon
+            numarası ve profil fotoğrafı ise isteğe bağlı olarak işlenebilir.
+            Ayrıca randevu bilgileri ve randevu geçmişiniz sistem tarafından
+            kaydedilir.
           </Text>
 
           <Text style={styles.text}>
-            Bildirim gönderimi ve fotoğraf erişimi, yalnızca tarafınızca izin
-            verilmesi halinde aktif hale gelir. İzin verilmemesi durumunda
-            uygulamanın temel işlevleri kullanılmaya devam edilebilir.
+            Bildirim gönderimi ve fotoğraf erişimi yalnızca sizin açık izninizle
+            aktif hale gelir. İzin vermemeniz durumunda uygulamanın temel
+            işlevleri kullanılmaya devam edilebilir.
           </Text>
 
           <Text style={styles.text}>
-            Kişisel verileriniz, yalnızca hizmetin sunulması amacıyla kullanılır,
-            üçüncü kişilerle paylaşılmaz ve yetkisiz erişime karşı gerekli teknik
-            ve idari tedbirler alınarak korunur.
+            Kişisel verileriniz yalnızca randevu hizmetinin sunulması amacıyla
+            kullanılır, üçüncü kişilerle paylaşılmaz ve yetkisiz erişime karşı
+            gerekli teknik ve idari önlemler alınarak korunur.
           </Text>
 
-          <TouchableOpacity style={styles.linkContainer} onPress={() => setShowPolicy(true)}>
+          <TouchableOpacity
+            style={styles.linkContainer}
+            onPress={() => setShowPolicy(true)}
+          >
             <Text style={styles.link}>Gizlilik Politikası'nı görüntüle</Text>
             <Ionicons name="chevron-forward" size={16} color="#E4D2AC" />
           </TouchableOpacity>
@@ -77,8 +82,8 @@ export function KvkkModal({ visible, onAccept, isAccepting }: Props) {
               {checked && <Ionicons name="checkmark" size={14} color="#000" />}
             </View>
             <Text style={styles.checkboxText}>
-              Gizlilik Politikası'nı okudum ve kişisel verilerimin işlenmesini
-              kabul ediyorum.
+              Gizlilik Politikası’nı okudum ve kişisel verilerimin belirtilen
+              amaçlar doğrultusunda işlenmesini kabul ediyorum.
             </Text>
           </TouchableOpacity>
         </ScrollView>
@@ -86,7 +91,10 @@ export function KvkkModal({ visible, onAccept, isAccepting }: Props) {
         <View style={styles.footer}>
           <TouchableOpacity
             disabled={!checked || isAccepting}
-            style={[styles.button, (!checked || isAccepting) && styles.buttonDisabled]}
+            style={[
+              styles.button,
+              (!checked || isAccepting) && styles.buttonDisabled,
+            ]}
             onPress={handleAccept}
             activeOpacity={0.8}
           >
@@ -101,6 +109,7 @@ export function KvkkModal({ visible, onAccept, isAccepting }: Props) {
           </TouchableOpacity>
         </View>
       </View>
+
       <Modal
         visible={showPolicy}
         animationType="slide"
@@ -108,101 +117,95 @@ export function KvkkModal({ visible, onAccept, isAccepting }: Props) {
         statusBarTranslucent
         presentationStyle="fullScreen"
         onRequestClose={() => setShowPolicy(false)}
-        >
+      >
         <View style={styles.container}>
-            <View style={styles.policyHeader}>
+          <View style={styles.policyHeader}>
             <TouchableOpacity onPress={() => setShowPolicy(false)}>
-                <Ionicons name="chevron-back" size={24} color="#E4D2AC" />
+              <Ionicons name="chevron-back" size={24} color="#E4D2AC" />
             </TouchableOpacity>
             <Text style={styles.policyTitle}>Gizlilik Politikası</Text>
             <View style={{ width: 24 }} />
-            </View>
+          </View>
 
-            <ScrollView contentContainerStyle={styles.content}>
-            <Text style={styles.text}>Son güncelleme: 2026</Text>
+          <ScrollView contentContainerStyle={styles.content}>
+            <Text style={styles.text}>Son güncelleme: Ocak 2026</Text>
+
             <Text style={styles.text}>
-            Bu Gizlilik Politikası, Berber Randevum mobil uygulamasını kullanan
-            kullanıcıların kişisel verilerinin nasıl toplandığını, işlendiğini ve
-            korunduğunu açıklamaktadır.
+              Bu Gizlilik Politikası, Berber Randevum mobil uygulamasını kullanan
+              kullanıcıların kişisel verilerinin nasıl toplandığını,
+              işlendiğini ve korunduğunu açıklamaktadır.
             </Text>
 
             <Text style={styles.sectionTitle}>1. Toplanan Kişisel Veriler</Text>
             <Text style={styles.text}>Ad ve soyad</Text>
-            <Text style={styles.text}>Telefon numarası</Text>
             <Text style={styles.text}>E-posta adresi</Text>
+            <Text style={styles.text}>Telefon numarası (isteğe bağlı)</Text>
             <Text style={styles.text}>Profil fotoğrafı (isteğe bağlı)</Text>
-            <Text style={styles.text}>Randevu bilgileri ve randevu geçmişi</Text>
             <Text style={styles.text}>
-            Bu veriler, kullanıcı tarafından doğrudan sağlanmaktadır.
+              Randevu bilgileri ve randevu geçmişi
             </Text>
 
-            <Text style={styles.sectionTitle}>2. Kişisel Verilerin İşlenme Amaçları</Text>
-            <Text style={styles.text}>
-            Kullanıcı hesabının oluşturulması ve yönetilmesi
+            <Text style={styles.sectionTitle}>
+              2. Kişisel Verilerin İşlenme Amaçları
             </Text>
             <Text style={styles.text}>
-            Randevu oluşturma, görüntüleme ve yönetme işlemleri
+              Kullanıcı hesabının oluşturulması ve yönetilmesi
             </Text>
-            <Text style={styles.text}>Kullanıcı ile iletişim kurulması</Text>
-            <Text style={styles.text}>Hizmet kalitesinin artırılması</Text>
             <Text style={styles.text}>
-            Kişisel veriler, bu amaçlar dışında kullanılmaz.
+              Randevu oluşturma, görüntüleme ve yönetme işlemleri
             </Text>
-
-            <Text style={styles.sectionTitle}>3. Bildirimler ve Cihaz İzinleri</Text>
-            <Text style={styles.text}>Bildirim izni: Randevu bilgilendirmeleri için</Text>
-            <Text style={styles.text}>Fotoğraf erişimi: Profil fotoğrafı eklemek için</Text>
             <Text style={styles.text}>
-            Bu izinlerin verilmemesi durumunda uygulamanın temel işlevleri kullanılmaya
-            devam edilebilir.
+              Randevularla ilgili bilgilendirme yapılması
             </Text>
 
-            <Text style={styles.sectionTitle}>4. Kişisel Verilerin Paylaşılması</Text>
-            <Text style={styles.text}>Üçüncü kişilerle paylaşılmaz</Text>
-            <Text style={styles.text}>Reklam veya pazarlama amacıyla kullanılmaz</Text>
-            <Text style={styles.text}>
-            Yalnızca hizmetin sunulması için işlenir
+            <Text style={styles.sectionTitle}>
+              3. Bildirimler ve Cihaz İzinleri
             </Text>
             <Text style={styles.text}>
-            Yasal yükümlülükler haricinde hiçbir kişi veya kuruluşla paylaşım yapılmaz.
+              Bildirim izni: Randevu durumları ve bilgilendirmeler için kullanılır.
+            </Text>
+            <Text style={styles.text}>
+              Fotoğraf erişimi: Yalnızca profil fotoğrafı eklemek istenirse kullanılır.
+            </Text>
+
+            <Text style={styles.sectionTitle}>
+              4. Kişisel Verilerin Paylaşılması
+            </Text>
+            <Text style={styles.text}>
+              Kişisel veriler üçüncü kişilerle paylaşılmaz ve reklam veya
+              pazarlama amacıyla kullanılmaz.
             </Text>
 
             <Text style={styles.sectionTitle}>5. Veri Güvenliği</Text>
             <Text style={styles.text}>
-            Kişisel verilerinizin güvenliği için gerekli teknik ve idari tedbirler
-            alınmaktadır. Yetkisiz erişim, veri kaybı veya kötüye kullanım risklerine
-            karşı koruma sağlanır.
+              Kişisel verilerinizin güvenliği için gerekli teknik ve idari
+              tedbirler alınmaktadır.
             </Text>
 
             <Text style={styles.sectionTitle}>6. Veri Saklama Süresi</Text>
             <Text style={styles.text}>
-            Kişisel veriler, hizmetin_attach 유지 süresince saklanır. Kullanıcı hesabının
-            silinmesi halinde veriler, yasal yükümlülükler dışında silinir veya anonim
-            hale getirilir.
+              Kişisel veriler hizmetin sunulması süresince saklanır. Hesap
+              silindiğinde, yasal yükümlülükler saklı kalmak kaydıyla silinir veya
+              anonim hale getirilir.
             </Text>
 
-            <Text style={styles.sectionTitle}>7. Kullanıcı Hakları ve Hesap Silme</Text>
-            <Text style={styles.text}>Kişisel verileri hakkında bilgi talep etme</Text>
-            <Text style={styles.text}>Verilerinin güncellenmesini veya düzeltilmesini isteme</Text>
-            <Text style={styles.text}>Hesaplarının ve kişisel verilerinin silinmesini talep etme</Text>
-            <Text style={styles.text}>
-            Hesap silme ve kişisel veri silme talepleri, kullanıcı tarafından uygulama
-            içindeki Gizlilik Politikası sayfası üzerinden veya uygulamanın resmi iletişim
-            kanalları aracılığıyla iletilebilir.
+            <Text style={styles.sectionTitle}>
+              7. Kullanıcı Hakları ve Hesap Silme
             </Text>
             <Text style={styles.text}>
-            Bu talepler, yürürlükteki mevzuat ve yasal yükümlülükler saklı kalmak kaydıyla
-            makul süre içinde sonuçlandırılır.
+              Kullanıcılar hesaplarını uygulama içerisinden kalıcı olarak
+              silebilir. Hesap silindiğinde kişisel veriler silinir ve ileri
+              tarihli randevular iptal edilir.
             </Text>
 
             <Text style={styles.sectionTitle}>8. Değişiklikler</Text>
             <Text style={styles.text}>
-            Bu Gizlilik Politikası gerektiğinde güncellenebilir. Güncellemeler uygulama
-            üzerinden veya bu sayfa aracılığıyla duyurulur.
+              Bu Gizlilik Politikası gerektiğinde güncellenebilir ve uygulama
+              üzerinden duyurulur.
             </Text>
-            </ScrollView>
+          </ScrollView>
         </View>
-        </Modal>
+      </Modal>
     </Modal>
   );
 }
@@ -302,21 +305,24 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
-    policyHeader: {
-        paddingTop: 56,
-        paddingHorizontal: 20,
-        paddingBottom: 12,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        backgroundColor: "#1a1a1a",
-    },
-    policyTitle: {
-        color: "#fff",
-        fontSize: 18,
-        fontWeight: "700",
-    },
-    headerTitle: { color: "#1a1a1a", fontSize: 22, fontWeight: "800" },
-    headerSub: { color: "#1a1a1a", fontSize: 12, opacity: 0.7 },
-    sectionTitle: { color: "#E4D2AC", fontSize: 16, fontWeight: "700", marginTop: 8 },
+  policyHeader: {
+    paddingTop: 56,
+    paddingHorizontal: 20,
+    paddingBottom: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#1a1a1a",
+  },
+  policyTitle: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  sectionTitle: {
+    color: "#E4D2AC",
+    fontSize: 16,
+    fontWeight: "700",
+    marginTop: 8,
+  },
 });

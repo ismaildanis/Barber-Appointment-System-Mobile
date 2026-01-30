@@ -15,6 +15,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.berberrandevum.mobile",
+      "buildNumber": "9",
       "supportsTablet": true,
       "splash": {
         "image": "./assets/logo/splash-minimal.png",
@@ -51,7 +52,8 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "permissions": [
-        "android.permission.POST_NOTIFICATIONS"
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -77,9 +79,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "2ed19cd6-a2e0-420f-bdad-579bc56b274b"
+        "projectId": "435c485b-f0d0-4d97-aa76-666400925558"
       }
     },
-    "owner": "hecksoft93"
+    "owner": "ismail4573"
   }
 }
